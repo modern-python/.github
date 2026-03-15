@@ -4,4 +4,4 @@ Python templates and packages for modern python development built using followin
 
 - `uv` - package and project manager;
 - `ruff` - linter and code formatter;
-- `mypy` in strict-mode;
+- `ty` for type analysis;
