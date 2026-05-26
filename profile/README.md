@@ -9,13 +9,13 @@ Open-source templates and libraries for building production-ready Python applica
 
 ### Dependency injection
 
-- [`that-depends`](https://github.com/modern-python/that-depends) — simple DI framework for Python;
 - [`modern-di`](https://github.com/modern-python/modern-di) — powerful DI framework with scopes;
 - [`modern-di-fastapi`](https://github.com/modern-python/modern-di-fastapi) — `modern-di` integration for FastAPI;
 - [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar) — `modern-di` integration for LiteStar;
 - [`modern-di-faststream`](https://github.com/modern-python/modern-di-faststream) — `modern-di` integration for FastStream;
 - [`modern-di-typer`](https://github.com/modern-python/modern-di-typer) — `modern-di` integration for Typer;
-- [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest) — `modern-di` integration for pytest.
+- [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest) — `modern-di` integration for pytest;
+- [`that-depends`](https://github.com/modern-python/that-depends) — predecessor DI framework, still actively maintained.
 
 ### Microservices & messaging
 
