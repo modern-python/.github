@@ -17,7 +17,6 @@ theme:
     - navigation.instant
     - navigation.top
     - search.suggest
-    - content.action.edit
   palette:
     - scheme: default
       primary: custom
