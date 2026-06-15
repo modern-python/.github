@@ -1,0 +1,34 @@
+/* Brand palette — forest green sampled from the org logo (#356852) */
+:root > * {
+  --md-primary-fg-color:        #356852;
+  --md-primary-fg-color--light: #4a8a6e;
+  --md-primary-fg-color--dark:  #234738;
+  --md-accent-fg-color:         #c98a00;
+}
+
+/* Dark scheme keeps the same brand hue for links/accents */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color:        #356852;
+  --md-accent-fg-color:         #e0a300;
+}
+
+/* Centered hero intro on the homepage */
+.mp-hero {
+  text-align: center;
+  margin: 2rem 0 3rem;
+}
+.mp-hero .mp-logo {
+  max-width: 420px;
+  width: 70%;
+  height: auto;
+}
+.mp-hero .mp-tagline {
+  color: var(--md-default-fg-color--light);
+  font-size: 1.05rem;
+  margin-top: 0.5rem;
+}
+
+/* Topic tiles inherit Material's .grid.cards; nudge the brand color */
+.md-typeset .grid.cards > ul > li:hover {
+  border-color: var(--md-primary-fg-color);
+}

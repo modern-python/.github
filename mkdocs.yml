@@ -6,6 +6,8 @@ repo_name: modern-python
 
 theme:
   name: material
+  logo: assets/modern-python.png
+  favicon: assets/modern-python.png
   features:
     - navigation.instant
     - navigation.top
@@ -24,3 +26,13 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
