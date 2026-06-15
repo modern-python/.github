@@ -1,0 +1,26 @@
+site_name: Modern Python
+site_url: https://modern-python.org/
+site_description: Open-source templates and libraries for building production-ready Python applications.
+repo_url: https://github.com/modern-python
+repo_name: modern-python
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.top
+    - search.suggest
+    - content.action.edit
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
