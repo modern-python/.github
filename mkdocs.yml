@@ -11,6 +11,7 @@ exclude_docs: |
 
 theme:
   name: material
+  custom_dir: overrides
   logo: assets/modern-python.png
   favicon: assets/modern-python.png
   features:
