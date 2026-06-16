@@ -12,6 +12,9 @@
   --md-primary-fg-color--light: #4a8a6e;
   --md-primary-fg-color--dark:  #234738;
   --md-accent-fg-color:         #e0a300;
+  /* Body links default to the primary green, which is too dark on the dark
+     background — use a lighter green (AA-contrast) for readability. */
+  --md-typeset-a-color:         #7fb79f;
 }
 
 /* Centered hero intro on the homepage */
