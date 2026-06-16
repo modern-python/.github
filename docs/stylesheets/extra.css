@@ -9,6 +9,8 @@
 /* Dark scheme keeps the same brand hue for links/accents */
 [data-md-color-scheme="slate"] {
   --md-primary-fg-color:        #356852;
+  --md-primary-fg-color--light: #4a8a6e;
+  --md-primary-fg-color--dark:  #234738;
   --md-accent-fg-color:         #e0a300;
 }
 
@@ -21,6 +23,11 @@
   max-width: 420px;
   width: 70%;
   height: auto;
+  color: var(--md-primary-fg-color);  /* brand green on the light page */
+}
+/* Lighter green in dark mode so the wordmark keeps contrast on the dark bg */
+[data-md-color-scheme="slate"] .mp-hero .mp-logo {
+  color: #7fb79f;
 }
 .mp-hero .mp-tagline {
   color: var(--md-default-fg-color--light);
