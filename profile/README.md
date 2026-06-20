@@ -5,13 +5,13 @@ Open-source templates and libraries for building production-ready Python applica
 ### Project templates
 
 - [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template) — dockerized web application with DI on FastAPI, SQLAlchemy 2, PostgreSQL;
-- [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template) — dockerized web application on LiteStar, SQLAlchemy 2, PostgreSQL.
+- [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template) — dockerized web application on Litestar, SQLAlchemy 2, PostgreSQL.
 
 ### Dependency injection
 
 - [`modern-di`](https://github.com/modern-python/modern-di) — powerful DI framework with scopes;
 - [`modern-di-fastapi`](https://github.com/modern-python/modern-di-fastapi) — `modern-di` integration for FastAPI;
-- [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar) — `modern-di` integration for LiteStar;
+- [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar) — `modern-di` integration for Litestar;
 - [`modern-di-faststream`](https://github.com/modern-python/modern-di-faststream) — `modern-di` integration for FastStream;
 - [`modern-di-typer`](https://github.com/modern-python/modern-di-typer) — `modern-di` integration for Typer;
 - [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest) — `modern-di` integration for pytest;
@@ -27,7 +27,7 @@ Open-source templates and libraries for building production-ready Python applica
 
 ### Utilities
 
-- [`db-retry`](https://github.com/modern-python/db-retry) — retry helpers for database operations;
+- [`db-retry`](https://github.com/modern-python/db-retry) — retry helpers for PostgreSQL / SQLAlchemy database operations;
 - [`eof-fixer`](https://github.com/modern-python/eof-fixer) — automatically fix newlines at the end of files;
 - [`semvertag`](https://github.com/modern-python/semvertag) — auto-tag your GitHub/GitLab repo with semantic version tags from CI.
 
