@@ -7,6 +7,7 @@ repo_name: modern-python
 # Repo-internal docs that must not be published to the public site.
 exclude_docs: |
   DEPLOYMENT.md
+  superpowers/
 
 theme:
   name: material
