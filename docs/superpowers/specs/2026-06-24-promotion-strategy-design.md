@@ -1,0 +1,205 @@
+# Modern Python — Promotion Strategy
+
+**Date:** 2026-06-24
+**Status:** Approved design, ready for planning
+**Owner:** modern-python maintainers
+**Scope:** Org-wide growth strategy for the `modern-python` GitHub org
+
+## Goal
+
+Grow the `modern-python` org along three axes, **users-first and staged** (users
+become contributors and feedback sources over time):
+
+1. **Attract users** — PyPI downloads, GitHub stars, real adoption.
+2. **Attract contributors** — issues, PRs, sustained maintainers.
+3. **Gain feedback** — understand what users want, to steer the roadmap.
+
+Execution model: **Claude produces the assets** (docs, pages, READMEs, templates,
+draft posts); the maintainer reviews, publishes, and runs the human-only channels
+(posting, moderation). The strategy is therefore deliberately asset-heavy and
+favors durable, compounding work over ongoing grind.
+
+## Core thesis
+
+The org's **engineering, docs depth, CI, and packaging are already strong**. Growth
+is not gated by code quality — it is gated by **conversion, positioning, and
+connective tissue**. So the strategy is mostly **polish + reposition + connect**,
+plus one-shot infrastructure, sequenced **foundation-first** so the single
+launch spike lands on pages that convert.
+
+## Current-state audit (June 2026)
+
+Snapshot of the 18 active repos, audited for promotion readiness.
+
+### Traction (stars / forks)
+
+| Repo | ★ | ⑂ | Role |
+|---|---|---|---|
+| `that-depends` | 250 | 15 | DI incumbent (most stars) |
+| `fastapi-sqlalchemy-template` | 206 | 31 | Top-of-funnel traffic (most forks) |
+| `modern-di` | 57 | 5 | **Designated DI future** |
+| `litestar-sqlalchemy-template` | 34 | 3 | Top-of-funnel traffic |
+| `lite-bootstrap` | 12 | — | Microservices bootstrap |
+| 5× `modern-di-*` integrations | 0–1 | — | Well-documented, not stubs |
+| `httpware`, `faststream-*`, utilities | 0–4 | — | Solid, niche |
+
+### Readiness tiers
+
+- **Tier 1 — promotion-ready (minor polish only):** `modern-di` (best docs in the
+  org — recipes, troubleshooting, design-decisions), `httpware`, `faststream-outbox`,
+  all five `modern-di-*` integrations, `semvertag`. Gap: contributor files.
+- **Tier 2 — high traffic, under-polished READMEs (biggest wasted opportunity):**
+  `fastapi-sqlalchemy-template` (206★/31⑂) and `litestar-sqlalchemy-template` (34★).
+  Thin one-liner READMEs, no quickstart, no code example, no "why this template,"
+  zero releases. Most eyeballs, worst conversion.
+- **Tier 3 — flagship-by-stars under-selling itself:** `that-depends` (250★).
+  Sloppy PyPI metadata (ships the **banned `"dependency injector"` keyword** that
+  the org `CLAUDE.md` forbids, stale summary, only 2 of 5 well-known URLs, missing
+  classifiers). No API reference, no comparison page. Steers users to `modern-di`
+  with no page telling them which to pick.
+
+### Four systemic gaps (the real strategy targets)
+
+1. **Contributor infrastructure missing org-wide.** 0 of 18 repos have issue/PR
+   templates; no real CONTRIBUTING (one 147-byte stub), no CODE_OF_CONDUCT, no
+   SECURITY, no FUNDING. Community-health score ~25%. **One org-default set in the
+   `.github` repo fixes all repos at once** — the highest-leverage single move.
+2. **No positioning anywhere.** "that-depends vs modern-di — which should I use?"
+   is unanswered, and so is "DI vs `dependency-injector` / FastAPI `Depends`." This
+   is the backbone every user-facing post needs, and it does not exist.
+3. **Metadata drift** on `that-depends`, `db-retry`, `eof-fixer`,
+   `faststream-redis-timers` (empty/inconsistent PyPI fields) — violating the org's
+   own three-surfaces convention.
+4. **Docs unevenness** — `faststream-concurrent-aiokafka` has no docs site;
+   `lite-bootstrap` and `faststream-redis-timers` lack quickstart + API reference.
+
+### Not a gap (corrected)
+
+The `planning/` directories in `semvertag` and `modern-di-faststream` are **not**
+stray cruft — they are a deliberate, documented planning/change-history convention
+(`semvertag/planning/README.md` describes it as "identical across the modern-python
+repos," with `_templates/`, `changes/`, `decisions/`). **They must not be deleted.**
+Observation only: the convention exists in just some repos and is not referenced in
+the root `CLAUDE.md`; out of scope for promotion.
+
+## Key decision: the DI narrative
+
+**`modern-di` is the future.** `that-depends` is positioned as stable / actively
+maintained but in effective maintenance mode. New-user content funnels to
+`modern-di`. The strategy must resolve the current split-brain (the 250★ repo
+points at the 57★ repo with no guidance) with an explicit, honest "which should I
+use?" page — without deflating `that-depends`'s existing audience or implying it is
+abandoned.
+
+## Strategy — six phases
+
+### Phase 0 — Foundation hygiene *(one-shot, invisible but required)*
+
+- **Org-wide `.github` defaults** in this repo, propagating to all repos:
+  `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`,
+  `ISSUE_TEMPLATE/` (bug / feature / question), `PULL_REQUEST_TEMPLATE.md`,
+  `SUPPORT.md`, `FUNDING.yml`.
+- **Metadata hygiene sweep** to the org's three-surfaces convention:
+  - `that-depends`: drop the banned `"dependency injector"` keyword, set canonical
+    summary, add the 5 well-known capitalized URLs, add missing `Development Status`
+    + `Intended Audience` classifiers.
+  - `db-retry`, `eof-fixer`, `faststream-redis-timers`: align PyPI
+    summary/keywords/URLs with GitHub; fix `eof-fixer` "Changelogs"→"Changelog".
+  - Casing `LiteStar`→`Litestar` (incl. `docs/index.md` lines 60/66 and the
+    `litestar-sqlalchemy-template` description).
+  - `faststream-outbox`: fix the stray `readthedocs.io` link to the
+    `modern-python.org` host.
+- Enable **Discussions** consistently on flagship repos (already on `that-depends`,
+  `modern-di`).
+
+### Phase 1 — Positioning backbone *(the content foundation everything cites)*
+
+- **Research-backed positioning** for `modern-di` vs `that-depends`,
+  `dependency-injector`, `wireup`, and FastAPI `Depends`. Claude researches and
+  proposes a comparison table for maintainer sign-off **before** content is built
+  on it.
+- **Canonical pages:**
+  - "that-depends vs modern-di — which should I use?" (future = `modern-di`).
+  - "Why modern-di / vs alternatives" on the `modern-di` docs site.
+  - Surface the existing from-`that-depends` migration guide prominently.
+
+### Phase 2 — Conversion polish *(highest-traffic, worst-converting surfaces)*
+
+- Rewrite **both template READMEs**: clear value prop, real quickstart
+  (clone → run → hit an endpoint), architecture walkthrough, "why this template,"
+  an example request. Cut first releases/tags so they signal freshness.
+- **`that-depends` README:** add a runnable example + API reference page + link to
+  the comparison page.
+- **Docs gaps:** stand up / correctly point the `faststream-concurrent-aiokafka`
+  site; add quickstart + API reference to `lite-bootstrap` and
+  `faststream-redis-timers`.
+
+### Phase 3 — Discoverability (SEO + LLM)
+
+- `llms.txt` for the org site + key project docs sites.
+- Verify Open Graph / structured metadata (partly done already).
+- Cross-linking org ↔ projects.
+- Submit to `awesome-python`, `awesome-fastapi`, `awesome-asyncio` (lands in the
+  Phase 4 window).
+
+### Phase 4 — Coordinated launch *(fires only after Phases 0–2 are done)*
+
+- One spike: **"Show HN: modern-di"** + r/Python + Lobsters, plus an org-story
+  announcement post ("the modern Python stack"). Claude drafts all posts; maintainer
+  picks the window and publishes. awesome-list PRs land in the same window.
+- Rationale: launch channels are effectively one-shot. Launching onto polished,
+  conversion-ready assets is the difference between a spike that compounds and one
+  that evaporates.
+
+### Phase 5 — Sustain + feedback loop *(ongoing)*
+
+- **Social cadence backlog** (X / Mastodon / Bluesky): release notes, recipes, tips
+  — Claude writes a queue the maintainer drips out.
+- **Feedback:** enable Discussions org-wide, seed Q&A / Ideas categories, a pinned
+  "what should we build next?" roadmap discussion, a batch of labeled
+  `good first issue`s, optional short user survey.
+- **Deferred decision:** Discord / Telegram only if Discussions demand justifies it
+  — start GitHub-native.
+
+## Success metrics
+
+- **Users:** PyPI downloads (`modern-di`, `that-depends`, templates), GitHub star
+  trajectory, docs traffic.
+- **Contributors:** external PR count, new-contributor count, `good first issue`
+  pickup rate.
+- **Feedback:** Discussions volume, survey responses, issues tagged feedback.
+
+Baselines (June 2026) captured in the audit table above; re-measure at launch + 30/90 days.
+
+## Phased delivery plan
+
+The spec covers the whole strategy. Implementation is split so value ships fast
+without a single 18-repo mega-PR.
+
+- **Plan 1 — Core (first):**
+  - Phase 0 org-`.github` defaults (this repo).
+  - Phase 0 metadata hygiene for `that-depends` + the casing/link fixes.
+  - Phase 1 positioning research + the two canonical DI pages.
+  - Phase 2 rewrites of the two template READMEs + `that-depends` README/API ref.
+- **Plan 2 — Long tail:** remaining metadata fixes, docs gaps
+  (`faststream-concurrent-aiokafka`, `lite-bootstrap`, `faststream-redis-timers`),
+  Phase 3 SEO/LLM assets.
+- **Plan 3 — Launch + sustain:** Phase 4 launch assets + window, Phase 5 social
+  backlog, Discussions seeding, good-first-issue batch, survey.
+
+Each plan targets repos that are **not checked out in this workspace**; the
+implementation plan must account for per-repo clone/branch/PR flow.
+
+## Out of scope
+
+- Rewriting any library's functionality (engineering is sound).
+- Deleting the `planning/` convention directories.
+- Standing up Discord/Telegram up front (revisit in Phase 5 if warranted).
+- Paid promotion / ads.
+
+## Open questions (resolve during planning)
+
+- Exact `modern-di` differentiators vs competitors — pending Phase 1 research +
+  maintainer sign-off on the comparison table.
+- Whether benchmarks are a credible differentiator worth a dedicated page.
+- Launch window timing (maintainer's call).
