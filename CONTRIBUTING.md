@@ -31,7 +31,7 @@ just --list             # see available tasks (lint, test, etc.) where a justfil
 3. Run lint, type check, and tests locally before pushing:
    ```bash
    uv run ruff check . && uv run ruff format --check .
-   uv run ty check
+   uv run ty check        # type check, where ty is configured (some repos also run mypy/pyrefly)
    # run the project's test command (often `just test` or `uv run pytest`)
    ```
 4. Update docs if you changed behavior or public API.
