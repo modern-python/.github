@@ -54,6 +54,40 @@ wires them together.
 
 </div>
 
+## The stack { #stack }
+
+The modern-python projects fit together into one coherent stack for building
+production Python services. Use one piece or all of them — each is independent.
+
+- **Start from a template.**
+  [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template)
+  and [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template)
+  give you a dockerized, batteries-included app — FastAPI or Litestar,
+  SQLAlchemy 2, PostgreSQL, with dependency injection already wired.
+- **Wire your dependencies** with
+  [`modern-di`](https://github.com/modern-python/modern-di) — typed, scoped
+  dependency injection with one wiring shared across FastAPI, Litestar,
+  FastStream, and Typer.
+  ([`that-depends`](https://github.com/modern-python/that-depends), its
+  production-proven predecessor, is still maintained.)
+- **Call other services reliably** with
+  [`httpware`](https://github.com/modern-python/httpware) — an httpx-based client
+  with typed errors, typed response bodies, and a composable resilience chain
+  (retry, bulkhead, circuit breaker).
+- **Publish events reliably** with
+  [`faststream-outbox`](https://github.com/modern-python/faststream-outbox) — the
+  transactional outbox pattern for FastStream + PostgreSQL: write your domain row
+  and outbox row in one transaction, relay to any broker with one decorator.
+- **Instrument everything** with
+  [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap) —
+  OpenTelemetry, Prometheus, Sentry, and structlog wired into FastAPI, Litestar,
+  or FastStream in a few lines.
+
+Every project is built with the same tooling
+([`uv`](https://github.com/astral-sh/uv), [`ruff`](https://github.com/astral-sh/ruff),
+[`ty`](https://github.com/astral-sh/ty)) under the MIT license. Browse the full
+catalog below.
+
 ## Project templates { #templates }
 
 - [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template) — dockerized web application with DI on FastAPI, SQLAlchemy 2, PostgreSQL.
