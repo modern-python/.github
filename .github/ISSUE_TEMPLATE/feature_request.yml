@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest an idea or improvement for a modern-python project
+labels: ["enhancement"]
+body:
+  - type: input
+    id: project
+    attributes:
+      label: Target project
+      description: Which repository / package would this affect?
+      placeholder: e.g. modern-di, lite-bootstrap
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem are you trying to solve? What's the use case?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would you like to happen? Include API sketches if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you've weighed, if any.
+    validations:
+      required: false

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question / usage help
+    url: https://github.com/orgs/modern-python/discussions
+    about: Ask questions and get help in GitHub Discussions.
+  - name: Documentation
+    url: https://modern-python.org
+    about: Browse the docs — your question may already be answered.

@@ -1,0 +1,47 @@
+name: Bug report
+description: Report a defect in a modern-python project
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Fill in the sections below so we can reproduce it quickly.
+  - type: input
+    id: project
+    attributes:
+      label: Affected project
+      description: Which repository / package is this about?
+      placeholder: e.g. modern-di, that-depends, httpware
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versions
+      description: Package version, Python version, and OS.
+      placeholder: e.g. modern-di 1.2.0, Python 3.12, macOS 14
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The smallest snippet or steps that reproduce the problem.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / traceback
+      description: Paste any relevant traceback. Automatically formatted as code.
+      render: shell
+    validations:
+      required: false
