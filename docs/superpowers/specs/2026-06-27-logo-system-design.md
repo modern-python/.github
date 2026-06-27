@@ -34,14 +34,14 @@ Both snakes share the stroke weight (8) so the three concentric bands read as a 
 
 **Dark mode:** outer + core → `#3f8064`, middle → `#e0a300`. Implement as a single SVG that adapts via an embedded `<style>` with `@media (prefers-color-scheme: dark)` (same technique as the existing `modern-python-mark.svg`).
 
-**Favicon (≤24px):** at 16–24px the three bands merge. Ship a simplified favicon variant — outer snake + core only (drop the middle snake), or a 2-band reduction — as a separate asset. Decision recorded in the plan.
+**Favicon (≤24px):** at 16–24px the three bands merge. Ship a simplified **two-band** favicon — outer green snake + middle gold snake, **core dropped** — as a separate asset.
 
 ## 4. The wordmark / lockups
 
-Recommended default (flagged for confirmation in §8): **monospace** wordmark to match the code/terminal theme and the project monograms.
+**Chosen:** monospace (JetBrains Mono), lowercase — ties the wordmark to the project monograms so the whole system reads as one hand.
 
-- **Primary (horizontal):** icon + `modern-python` set in JetBrains Mono, reading like a command line.
-- **Secondary (stacked):** icon above two-line `Modern / Python` (or spaced caps) for square/social/avatar contexts.
+- **Primary (horizontal):** icon + `modern-python` in JetBrains Mono ~600, lowercase, reading like a command line / package handle. Wordmark color = primary green `#356852` (light) / `#3f8064` (dark).
+- **Secondary (stacked):** icon above `modern-python` (same mono, lowercase) for square / social / avatar contexts.
 - Lockup rules (from research): clear space = one icon-height around the whole lockup; wordmark optically balanced to the icon height; type weight harmonized to stroke weight; shared baseline/center. Icon must work standalone (it does).
 - Final wordmark text is converted to outlined paths (font-independent).
 
@@ -70,11 +70,10 @@ One shared **foundation** with a single controlled **variable** per project (the
 **Stack glyph** (template marker), centered in the frame, filled in the framework color:
 `rect x=37 y=39 w=26 h=6 rx=3` · `rect x=37 y=48 w=26 h=6 rx=3` · `rect x=37 y=57 w=26 h=6 rx=3`.
 
-### 5.3 Framework colors (PLACEHOLDERS — verify before shipping)
+### 5.3 Framework colors (pull upstream, then check harmony)
 
-Approximate, must be confirmed against each project's actual brand:
+Source each from the framework's actual brand (logo/site), then audit the set against green/gold as a group. If a color clashes or muddies the family, **adapt it** (shift lightness/saturation toward the palette) while keeping it recognizable as that framework. Starting approximations, to be replaced with verified-and-harmonized values:
 FastAPI `#009688`, Litestar `#5b8def`, FastStream `#c2569b`, Typer `#1f9ed1`, pytest `#3aae6b`.
-(See §8 — do not ship until each is verified against the upstream brand.)
 
 ### 5.4 Monogram assignments (initial)
 
@@ -99,7 +98,7 @@ FastAPI `#009688`, Litestar `#5b8def`, FastStream `#c2569b`, Typer `#1f9ed1`, py
 
 ### 6.3 Storage
 
-Canonical source lives in this repo (the org-site repo). Proposed: `brand/` at the repo root with one folder per mark and a shared `tokens` reference; the org-site favicon/logo in `docs/assets/` is regenerated from it. Per-repo usage: each repo's `README.md` header gets its horizontal lockup; repos with a docs site get the favicon. Exact path confirmed in the plan.
+Canonical source lives in this repo (the org-site repo) at **`brand/`** (repo root): one folder per mark plus a shared `tokens` reference. The org-site favicon/logo in `docs/assets/` is regenerated from it. Per-repo usage: each repo's `README.md` header gets its horizontal lockup; repos with a docs site get the favicon.
 
 ## 7. Conventions to honor
 
@@ -107,13 +106,13 @@ Canonical source lives in this repo (the org-site repo). Proposed: `brand/` at t
 - SVGs: `role="img"`, `aria-label`, no raster fallback needed.
 - Brand casing in any text: `modern-di`, `that-depends`, `Litestar`, `FastStream`, `FastAPI`, `Typer`.
 
-## 8. Open decisions (please rule during spec review)
+## 8. Resolved decisions
 
-1. **Wordmark typeface/lockup** — adopt the monospace command-line default (§4), or prefer a geometric sans / the existing wordmark? (Earlier companion options L1 vs L3 vs L5.)
-2. **Framework hex values** (§5.3) — confirm sourcing: pull each from the upstream project's brand, or pick our own harmonized set?
-3. **Storage location** (§6.3) — `brand/` at repo root vs `docs/assets/brand/`.
-4. **Favicon reduction** — outer+core only, or a 2-band version?
-5. **Rollout** — produce all 17 now, or the 4 exemplars first then the rest in a follow-up (current scope assumes the latter).
+1. **Wordmark** — monospace (JetBrains Mono), lowercase; command-line horizontal primary, stacked secondary (§4).
+2. **Framework colors** — pull from each upstream brand, audit for harmony, adapt any that clash (§5.3).
+3. **Storage** — `brand/` at repo root (§6.3).
+4. **Favicon** — two-band reduction (outer green + middle gold, core dropped) (§3).
+5. **Rollout** — 4 exemplars this pass; remaining ~13 in a follow-up (§6.1).
 
 ## 9. Explicitly out of scope
 
