@@ -39,3 +39,19 @@ def test_template_has_three_bars(parse_svg):
     parse_svg(svg)
     assert svg.count("<rect") == 3
     assert 'width="26" height="6"' in svg
+
+
+def test_horizontal_lockup(parse_svg):
+    inner = g.icon_inner("org")
+    svg = g.lockup_horizontal(inner, "modern-python", label="Modern Python")
+    el = parse_svg(svg)
+    assert float(el.attrib["viewBox"].split()[2]) > 100  # wider than the icon
+    assert "<text" not in svg            # wordmark outlined
+    assert g.OUTER_SNAKE in svg
+
+
+def test_social_card_dimensions(parse_svg):
+    inner = g.icon_inner("org")
+    svg = g.social_card(inner, "modern-python", label="Modern Python")
+    el = parse_svg(svg)
+    assert el.attrib["viewBox"] == "0 0 1280 640"
