@@ -36,13 +36,15 @@ def _middle(stroke_color: str = "var(--accent)") -> str:
             f'<circle cx="65" cy="57" r="5.5" fill="{stroke_color}" stroke="none"/></g>')
 
 
-def org_icon() -> str:
-    body = ('<g fill="none" stroke-linecap="round" stroke-linejoin="round">'
+def _org_inner() -> str:
+    return ('<g fill="none" stroke-linecap="round" stroke-linejoin="round">'
             f'{_outer()}{_middle()}'
-            '<circle cx="50" cy="50" r="5" fill="var(--struct)" stroke="none"/>'
-            '</g>')
+            '<circle cx="50" cy="50" r="5" fill="var(--struct)" stroke="none"/></g>')
+
+
+def org_icon() -> str:
     style = theme_style(t.GREEN, t.GOLD, t.GREEN_DARK, t.GOLD_DARK)
-    return svg(body, label="Modern Python", style=style)
+    return svg(_org_inner(), label="Modern Python", style=style)
 
 
 OPTICAL_CENTER = 48.5
@@ -53,21 +55,28 @@ def _frame(frame_color: str) -> str:
             f'{_outer(frame_color)}</g>')
 
 
-def project_monogram(initials: str, *, frame_color: str, ink: str, label: str) -> str:
+def _monogram_inner(initials: str, *, frame_color: str, ink: str) -> str:
     size = 30 if len(initials) <= 2 else 26
     baseline = OPTICAL_CENTER + cap_height_scaled(size) / 2
     glyphs, _ = outline_text(initials, size, x=50, baseline_y=baseline,
                              anchor="middle", color=ink)
-    return svg(_frame(frame_color) + glyphs, label=label)
+    return _frame(frame_color) + glyphs
 
 
-def project_template(*, frame_color: str, ink: str, label: str) -> str:
+def _template_inner(*, frame_color: str, ink: str) -> str:
     bars = "".join(
         f'<rect x="37" y="{y}" width="26" height="6" rx="3"/>'
         for y in (39, 48, 57)
     )
-    glyph = f'<g fill="{ink}">{bars}</g>'
-    return svg(_frame(frame_color) + glyph, label=label)
+    return _frame(frame_color) + f'<g fill="{ink}">{bars}</g>'
+
+
+def project_monogram(initials: str, *, frame_color: str, ink: str, label: str) -> str:
+    return svg(_monogram_inner(initials, frame_color=frame_color, ink=ink), label=label)
+
+
+def project_template(*, frame_color: str, ink: str, label: str) -> str:
+    return svg(_template_inner(frame_color=frame_color, ink=ink), label=label)
 
 
 def org_favicon() -> str:
@@ -77,32 +86,16 @@ def org_favicon() -> str:
     return svg(body, label="Modern Python", style=style)
 
 
-ICON_SIZE_IN_LOCKUP = 80  # px of the embedded icon nested-svg
+ICON_SIZE_IN_LOCKUP = 96  # px of the embedded icon nested-svg
 
 
-def icon_inner(kind: str, **kw: object) -> str:
+def icon_inner(kind: str, **kw: str) -> str:
     if kind == "org":
-        return ('<g fill="none" stroke-linecap="round" stroke-linejoin="round">'
-                f'{_outer()}{_middle()}'
-                '<circle cx="50" cy="50" r="5" fill="var(--struct)" stroke="none"/></g>')
+        return _org_inner()
     if kind == "monogram":
-        size = 30 if len(kw["initials"]) <= 2 else 26  # ty: ignore[arg-type]
-        baseline = OPTICAL_CENTER + cap_height_scaled(size) / 2
-        glyphs, _ = outline_text(
-            kw["initials"],  # ty: ignore[arg-type]
-            size,
-            x=50,
-            baseline_y=baseline,
-            anchor="middle",
-            color=kw["ink"],  # ty: ignore[arg-type]
-        )
-        return _frame(kw["frame_color"]) + glyphs  # ty: ignore[operator]
+        return _monogram_inner(kw["initials"], frame_color=kw["frame_color"], ink=kw["ink"])
     if kind == "template":
-        bars = "".join(
-            f'<rect x="37" y="{y}" width="26" height="6" rx="3"/>'
-            for y in (39, 48, 57)
-        )
-        return _frame(kw["frame_color"]) + f'<g fill="{kw["ink"]}">{bars}</g>'  # ty: ignore[operator]
+        return _template_inner(frame_color=kw["frame_color"], ink=kw["ink"])
     raise ValueError(kind)
 
 
@@ -117,7 +110,7 @@ def _lockup_style() -> str:
 
 def lockup_horizontal(icon_inner_svg: str, wordmark: str, label: str) -> str:
     fs = 46
-    icon_px = 96
+    icon_px = ICON_SIZE_IN_LOCKUP
     gap = 26
     h = 100
     baseline = h / 2 + cap_height_scaled(fs) / 2
@@ -134,7 +127,7 @@ def lockup_horizontal(icon_inner_svg: str, wordmark: str, label: str) -> str:
 
 def lockup_stacked(icon_inner_svg: str, wordmark: str, label: str) -> str:
     fs = 22
-    icon_px = 96
+    icon_px = ICON_SIZE_IN_LOCKUP
     wm, _ = outline_text(wordmark, fs, x=64, baseline_y=128, anchor="middle",
                          color="var(--ink)")
     body = (
