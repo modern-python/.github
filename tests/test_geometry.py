@@ -30,6 +30,28 @@ def test_lockup_body_has_outlined_wordmark_and_crops(parse_svg):
     assert 'points="406,130 398,130 398,128 406,120"' in body   # BR snake tail
 
 
+def test_wordmark_is_transparent_two_color_lockup(parse_svg):
+    svg = g.wordmark(struct="#356852", gold="#c98a00")
+    el = parse_svg(svg)
+    assert el.attrib["viewBox"] == "118 32 304 184"   # tight, centered on the lockup
+    assert "<rect width=" not in svg                   # transparent — no background fill
+    assert "M138 122 L138 50 L210 50" in svg           # carries the lockup crops
+    assert "#356852" in svg and "#c98a00" in svg
+    assert "var(" not in svg and "<text" not in svg
+
+
+def test_mark_is_transparent_chevron(parse_svg):
+    svg = g.mark(struct="#f4f1e8", gold="#f0b528")
+    el = parse_svg(svg)
+    assert el.attrib["viewBox"] == "0 0 100 100"
+    assert 'width="100" height="100"' not in svg        # no full-bleed background rect
+    assert "M15 68 L15 15 L68 15" in svg                # both snakes...
+    assert "M85 32 L85 85 L32 85" in svg
+    assert 'points="45,40 57,50 45,60"' in svg          # ...and the gold chevron
+    assert "#f4f1e8" in svg and "#f0b528" in svg
+    assert "var(" not in svg
+
+
 def test_social_card_cream(parse_svg):
     svg = g.social_card(bg="#f4f1e8", struct="#356852", gold="#c98a00", url_color="#c98a00")
     el = parse_svg(svg)

@@ -52,6 +52,24 @@ def lockup_body(*, struct: str, gold: str) -> str:
     return crops + modern + python
 
 
+def wordmark(*, struct: str, gold: str) -> str:
+    """Standalone two-color MODERN/PYTHON wordmark for the site hero. Wraps
+    `lockup_body` (drawn in a 540x250 space) in a tight viewBox centered on the
+    content, with no background — transparent so it sits on any page surface."""
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="118 32 304 184" '
+        'role="img" aria-label="Modern Python">'
+        + lockup_body(struct=struct, gold=gold)
+        + "</svg>"
+    )
+
+
+def mark(*, struct: str, gold: str) -> str:
+    """The chevron mark on its own (no background) for the site header logo —
+    same glyph as `icon`, minus the full-bleed background rect."""
+    return _SVG_OPEN.format(w=100, h=100) + _icon_mark(struct, gold) + "</svg>"
+
+
 def social_card(*, bg: str, struct: str, gold: str, url_color: str) -> str:
     body = lockup_body(struct=struct, gold=gold)
     url, _ = outline_text("modern-python.org", 34, x=640, baseline_y=575,

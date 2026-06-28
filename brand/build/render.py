@@ -51,6 +51,13 @@ def render() -> None:
            g.icon_circle(bg=t.GREEN_SURFACE, struct=t.CREAM, gold=t.GOLD_DARK))
     export_png(ORG / "avatar-circle.svg", ORG / "avatar-circle-1024.png", width=1024, height=1024)
 
+    # Site logos — transparent, no background.
+    #   wordmark (hero): two-color lockup, light + dark variants
+    #   mark (header): chevron mark in cream/gold-dark for the green header bar
+    _write(ORG / "wordmark.svg", g.wordmark(struct=t.GREEN_INK, gold=t.GOLD_LIGHT))
+    _write(ORG / "wordmark-dark.svg", g.wordmark(struct=t.CREAM, gold=t.GOLD_DARK))
+    _write(ORG / "mark.svg", g.mark(struct=t.CREAM, gold=t.GOLD_DARK))
+
     # Social cards — cream (primary) + green (alternate).
     _write(ORG / "social-card.svg",
            g.social_card(bg=t.CREAM, struct=t.GREEN_INK, gold=t.GOLD_LIGHT, url_color=t.GOLD_LIGHT))

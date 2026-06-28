@@ -1,9 +1,25 @@
 {% extends "base.html" %}
 
+{#- The homepage sets a front-matter `title` so the header topic reads
+    "Modern Python" instead of the nav default "Home". Material's default
+    htmltitle would then render "<title>Modern Python - Modern Python</title>";
+    collapse that to just the site name on the homepage. -#}
+{% block htmltitle %}
+  {%- if page.is_homepage %}
+    <title>{{ config.site_name }}</title>
+  {%- elif page.meta and page.meta.title %}
+    <title>{{ page.meta.title }} - {{ config.site_name }}</title>
+  {%- elif page.title %}
+    <title>{{ page.title | striptags }} - {{ config.site_name }}</title>
+  {%- else %}
+    <title>{{ config.site_name }}</title>
+  {%- endif %}
+{% endblock %}
+
 {#- Open Graph / Twitter card metadata for modern-python.org. -#}
 {% block extrahead %}
   {{ super() }}
-  {% set card = config.site_url ~ "assets/social-card.png" %}
+  {% set card = config.site_url ~ "assets/social-card-green.png" %}
   {%- if page.meta and page.meta.title %}
     {%- set title = page.meta.title %}
   {%- elif page.is_homepage %}
