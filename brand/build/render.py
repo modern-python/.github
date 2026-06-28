@@ -72,10 +72,14 @@ def render_project(slug: str, inner_kind: str, wordmark: str, label: str, **icon
     else:
         standalone = g.project_template(frame_color=icon_kw["frame_color"],
                                         ink=icon_kw["ink"], label=label)
+    horizontal_svg = g.lockup_horizontal(inner, wordmark, label=label)
+    stacked_svg = g.lockup_stacked(inner, wordmark, label=label)
     _write(base / "icon.svg", standalone)
     _write(base / "icon-dark.svg", dark_variant(standalone))
-    _write(base / "horizontal.svg", g.lockup_horizontal(inner, wordmark, label=label))
-    _write(base / "stacked.svg", g.lockup_stacked(inner, wordmark, label=label))
+    _write(base / "horizontal.svg", horizontal_svg)
+    _write(base / "stacked.svg", stacked_svg)
+    _write(base / "horizontal-dark.svg", dark_variant(bake(horizontal_svg, "dark")))
+    _write(base / "stacked-dark.svg", dark_variant(bake(stacked_svg, "dark")))
 
 
 def render_org() -> None:

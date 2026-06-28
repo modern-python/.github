@@ -6,7 +6,7 @@ MIDDLE_SNAKE = "M65 57 L65 43 Q65 35 57 35 L43 35 Q35 35 35 43 L35 57 Q35 65 43 
 STROKE = 8
 
 
-def svg(body: str, *, w: int = 100, h: int = 100, label: str, style: str = "") -> str:
+def svg(body: str, *, w: float = 100, h: float = 100, label: str, style: str = "") -> str:
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
             f'role="img" aria-label="{label}">{style}{body}</svg>')
 

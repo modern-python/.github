@@ -96,3 +96,38 @@ def test_template_assets_distinct_from_integration():
 
 def test_framework_palettes_have_matching_keys():
     assert tokens.FRAMEWORK.keys() == tokens.FRAMEWORK_DARK.keys()
+
+
+def test_project_horizontal_dark_modern_di():
+    subprocess.run([sys.executable, "-m", "brand.build.render"], check=True)
+    base = Path("brand/projects/modern-di")
+    dark = base / "horizontal-dark.svg"
+    assert dark.exists(), dark
+    ET.parse(dark)  # well-formed
+    content = dark.read_text()
+    assert tokens.GREEN_DARK in content    # dark green present (#3f8064)
+    assert tokens.GREEN not in content     # light green absent (#356852)
+    assert "var(--" not in content         # no un-baked variables
+
+
+def test_project_stacked_dark_modern_di():
+    subprocess.run([sys.executable, "-m", "brand.build.render"], check=True)
+    base = Path("brand/projects/modern-di")
+    dark = base / "stacked-dark.svg"
+    assert dark.exists(), dark
+    ET.parse(dark)
+    content = dark.read_text()
+    assert tokens.GREEN_DARK in content
+    assert tokens.GREEN not in content
+    assert "var(--" not in content
+
+
+def test_project_horizontal_dark_modern_di_fastapi():
+    subprocess.run([sys.executable, "-m", "brand.build.render"], check=True)
+    base = Path("brand/projects/modern-di-fastapi")
+    dark = base / "horizontal-dark.svg"
+    assert dark.exists(), dark
+    ET.parse(dark)
+    content = dark.read_text()
+    assert tokens.FRAMEWORK_DARK["fastapi"] in content   # #2dd4bf
+    assert tokens.FRAMEWORK["fastapi"] not in content    # #009688 remapped away
