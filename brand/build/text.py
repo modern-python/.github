@@ -12,7 +12,7 @@ def _font() -> TTFont:
 
 
 def _upm() -> int:
-    return _font()["head"].unitsPerEm
+    return _font()["head"].unitsPerEm  # ty: ignore[unresolved-attribute]
 
 
 def cap_height_scaled(size: float) -> float:
@@ -37,6 +37,7 @@ def outline_text(
     upm = _upm()
     s = size / upm
 
+    assert cmap is not None, "font has no Unicode cmap"
     parts: list[str] = []
     cursor: int = 0
     for ch in text:
