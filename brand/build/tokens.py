@@ -16,3 +16,13 @@ FRAMEWORK = {
     "typer": "#1f9ed1",
     "pytest": "#3aae6b",
 }
+
+# Brighter framework inks for dark backgrounds — starting approximations,
+# verified/harmonized per spec §5.3 like FRAMEWORK.
+FRAMEWORK_DARK = {
+    "fastapi": "#2dd4bf",
+    "litestar": "#93b4ff",
+    "faststream": "#e879c0",
+    "typer": "#5bc0f0",
+    "pytest": "#5fd99a",
+}

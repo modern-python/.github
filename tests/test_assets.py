@@ -72,7 +72,13 @@ def test_modern_di_fastapi_assets():
     assert fastapi_hex in icon          # framework-colored letters
     assert "<rect" not in icon          # NOT a template (no stack glyph)
     ET.parse(base / "horizontal.svg")
-    # dark variant: framework ink unchanged; frame remapped to dark green
+    # dark variant: framework ink brightened for dark bg; frame -> dark green
     icon_dark = (base / "icon-dark.svg").read_text()
-    assert fastapi_hex in icon_dark     # FastAPI hex survives dark remap
-    assert "#3f8064" in icon_dark       # dark green frame
+    assert tokens.FRAMEWORK_DARK["fastapi"] in icon_dark   # #2dd4bf
+    assert fastapi_hex not in icon_dark                    # light teal remapped away
+    assert "#3f8064" in icon_dark                          # dark green frame
+
+
+def test_framework_palettes_have_matching_keys():
+    from brand.build import tokens
+    assert tokens.FRAMEWORK.keys() == tokens.FRAMEWORK_DARK.keys()

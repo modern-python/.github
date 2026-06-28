@@ -53,9 +53,13 @@ def export_png(
 
 
 def dark_variant(svg: str) -> str:
-    """Remap the two brand colors to their dark-mode equivalents; leave
-    framework/category inks untouched."""
-    return svg.replace(t.GREEN, t.GREEN_DARK).replace(t.GOLD, t.GOLD_DARK)
+    """Remap brand colors (GREEN/GOLD) and framework inks to their
+    dark-mode equivalents. Only colors actually present in the SVG match, so
+    a framework-free asset (e.g. modern-di) is unaffected by the framework loop."""
+    out = svg.replace(t.GREEN, t.GREEN_DARK).replace(t.GOLD, t.GOLD_DARK)
+    for name, light in t.FRAMEWORK.items():
+        out = out.replace(light, t.FRAMEWORK_DARK[name])
+    return out
 
 
 def render_project(slug: str, inner_kind: str, wordmark: str, label: str, **icon_kw: str) -> None:
