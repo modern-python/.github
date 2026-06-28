@@ -1,0 +1,44 @@
+# modern-python brand kit
+
+Source of truth for the org's **favicon** and **social card**. Generated assets
+live in `brand/org/`. Regenerate with:
+
+```bash
+uv run python -m brand.build.render
+```
+
+PNGs require `rsvg-convert` (`brew install librsvg` / `apt install librsvg2-bin`).
+Without it the SVGs are still written and PNGs are skipped.
+
+## Palette
+
+| Token | Hex | Role |
+|-------|-----|------|
+| Green ink | `#356852` | snakes/text on cream |
+| Green surface | `#2f5e4a` | green backgrounds |
+| Gold (light) | `#c98a00` | accent on cream |
+| Gold (dark) | `#f0b528` | accent on green |
+| Cream | `#f4f1e8` | light surface; light ink on green |
+
+## Mark
+
+Two interlocked "snakes" (corner brackets with square heads) as a pinwheel. The
+**icon** wraps them around a gold core dot (favicon + avatar). The **wordmark
+lockup** pulls them into crop marks framing `MODERN` / `PYTHON` set in **Jost**
+(SIL OFL, outlined to paths at build time — see `brand/build/fonts/Jost-OFL.txt`).
+
+## Outputs (`brand/org/`)
+
+| File | What |
+|------|------|
+| `favicon.svg`, `favicon-16/32/48.png` | browser favicon (bold reduction, green) |
+| `apple-touch-icon.svg`, `apple-touch-icon-180.png` | iOS home-screen (full-bleed) |
+| `avatar.svg`, `avatar-1024.png` | GitHub org picture |
+| `social-card.svg` / `.png` | 1280×640 og:image, **cream** (primary) |
+| `social-card-green.svg` / `.png` | 1280×640, green alternate |
+| `social-square.svg` / `.png`, `social-square-green.*` | 640×640 (Telegram) |
+
+## Deferred (not in this kit)
+
+Per-project / per-repo marks, the subfamily system, and any inner glyphs are a
+later task. The header nav logo redesign is also a follow-up.
