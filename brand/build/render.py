@@ -10,8 +10,6 @@ ROOT = Path(__file__).resolve().parents[2]
 ORG = ROOT / "brand" / "org"
 PROJECTS = ROOT / "brand" / "projects"
 
-MANIFEST: list[tuple[Path, object]] = []
-
 _STYLE_RE = re.compile(r"<style>.*?</style>", re.DOTALL)
 
 _BAKE: dict[str, dict[str, str]] = {
