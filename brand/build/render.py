@@ -8,6 +8,7 @@ from brand.build import tokens as t
 
 ROOT = Path(__file__).resolve().parents[2]
 ORG = ROOT / "brand" / "org"
+PROJECTS = ROOT / "brand" / "projects"
 
 MANIFEST: list[tuple[Path, object]] = []
 
@@ -51,6 +52,28 @@ def export_png(
     return True
 
 
+def dark_variant(svg: str) -> str:
+    """Remap the two brand colors to their dark-mode equivalents; leave
+    framework/category inks untouched."""
+    return svg.replace(t.GREEN, t.GREEN_DARK).replace(t.GOLD, t.GOLD_DARK)
+
+
+def render_project(slug: str, inner_kind: str, wordmark: str, label: str, **icon_kw: str) -> None:
+    base = PROJECTS / slug
+    inner = g.icon_inner(inner_kind, **icon_kw)
+    if inner_kind == "monogram":
+        standalone = g.project_monogram(icon_kw["initials"],
+                                        frame_color=icon_kw["frame_color"],
+                                        ink=icon_kw["ink"], label=label)
+    else:
+        standalone = g.project_template(frame_color=icon_kw["frame_color"],
+                                        ink=icon_kw["ink"], label=label)
+    _write(base / "icon.svg", standalone)
+    _write(base / "icon-dark.svg", dark_variant(standalone))
+    _write(base / "horizontal.svg", g.lockup_horizontal(inner, wordmark, label=label))
+    _write(base / "stacked.svg", g.lockup_stacked(inner, wordmark, label=label))
+
+
 def render_org() -> None:
     inner = g.icon_inner("org")
     _write(ORG / "icon.svg", g.org_icon())
@@ -73,7 +96,8 @@ def render_org() -> None:
 
 def main() -> None:
     render_org()
-    # project rendering added in later tasks
+    render_project("modern-di", "monogram", "modern-di", "modern-di",
+                   initials="di", frame_color=t.GREEN, ink=t.GOLD)
 
 
 if __name__ == "__main__":

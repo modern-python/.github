@@ -44,3 +44,19 @@ def test_render_writes_baked_and_pngs():
             png = ORG / f"{name}.png"
             assert png.exists()
             assert png.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+def test_modern_di_assets():
+    subprocess.run([sys.executable, "-m", "brand.build.render"], check=True)
+    base = Path("brand/projects/modern-di")
+    icon = (base / "icon.svg").read_text()
+    assert 'aria-label="modern-di"' in icon
+    assert "#c98a00" in icon            # gold monogram
+    assert "<text" not in icon          # outlined
+    for name in ("icon", "horizontal", "stacked"):
+        ET.parse(base / f"{name}.svg")
+    # dark variant: frame color remapped to dark green
+    icon_dark = (base / "icon-dark.svg").read_text()
+    assert (base / "icon-dark.svg").exists()
+    ET.parse(base / "icon-dark.svg")
+    assert "#3f8064" in icon_dark       # dark green frame
