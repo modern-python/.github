@@ -79,5 +79,20 @@ def test_modern_di_fastapi_assets():
     assert "#3f8064" in icon_dark                          # dark green frame
 
 
+def test_template_assets_distinct_from_integration():
+    subprocess.run([sys.executable, "-m", "brand.build.render"], check=True)
+    base = Path("brand/projects/fastapi-sqlalchemy-template")
+    icon = (base / "icon.svg").read_text()
+    assert 'aria-label="fastapi-sqlalchemy-template"' in icon
+    assert icon.count("<rect") == 3                # stack glyph
+    assert tokens.FRAMEWORK["fastapi"] in icon     # same framework color...
+    integ = Path("brand/projects/modern-di-fastapi/icon.svg").read_text()
+    assert ("<rect" in icon) and ("<rect" not in integ)  # ...different device
+    # dark variant: framework ink brightened, frame -> dark green
+    icon_dark = (base / "icon-dark.svg").read_text()
+    assert tokens.FRAMEWORK_DARK["fastapi"] in icon_dark   # #2dd4bf brightened FastAPI
+    assert "#3f8064" in icon_dark                          # dark green frame
+
+
 def test_framework_palettes_have_matching_keys():
     assert tokens.FRAMEWORK.keys() == tokens.FRAMEWORK_DARK.keys()

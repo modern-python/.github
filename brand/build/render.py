@@ -104,6 +104,9 @@ def main() -> None:
                    initials="di", frame_color=t.GREEN, ink=t.GOLD)
     render_project("modern-di-fastapi", "monogram", "modern-di-fastapi", "modern-di-fastapi",
                    initials="fa", frame_color=t.GREEN, ink=t.FRAMEWORK["fastapi"])
+    render_project("fastapi-sqlalchemy-template", "template",
+                   "fastapi-sqlalchemy-template", "fastapi-sqlalchemy-template",
+                   frame_color=t.GREEN, ink=t.FRAMEWORK["fastapi"])
 
 
 if __name__ == "__main__":
