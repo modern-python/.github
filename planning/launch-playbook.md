@@ -1,6 +1,6 @@
 # Launch playbook (Phase 4)
 
-Internal asset — **not published** (excluded from the site via `exclude_docs`).
+Internal asset — **not published** (lives at the repo root, outside the MkDocs `docs/` tree).
 Ready-to-post copy for the coordinated launch, plus timing and etiquette.
 
 **Design principles**

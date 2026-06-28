@@ -670,7 +670,7 @@ Covenant 2.1), SECURITY (private vulnerability reporting), SUPPORT, issue forms
 casing on the docs landing page.
 
 Implements Phase 0 (foundation hygiene) of the promotion strategy
-(\`docs/superpowers/specs/2026-06-24-promotion-strategy-design.md\`).
+(\`../2026-06-24.01-promotion-strategy/design.md\`).
 
 Note: org-level Discussions must be enabled for the issue-chooser "Question"
 contact link to resolve (see manual step).
