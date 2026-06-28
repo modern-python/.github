@@ -47,6 +47,22 @@ def test_render_writes_avatar_circle():
         assert (ORG / "avatar-circle-1024.png").read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
 
 
+def test_render_writes_site_wordmark_and_mark():
+    _render()
+    light = (ORG / "wordmark.svg").read_text()
+    assert ET.parse(ORG / "wordmark.svg") is not None
+    assert "#356852" in light and "#c98a00" in light   # green ink + gold-light
+    dark = (ORG / "wordmark-dark.svg").read_text()
+    assert "#f4f1e8" in dark and "#f0b528" in dark      # cream + gold-dark
+    for wm in ("wordmark.svg", "wordmark-dark.svg"):
+        assert "<rect width=" not in (ORG / wm).read_text()   # no background fill
+    mark = (ORG / "mark.svg").read_text()
+    assert ET.parse(ORG / "mark.svg") is not None
+    assert 'width="100" height="100"' not in mark       # transparent, no bg rect
+    assert 'points="45,40 57,50 45,60"' in mark         # chevron
+    assert "#f4f1e8" in mark and "#f0b528" in mark
+
+
 def test_render_writes_social_cards():
     _render()
     cream = (ORG / "social-card.svg").read_text()

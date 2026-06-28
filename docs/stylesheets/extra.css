@@ -22,15 +22,26 @@
   text-align: center;
   margin: 2rem 0 3rem;
 }
+/* The wordmark is the page <h1>; strip the default heading chrome. */
+.mp-hero .mp-wordmark {
+  margin: 0;
+  font-size: 0;  /* collapse whitespace between the stacked <img> variants */
+  line-height: 0;
+}
 .mp-hero .mp-logo {
   max-width: 420px;
   width: 70%;
   height: auto;
-  color: var(--md-primary-fg-color);  /* brand green on the light page */
 }
-/* Lighter green in dark mode so the wordmark keeps contrast on the dark bg */
-[data-md-color-scheme="slate"] .mp-hero .mp-logo {
-  color: #7fb79f;
+/* Two-color wordmark: light variant by default, cream variant in dark mode. */
+.mp-hero .mp-logo--dark {
+  display: none;
+}
+[data-md-color-scheme="slate"] .mp-hero .mp-logo--light {
+  display: none;
+}
+[data-md-color-scheme="slate"] .mp-hero .mp-logo--dark {
+  display: inline;
 }
 .mp-hero .mp-tagline {
   color: var(--md-default-fg-color--light);
