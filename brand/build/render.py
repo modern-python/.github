@@ -98,6 +98,8 @@ def main() -> None:
     render_org()
     render_project("modern-di", "monogram", "modern-di", "modern-di",
                    initials="di", frame_color=t.GREEN, ink=t.GOLD)
+    render_project("modern-di-fastapi", "monogram", "modern-di-fastapi", "modern-di-fastapi",
+                   initials="fa", frame_color=t.GREEN, ink=t.FRAMEWORK["fastapi"])
 
 
 if __name__ == "__main__":

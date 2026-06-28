@@ -60,3 +60,19 @@ def test_modern_di_assets():
     assert (base / "icon-dark.svg").exists()
     ET.parse(base / "icon-dark.svg")
     assert "#3f8064" in icon_dark       # dark green frame
+
+
+def test_modern_di_fastapi_assets():
+    subprocess.run([sys.executable, "-m", "brand.build.render"], check=True)
+    base = Path("brand/projects/modern-di-fastapi")
+    icon = (base / "icon.svg").read_text()
+    assert 'aria-label="modern-di-fastapi"' in icon
+    from brand.build import tokens
+    fastapi_hex = tokens.FRAMEWORK["fastapi"]
+    assert fastapi_hex in icon          # framework-colored letters
+    assert "<rect" not in icon          # NOT a template (no stack glyph)
+    ET.parse(base / "horizontal.svg")
+    # dark variant: framework ink unchanged; frame remapped to dark green
+    icon_dark = (base / "icon-dark.svg").read_text()
+    assert fastapi_hex in icon_dark     # FastAPI hex survives dark remap
+    assert "#3f8064" in icon_dark       # dark green frame
