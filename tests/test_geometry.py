@@ -10,8 +10,8 @@ def test_icon_structure(parse_svg):
     assert 'fill="#2f5e4a"' in svg
     assert "M15 68 L15 15 L68 15" in svg
     assert "M85 32 L85 85 L32 85" in svg
-    assert 'points="9.5,66 9.5,79 20.5,66"' in svg
-    assert 'points="90.5,34 90.5,21 79.5,34"' in svg
+    assert 'points="9.5,66 20.5,66 20.5,68 9.5,79"' in svg
+    assert 'points="90.5,34 79.5,34 79.5,32 90.5,21"' in svg
     assert 'points="45,40 57,50 45,60"' in svg
     assert "#f4f1e8" in svg and "#f0b528" in svg
     assert "var(" not in svg
@@ -26,8 +26,8 @@ def test_lockup_body_has_outlined_wordmark_and_crops(parse_svg):
     assert "#356852" in body and "#c98a00" in body
     assert "<text" not in body                   # outlined, not live text
     assert body.count("<path") >= 4              # 2 crops + >=2 glyph paths
-    assert 'points="134,120 134,130 142,120"' in body   # TL snake tail
-    assert 'points="406,130 406,120 398,130"' in body   # BR snake tail
+    assert 'points="134,120 142,120 142,122 134,130"' in body   # TL snake tail
+    assert 'points="406,130 398,130 398,128 406,120"' in body   # BR snake tail
 
 
 def test_social_card_cream(parse_svg):

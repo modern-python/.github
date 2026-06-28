@@ -60,10 +60,10 @@ polygon bases overlap the stroke by ~2px so tail and body render as one shape.
 bg:       rect 0 0 100 100  fill BG  (square, no rx)
 snake TL: path "M15 68 L15 15 L68 15"  stroke STRUCT  width 11  (butt, miter)
 head TL:  rect x61 y8 w14 h14 rx2      fill STRUCT
-tail TL:  polygon "9.5,66 9.5,79 20.5,66"   fill STRUCT
+tail TL:  polygon "9.5,66 20.5,66 20.5,68 9.5,79"   fill STRUCT
 snake BR: path "M85 32 L85 85 L32 85"  stroke GOLD    width 11
 head BR:  rect x25 y78 w14 h14 rx2     fill GOLD
-tail BR:  polygon "90.5,34 90.5,21 79.5,34"  fill GOLD
+tail BR:  polygon "90.5,34 79.5,34 79.5,32 90.5,21"  fill GOLD
 chevron:  polyline "45,40 57,50 45,60"  stroke GOLD  width 6  (round)
 ```
 `icon_circle` wraps the mark in `translate(50,50) scale(0.74) translate(-50,-50)`
@@ -78,8 +78,8 @@ snake TL: path "M138 122 L138 50 L210 50"  stroke STRUCT  width 8  (butt, miter)
 snake BR: path "M402 128 L402 200 L330 200" stroke GOLD   width 8
 head TL:  rect x202.5 y42.5 w15 h15 rx3  fill STRUCT
 head BR:  rect x322.5 y192.5 w15 h15 rx3  fill GOLD
-tail TL:  polygon "134,120 134,130 142,120"  fill STRUCT
-tail BR:  polygon "406,130 406,120 398,130"  fill GOLD
+tail TL:  polygon "134,120 142,120 142,122 134,130"  fill STRUCT
+tail BR:  polygon "406,130 398,130 398,128 406,120"  fill GOLD
 MODERN:   x270 y126  Jost 400  size 50  fill STRUCT  text-anchor middle  textLength 210
 PYTHON:   x270 y166  Jost 400  size 50  fill GOLD    text-anchor middle  textLength 210
 ```

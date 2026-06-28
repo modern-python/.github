@@ -9,10 +9,10 @@ def _icon_mark(struct: str, gold: str) -> str:
     return (
         f'<path d="M15 68 L15 15 L68 15" fill="none" stroke="{struct}" stroke-width="11" stroke-linecap="butt" stroke-linejoin="miter"/>'
         f'<rect x="61" y="8" width="14" height="14" rx="2" fill="{struct}"/>'
-        f'<polygon points="9.5,66 9.5,79 20.5,66" fill="{struct}"/>'
+        f'<polygon points="9.5,66 20.5,66 20.5,68 9.5,79" fill="{struct}"/>'
         f'<path d="M85 32 L85 85 L32 85" fill="none" stroke="{gold}" stroke-width="11" stroke-linecap="butt" stroke-linejoin="miter"/>'
         f'<rect x="25" y="78" width="14" height="14" rx="2" fill="{gold}"/>'
-        f'<polygon points="90.5,34 90.5,21 79.5,34" fill="{gold}"/>'
+        f'<polygon points="90.5,34 79.5,34 79.5,32 90.5,21" fill="{gold}"/>'
         f'<polyline points="45,40 57,50 45,60" fill="none" stroke="{gold}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>'
     )
 
@@ -46,8 +46,8 @@ def lockup_body(*, struct: str, gold: str) -> str:
         f'<path d="M402 128 L402 200 L330 200" stroke="{gold}"/></g>'
         f'<rect x="202.5" y="42.5" width="15" height="15" rx="3" fill="{struct}"/>'
         f'<rect x="322.5" y="192.5" width="15" height="15" rx="3" fill="{gold}"/>'
-        f'<polygon points="134,120 134,130 142,120" fill="{struct}"/>'
-        f'<polygon points="406,130 406,120 398,130" fill="{gold}"/>'
+        f'<polygon points="134,120 142,120 142,122 134,130" fill="{struct}"/>'
+        f'<polygon points="406,130 398,130 398,128 406,120" fill="{gold}"/>'
     )
     return crops + modern + python
 
