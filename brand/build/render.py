@@ -100,8 +100,24 @@ def render_org() -> None:
         (ORG / "_social-light.svg").unlink(missing_ok=True)
 
 
+def render_avatar() -> None:
+    """Square org avatar (white background, padded mark) for the GitHub org
+    profile picture. Baked light colors so it rasterizes everywhere."""
+    inner = g.icon_inner("org")
+    avatar = (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="6 6 88 88" '
+        'role="img" aria-label="Modern Python">'
+        f"{g.theme_style(t.GREEN, t.GOLD, t.GREEN_DARK, t.GOLD_DARK)}"
+        '<rect x="6" y="6" width="88" height="88" fill="#ffffff"/>'
+        f"{inner}</svg>"
+    )
+    _write(ORG / "avatar.svg", bake(avatar, "light"))
+    export_png(ORG / "avatar.svg", ORG / "avatar.png", width=1024, height=1024)
+
+
 def main() -> None:
     render_org()
+    render_avatar()
     render_project("modern-di", "monogram", "modern-di", "modern-di",
                    initials="di", frame_color=t.GREEN, ink=t.GOLD)
     render_project("modern-di-fastapi", "monogram", "modern-di-fastapi", "modern-di-fastapi",

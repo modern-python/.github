@@ -131,3 +131,17 @@ def test_project_horizontal_dark_modern_di_fastapi():
     content = dark.read_text()
     assert tokens.FRAMEWORK_DARK["fastapi"] in content   # #2dd4bf
     assert tokens.FRAMEWORK["fastapi"] not in content    # #009688 remapped away
+
+
+def test_render_writes_org_avatar():
+    subprocess.run([sys.executable, "-m", "brand.build.render"], check=True)
+    svg = ORG / "avatar.svg"
+    assert svg.exists()
+    ET.parse(svg)
+    text = svg.read_text()
+    assert "#356852" in text  # baked light, concrete colors
+    assert "var(--" not in text
+    if shutil.which("rsvg-convert"):
+        png = ORG / "avatar.png"
+        assert png.exists()
+        assert png.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
