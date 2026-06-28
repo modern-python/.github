@@ -1,8 +1,9 @@
+---
+summary: Org-wide, users-first staged growth strategy for the modern-python GitHub org along three axes (reach, retain, contribute).
+---
+
 # Modern Python — Promotion Strategy
 
-**Date:** 2026-06-24
-**Status:** Approved design, ready for planning
-**Owner:** modern-python maintainers
 **Scope:** Org-wide growth strategy for the `modern-python` GitHub org
 
 ## Goal

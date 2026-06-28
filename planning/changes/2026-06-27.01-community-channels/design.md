@@ -1,8 +1,9 @@
+---
+summary: Which channels the modern-python org uses to reach, support, and retain users, and how they fit together.
+---
+
 # Modern Python — Community & Channels
 
-**Date:** 2026-06-27
-**Status:** Approved design, ready for planning
-**Owner:** modern-python maintainers
 **Scope:** Which channels the `modern-python` org uses to reach, support, and
 retain users — and how they fit together. Extends the
 [promotion strategy](2026-06-24-promotion-strategy-design.md); **amends its Phase 5
