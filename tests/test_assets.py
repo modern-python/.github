@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from brand.build import geometry as g
+from brand.build import tokens
 from brand.build.render import bake
 
 ORG = Path("brand/org")
@@ -67,7 +68,6 @@ def test_modern_di_fastapi_assets():
     base = Path("brand/projects/modern-di-fastapi")
     icon = (base / "icon.svg").read_text()
     assert 'aria-label="modern-di-fastapi"' in icon
-    from brand.build import tokens
     fastapi_hex = tokens.FRAMEWORK["fastapi"]
     assert fastapi_hex in icon          # framework-colored letters
     assert "<rect" not in icon          # NOT a template (no stack glyph)
@@ -80,5 +80,4 @@ def test_modern_di_fastapi_assets():
 
 
 def test_framework_palettes_have_matching_keys():
-    from brand.build import tokens
     assert tokens.FRAMEWORK.keys() == tokens.FRAMEWORK_DARK.keys()
