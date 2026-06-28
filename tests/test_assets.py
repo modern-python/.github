@@ -4,6 +4,7 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from brand.build import geometry as g
 from brand.build.render import bake
 
 ORG = Path("brand/org")
@@ -18,7 +19,6 @@ def test_render_writes_valid_org_assets():
 
 
 def test_bake_light_concrete_colors():
-    from brand.build import geometry as g
     light = bake(g.org_icon(), "light")
     assert "#356852" in light and "#c98a00" in light
     assert "var(--" not in light
@@ -26,7 +26,6 @@ def test_bake_light_concrete_colors():
 
 
 def test_bake_dark_concrete_colors():
-    from brand.build import geometry as g
     dark = bake(g.org_icon(), "dark")
     assert "#3f8064" in dark and "#e0a300" in dark
     assert "var(--" not in dark

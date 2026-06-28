@@ -61,12 +61,14 @@ def render_org() -> None:
     _write(ORG / "icon-light.svg", bake(g.org_icon(), "light"))
     _write(ORG / "icon-dark.svg", bake(g.org_icon(), "dark"))
     # PNG exports from baked-light sources (favicon for tabs, social for og:image)
-    _write(ORG / "_favicon-light.svg", bake(g.org_favicon(), "light"))
-    export_png(ORG / "_favicon-light.svg", ORG / "favicon.png", width=64, height=64)
-    _write(ORG / "_social-light.svg", bake(g.social_card(inner, "modern-python", label="Modern Python"), "light"))
-    export_png(ORG / "_social-light.svg", ORG / "social.png", width=1280, height=640)
-    (ORG / "_favicon-light.svg").unlink(missing_ok=True)
-    (ORG / "_social-light.svg").unlink(missing_ok=True)
+    try:
+        _write(ORG / "_favicon-light.svg", bake(g.org_favicon(), "light"))
+        export_png(ORG / "_favicon-light.svg", ORG / "favicon.png", width=64, height=64)
+        _write(ORG / "_social-light.svg", bake(g.social_card(inner, "modern-python", label="Modern Python"), "light"))
+        export_png(ORG / "_social-light.svg", ORG / "social.png", width=1280, height=640)
+    finally:
+        (ORG / "_favicon-light.svg").unlink(missing_ok=True)
+        (ORG / "_social-light.svg").unlink(missing_ok=True)
 
 
 def main() -> None:
