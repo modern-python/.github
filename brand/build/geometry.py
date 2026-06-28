@@ -127,14 +127,19 @@ def lockup_horizontal(icon_inner_svg: str, wordmark: str, label: str) -> str:
 
 def lockup_stacked(icon_inner_svg: str, wordmark: str, label: str) -> str:
     fs = 22
+    _, w = outline_text(wordmark, fs, x=0, baseline_y=0, color="var(--ink)")  # measure width
     icon_px = ICON_SIZE_IN_LOCKUP
-    wm, _ = outline_text(wordmark, fs, x=64, baseline_y=128, anchor="middle",
+    pad = 12
+    width = max(icon_px, w) + 2 * pad
+    cx = width / 2
+    wm, _ = outline_text(wordmark, fs, x=cx, baseline_y=128, anchor="middle",
                          color="var(--ink)")
+    icon_x = cx - icon_px / 2
     body = (
-        f'<svg x="16" y="0" width="{icon_px}" height="{icon_px}" '
+        f'<svg x="{icon_x}" y="0" width="{icon_px}" height="{icon_px}" '
         f'viewBox="0 0 100 100">{icon_inner_svg}</svg>{wm}'
     )
-    return svg(body, w=128, h=140, label=label, style=_lockup_style())
+    return svg(body, w=round(width, 1), h=140, label=label, style=_lockup_style())
 
 
 def social_card(icon_inner_svg: str, wordmark: str, label: str) -> str:

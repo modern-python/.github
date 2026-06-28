@@ -1,4 +1,14 @@
 from brand.build import geometry as g
+from brand.build.text import outline_text
+
+
+def test_stacked_lockup_fits_wordmark(parse_svg):
+    inner = g.icon_inner("org")
+    svg = g.lockup_stacked(inner, "modern-python", label="Modern Python")
+    el = parse_svg(svg)
+    vb_w = float(el.attrib["viewBox"].split()[2])
+    _, wordmark_w = outline_text("modern-python", 22, x=0, baseline_y=0)
+    assert vb_w >= wordmark_w  # wordmark must fit inside the viewBox
 
 
 def test_org_icon_structure(parse_svg):
