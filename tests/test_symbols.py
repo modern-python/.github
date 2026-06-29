@@ -41,3 +41,11 @@ MSG_SYMBOLS = ["rocket", "chain", "stopwatch", "lanes", "outbox"]
 @pytest.mark.parametrize("name", MSG_SYMBOLS)
 def test_msg_symbol_parses(name: str) -> None:
     minidom.parseString(_wrap(getattr(sym, name)(50, 50, 23)))
+
+
+UTIL_SYMBOLS = ["db_retry", "eof_fixer", "tag"]
+
+
+@pytest.mark.parametrize("name", UTIL_SYMBOLS)
+def test_util_symbol_parses(name: str) -> None:
+    minidom.parseString(_wrap(getattr(sym, name)(50, 50, 23)))

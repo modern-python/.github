@@ -242,3 +242,38 @@ def outbox(cx: float, cy: float, r: float) -> str:
             f'fill="none" stroke="{GOLD}" stroke-width="{r * 0.72 * 0.14:.1f}"/>'
         )
     return base + out
+
+
+def db_retry(cx: float, cy: float, r: float) -> str:
+    """db-retry: a database cylinder inside a two-head clockwise retry circle."""
+    rad = 0.92 * r
+    return _cyl(cx, cy, r * 0.6) + _circ_arc(cx, cy, rad, 285, 425, 4.5) + _circ_arc(cx, cy, rad, 105, 245, 4.5)
+
+
+def eof_fixer(cx: float, cy: float, r: float) -> str:
+    """eof-fixer: a document with a newline-return (down-then-left) arrow."""
+    doc = (
+        f'<rect x="{cx - 0.6 * r:.1f}" y="{cy - 0.8 * r:.1f}" width="{1.2 * r:.1f}" height="{1.6 * r:.1f}" '
+        f'rx="3" fill="none" stroke="{GOLD}" stroke-width="{r * 0.12:.1f}"/>'
+    )
+    for i in range(3):
+        doc += (
+            f'<line x1="{cx - 0.4 * r:.1f}" y1="{cy - 0.5 * r + i * 0.32 * r:.1f}" '
+            f'x2="{cx + 0.4 * r:.1f}" y2="{cy - 0.5 * r + i * 0.32 * r:.1f}" stroke="{GOLD}" stroke-width="{r * 0.1:.1f}"/>'
+        )
+    doc += (
+        f'<line x1="{cx - 0.2 * r:.1f}" y1="{cy + 0.55 * r:.1f}" x2="{cx + 0.45 * r:.1f}" y2="{cy + 0.55 * r:.1f}" '
+        f'stroke="{GOLD}" stroke-width="{r * 0.1:.1f}"/>'
+    )
+    doc += _ah(cx - 0.2 * r, cy + 0.55 * r, math.pi, r * 0.24)
+    return doc
+
+
+def tag(cx: float, cy: float, r: float) -> str:
+    """semvertag: a price/version tag with a punch-hole, vertically centred."""
+    return (
+        f'<path d="M{cx - 0.2 * r:.1f} {cy - 0.48 * r:.1f} L{cx + 0.75 * r:.1f} {cy - 0.48 * r:.1f} '
+        f'L{cx + 0.75 * r:.1f} {cy + 0.48 * r:.1f} L{cx - 0.2 * r:.1f} {cy + 0.48 * r:.1f} '
+        f'L{cx - 0.75 * r:.1f} {cy:.1f} Z" fill="{GOLD}"/>'
+        f'<circle cx="{cx - 0.28 * r:.1f}" cy="{cy:.1f}" r="{0.13 * r:.1f}" fill="{CREAM}"/>'
+    )
