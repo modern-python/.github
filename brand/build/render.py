@@ -1,9 +1,9 @@
-import shutil
-import subprocess
 from pathlib import Path
 
 from brand.build import geometry as g
 from brand.build import tokens as t
+from brand.build.projects import render_projects
+from brand.build.raster import export_png
 
 ROOT = Path(__file__).resolve().parents[2]
 ORG = ROOT / "brand" / "org"
@@ -12,26 +12,6 @@ ORG = ROOT / "brand" / "org"
 def _write(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content + "\n", encoding="utf-8")
-
-
-def export_png(
-    svg_path: Path,
-    png_path: Path,
-    *,
-    width: int | None = None,
-    height: int | None = None,
-) -> bool:
-    exe = shutil.which("rsvg-convert")
-    if exe is None:
-        return False
-    args = [exe]
-    if width is not None:
-        args += ["-w", str(width)]
-    if height is not None:
-        args += ["-h", str(height)]
-    args += [str(svg_path), "-o", str(png_path)]
-    subprocess.run(args, check=True)
-    return True
 
 
 def render() -> None:
@@ -73,6 +53,9 @@ def render() -> None:
     _write(ORG / "social-square-green.svg",
            g.social_square(bg=t.GREEN_SURFACE, struct=t.CREAM, gold=t.GOLD_DARK))
     export_png(ORG / "social-square-green.svg", ORG / "social-square-green.png", width=640, height=640)
+
+    # Per-project marks (brand/projects/<repo>/).
+    render_projects()
 
 
 def main() -> None:

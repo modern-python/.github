@@ -1,8 +1,10 @@
 from collections.abc import Callable
+from pathlib import Path
 
 from brand.build import geometry as g
 from brand.build import symbols as sym
 from brand.build import tokens as t
+from brand.build.raster import export_png
 
 R = 23
 _CX = _CY = 50
@@ -36,6 +38,11 @@ MANIFEST: dict[str, Callable[[], str]] = {
 }
 
 
+ROOT = Path(__file__).resolve().parents[2]
+PROJECTS = ROOT / "brand" / "projects"
+_PNG_SIZES = (512, 1024)
+
+
 def project_mark(repo: str) -> str:
     """Full <svg> for a repo: constant frame + its gold inner symbol."""
     frame = g.project_frame(struct=t.GREEN_INK, accent=t.GOLD_LIGHT)
@@ -44,3 +51,18 @@ def project_mark(repo: str) -> str:
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" '
         f'role="img" aria-label="{repo}">{frame}{inner}</svg>'
     )
+
+
+def render_projects(out_dir: Path | None = None) -> list[Path]:
+    """Write mark.svg (+ PNGs) for every repo under out_dir/<repo>/."""
+    base = out_dir if out_dir is not None else PROJECTS
+    written: list[Path] = []
+    for repo in MANIFEST:
+        d = base / repo
+        d.mkdir(parents=True, exist_ok=True)
+        svg = d / "mark.svg"
+        svg.write_text(project_mark(repo) + "\n", encoding="utf-8")
+        for sz in _PNG_SIZES:
+            export_png(svg, d / f"mark-{sz}.png", width=sz, height=sz)
+        written.append(svg)
+    return written

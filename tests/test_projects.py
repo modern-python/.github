@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 from xml.dom import minidom
 import pytest
 from brand.build import geometry as g
@@ -37,3 +38,11 @@ def test_templates_use_chevron() -> None:
     # both templates share the org chevron (a polyline), not a bespoke symbol
     for repo in ("fastapi-sqlalchemy-template", "litestar-sqlalchemy-template"):
         assert "<polyline" in p.project_mark(repo)
+
+
+def test_render_projects_writes_every_mark(tmp_path: Path) -> None:
+    written = p.render_projects(out_dir=tmp_path)
+    assert len(written) == len(EXPECTED_REPOS)
+    for repo in EXPECTED_REPOS:
+        svg = tmp_path / repo / "mark.svg"
+        assert svg.is_file() and svg.read_text(encoding="utf-8").startswith("<svg")
