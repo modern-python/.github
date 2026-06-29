@@ -46,3 +46,13 @@ def test_render_projects_writes_every_mark(tmp_path: Path) -> None:
     for repo in EXPECTED_REPOS:
         svg = tmp_path / repo / "mark.svg"
         assert svg.is_file() and svg.read_text(encoding="utf-8").startswith("<svg")
+
+@pytest.mark.parametrize("repo", ["modern-di", "faststream-outbox", "semvertag"])
+def test_lockup_is_valid_and_names_repo(repo: str) -> None:
+    svg = p.project_lockup(repo)
+    minidom.parseString(svg)
+    assert svg.startswith("<svg")
+
+def test_render_projects_writes_lockup(tmp_path: Path) -> None:
+    p.render_projects(out_dir=tmp_path)
+    assert (tmp_path / "modern-di" / "lockup.svg").is_file()

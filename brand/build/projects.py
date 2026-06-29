@@ -5,6 +5,7 @@ from brand.build import geometry as g
 from brand.build import symbols as sym
 from brand.build import tokens as t
 from brand.build.raster import export_png
+from brand.build.text import outline_text
 
 R = 23
 _CX = _CY = 50
@@ -42,6 +43,10 @@ ROOT = Path(__file__).resolve().parents[2]
 PROJECTS = ROOT / "brand" / "projects"
 _PNG_SIZES = (512, 1024)
 
+_LOCKUP_H = 100
+_NAME_SIZE = 34
+_GAP = 18
+
 
 def project_mark(repo: str) -> str:
     """Full <svg> for a repo: constant frame + its gold inner symbol."""
@@ -50,6 +55,24 @@ def project_mark(repo: str) -> str:
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" '
         f'role="img" aria-label="{repo}">{frame}{inner}</svg>'
+    )
+
+
+def project_lockup(repo: str) -> str:
+    """Framed mark on the left + the repo name in Jost (green) to its right."""
+    mark_frame = g.project_frame(struct=t.GREEN_INK, accent=t.GOLD_LIGHT)
+    inner = MANIFEST[repo]()
+    name_x = _LOCKUP_H + _GAP
+    name_svg, name_w = outline_text(
+        repo, _NAME_SIZE, x=name_x, baseline_y=_LOCKUP_H / 2 + _NAME_SIZE * 0.34,
+        anchor="start", color=t.GREEN_INK,
+    )
+    total_w = round(name_x + name_w + _GAP)
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {total_w} {_LOCKUP_H}" '
+        f'role="img" aria-label="{repo}">'
+        f'<g>{mark_frame}{inner}</g>'
+        f"{name_svg}</svg>"
     )
 
 
@@ -64,5 +87,6 @@ def render_projects(out_dir: Path | None = None) -> list[Path]:
         svg.write_text(project_mark(repo) + "\n", encoding="utf-8")
         for sz in _PNG_SIZES:
             export_png(svg, d / f"mark-{sz}.png", width=sz, height=sz)
+        (d / "lockup.svg").write_text(project_lockup(repo) + "\n", encoding="utf-8")
         written.append(svg)
     return written
