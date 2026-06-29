@@ -94,3 +94,28 @@ def social_square(*, bg: str, struct: str, gold: str) -> str:
         + f'<g transform="translate({tx},{ty}) scale({s})">{body}</g>'
         + "</svg>"
     )
+
+
+def project_frame(
+    *,
+    struct: str,
+    accent: str,
+    w: int = 100,
+    h: int = 100,
+    m: int = 9,
+    lx: int = 53,
+    ly: int = 53,
+    s: int = 11,
+) -> str:
+    """Two pinwheeled L-snakes in opposite corners — the constant project frame.
+    Returns bare markup (no <svg> wrapper)."""
+    hs = s + 3
+    parts = [
+        f'<path d="M{m} {m + ly} L{m} {m} L{m + lx} {m}" fill="none" stroke="{struct}" stroke-width="{s}" stroke-linejoin="miter"/>',
+        f'<rect x="{m + lx - hs / 2:.1f}" y="{m - hs / 2:.1f}" width="{hs}" height="{hs}" rx="2" fill="{struct}"/>',
+        f'<polygon points="{m - s / 2:.1f},{m + ly - 2:.1f} {m + s / 2:.1f},{m + ly - 2:.1f} {m + s / 2:.1f},{m + ly:.1f} {m - s / 2:.1f},{m + ly + s:.1f}" fill="{struct}"/>',
+        f'<path d="M{w - m} {h - m - ly} L{w - m} {h - m} L{w - m - lx} {h - m}" fill="none" stroke="{accent}" stroke-width="{s}" stroke-linejoin="miter"/>',
+        f'<rect x="{w - m - lx - hs / 2:.1f}" y="{h - m - hs / 2:.1f}" width="{hs}" height="{hs}" rx="2" fill="{accent}"/>',
+        f'<polygon points="{w - m + s / 2:.1f},{h - m - ly + 2:.1f} {w - m - s / 2:.1f},{h - m - ly + 2:.1f} {w - m - s / 2:.1f},{h - m - ly:.1f} {w - m + s / 2:.1f},{h - m - ly - s:.1f}" fill="{accent}"/>',
+    ]
+    return "".join(parts)
