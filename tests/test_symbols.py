@@ -1,4 +1,7 @@
 from xml.dom import minidom
+
+import pytest
+
 from brand.build import symbols as sym
 
 
@@ -16,3 +19,17 @@ def test_helpers_emit_parseable_svg() -> None:
         sym._circ_arc(50, 50, 20, 285, 425, 4.5),
     ):
         minidom.parseString(_wrap(markup))  # raises on malformed XML
+
+
+DI_SYMBOLS = ["bolt_disc", "star_disc", "faststream", "terminal", "bars", "chevron"]
+
+
+@pytest.mark.parametrize("name", DI_SYMBOLS)
+def test_di_symbol_parses(name: str) -> None:
+    markup = getattr(sym, name)(50, 50, 23)
+    minidom.parseString(_wrap(markup))
+
+
+def test_graph_dashed_vs_solid() -> None:
+    assert "stroke-dasharray" in sym.graph(50, 50, 23, dashed=True)
+    assert "stroke-dasharray" not in sym.graph(50, 50, 23, dashed=False)

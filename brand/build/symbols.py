@@ -81,3 +81,94 @@ def _circ_arc(cx: float, cy: float, rad: float, a0: float, a1: float, w: float) 
         f'{base[0] - width * px:.1f},{base[1] - width * py:.1f}" fill="{GOLD}"/>'
     )
     return d
+
+
+FASTSTREAM_PATH = (
+    "m499.61,356.87l-92.61-160.41-36.48-63.19-10.46,251.02c.07,2.86-.78,6.05-2.51,8.6"
+    "-2.98,4.41-7.42,5.31-9.92,2.02l.02-.03-68.85-90.48-107.13,38.09v.04c-3.89,1.38-7.11"
+    "-1.8-7.2-7.12-.05-3.08.97-6.22,2.6-8.57L327.1,58.07l-12.71-22.02c-25.95-44.94-90.82"
+    "-44.94-116.77,0l-92.61,160.41L12.39,356.87c-25.95,44.94,6.49,101.12,58.38,101.12"
+    "h370.45c51.9,0,84.33-56.18,58.38-101.12Z"
+)
+
+
+def bolt_disc(cx: float, cy: float, r: float) -> str:
+    """FastAPI cue: lightning bolt knocked out of a gold disc."""
+    norm = [(0.30, -0.80), (-0.42, 0.18), (0.05, 0.18), (-0.22, 0.82), (0.48, -0.22), (0.05, -0.22)]
+    pts = " ".join(f"{cx + dx * r * 0.82:.1f},{cy + dy * r * 0.82:.1f}" for dx, dy in norm)
+    return f'<circle cx="{cx}" cy="{cy}" r="{r:.1f}" fill="{GOLD}"/><polygon points="{pts}" fill="{CREAM}"/>'
+
+
+def star_disc(cx: float, cy: float, r: float) -> str:
+    """Litestar cue: star knocked out of a gold disc."""
+    return f'<circle cx="{cx}" cy="{cy}" r="{r:.1f}" fill="{GOLD}"/>' + _star5(cx, cy, r * 0.72, CREAM)
+
+
+def faststream(cx: float, cy: float, r: float) -> str:
+    """FastStream's own delta/stream mark, recoloured gold (sized ~2r tall)."""
+    size = r * 2.1
+    sc = size / 462.0
+    return (
+        f'<g transform="translate({cx - 256 * sc:.1f},{cy - 231 * sc:.1f}) scale({sc:.4f})">'
+        f'<path d="{FASTSTREAM_PATH}" fill="{GOLD}"/></g>'
+    )
+
+
+def terminal(cx: float, cy: float, r: float) -> str:
+    """Typer cue: terminal window showing a T> prompt."""
+    return (
+        f'<rect x="{cx - r:.1f}" y="{cy - r * 0.72:.1f}" width="{2 * r:.1f}" height="{r * 1.44:.1f}" '
+        f'rx="{r * 0.2:.1f}" fill="{GOLD}"/>'
+        f'<text x="{cx - r * 0.58:.1f}" y="{cy + r * 0.42:.1f}" '
+        f'font-family="ui-monospace,Menlo,monospace" font-size="{r * 0.98:.1f}" '
+        f'font-weight="700" fill="{CREAM}">T&gt;</text>'
+    )
+
+
+def bars(cx: float, cy: float, r: float) -> str:
+    """pytest cue: stepped bars hanging from a crossbar (gold tints), vertically centred."""
+    bw = r * 0.34
+    gap = r * 0.22
+    x0 = cx - r
+    stub = r * 0.18
+    cb = r * 0.2
+    maxlen = r * 1.0
+    total = stub + r * 0.12 + cb + maxlen
+    top = cy - total / 2
+    y_stub = top
+    y_cb = top + stub + r * 0.12
+    y_bar = y_cb + cb
+    heights = [1.0, 0.78, 0.55, 0.38]
+    out = [f'<rect x="{x0:.1f}" y="{y_cb:.1f}" width="{2 * r:.1f}" height="{cb:.1f}" rx="{cb / 2:.1f}" fill="{GOLD}"/>']
+    for i in range(4):
+        x = x0 + i * (bw + gap)
+        out.append(f'<rect x="{x:.1f}" y="{y_stub:.1f}" width="{bw:.1f}" height="{stub:.1f}" fill="{_BAR_TINTS[i]}"/>')
+        out.append(f'<rect x="{x:.1f}" y="{y_bar:.1f}" width="{bw:.1f}" height="{r * heights[i]:.1f}" rx="1" fill="{_BAR_TINTS[i]}"/>')
+    return "".join(out)
+
+
+def chevron(cx: float, cy: float, r: float) -> str:
+    """The org chevron (used by templates and as a standalone cue)."""
+    return (
+        f'<polyline points="{cx - r * 0.45:.1f},{cy - r:.1f} {cx + r * 0.7:.1f},{cy:.1f} '
+        f'{cx - r * 0.45:.1f},{cy + r:.1f}" fill="none" stroke="{GOLD}" '
+        f'stroke-width="{r * 0.5:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+
+
+def graph(cx: float, cy: float, r: float, *, dashed: bool) -> str:
+    """Dependency graph: 3 nodes + two edges. dashed=auto-wired (modern-di),
+    solid=explicit (that-depends)."""
+    top = (cx, cy - 0.62 * r)
+    bl = (cx - 0.82 * r, cy + 0.6 * r)
+    br = (cx + 0.82 * r, cy + 0.6 * r)
+    nr = r * 0.24
+    w = r * 0.15
+    da = ' stroke-dasharray="4 3"' if dashed else ""
+    return (
+        f'<line x1="{top[0]:.1f}" y1="{top[1]:.1f}" x2="{bl[0]:.1f}" y2="{bl[1]:.1f}" stroke="{GOLD}" stroke-width="{w:.1f}"{da}/>'
+        f'<line x1="{top[0]:.1f}" y1="{top[1]:.1f}" x2="{br[0]:.1f}" y2="{br[1]:.1f}" stroke="{GOLD}" stroke-width="{w:.1f}"{da}/>'
+        f'<circle cx="{top[0]:.1f}" cy="{top[1]:.1f}" r="{nr:.1f}" fill="{GOLD}"/>'
+        f'<circle cx="{bl[0]:.1f}" cy="{bl[1]:.1f}" r="{nr:.1f}" fill="{GOLD}"/>'
+        f'<circle cx="{br[0]:.1f}" cy="{br[1]:.1f}" r="{nr:.1f}" fill="{GOLD}"/>'
+    )
