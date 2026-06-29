@@ -19,27 +19,40 @@ def _icon_mark(struct: str, gold: str) -> str:
 
 def icon(*, bg: str, struct: str, gold: str) -> str:
     """Full-bleed square icon — favicon, apple-touch, GitHub avatar."""
-    return (_SVG_OPEN.format(w=100, h=100)
-            + f'<rect width="100" height="100" fill="{bg}"/>'
-            + _icon_mark(struct, gold) + "</svg>")
+    return (
+        _SVG_OPEN.format(w=100, h=100)
+        + f'<rect width="100" height="100" fill="{bg}"/>'
+        + _icon_mark(struct, gold)
+        + "</svg>"
+    )
 
 
 def icon_circle(*, bg: str, struct: str, gold: str, scale: float = 0.74) -> str:
     """Padded variant centered for circular crops (e.g. Telegram). The mark is
     scaled about the center so it fits inside the inscribed circle with margin."""
-    return (_SVG_OPEN.format(w=100, h=100)
-            + f'<rect width="100" height="100" fill="{bg}"/>'
-            + f'<g transform="translate(50,50) scale({scale}) translate(-50,-50)">{_icon_mark(struct, gold)}</g>'
-            + "</svg>")
+    return (
+        _SVG_OPEN.format(w=100, h=100)
+        + f'<rect width="100" height="100" fill="{bg}"/>'
+        + f'<g transform="translate(50,50) scale({scale}) translate(-50,-50)">{_icon_mark(struct, gold)}</g>'
+        + "</svg>"
+    )
 
 
 def lockup_body(*, struct: str, gold: str) -> str:
     """The MODERN/PYTHON crop-mark lockup, drawn in a 540x250 coordinate space.
     Returned as bare markup (no <svg> wrapper, no background) for embedding."""
-    modern, _ = outline_text("MODERN", 50, x=270, baseline_y=126, anchor="middle",
-                             color=struct, fit_width=210)
-    python, _ = outline_text("PYTHON", 50, x=270, baseline_y=166, anchor="middle",
-                             color=gold, fit_width=210)
+    modern, _ = outline_text(
+        "MODERN",
+        50,
+        x=270,
+        baseline_y=126,
+        anchor="middle",
+        color=struct,
+        fit_width=210,
+    )
+    python, _ = outline_text(
+        "PYTHON", 50, x=270, baseline_y=166, anchor="middle", color=gold, fit_width=210
+    )
     crops = (
         '<g fill="none" stroke-width="8" stroke-linecap="butt" stroke-linejoin="miter">'
         f'<path d="M138 122 L138 50 L210 50" stroke="{struct}"/>'
@@ -72,8 +85,15 @@ def mark(*, struct: str, gold: str) -> str:
 
 def social_card(*, bg: str, struct: str, gold: str, url_color: str) -> str:
     body = lockup_body(struct=struct, gold=gold)
-    url, _ = outline_text("modern-python.org", 34, x=640, baseline_y=575,
-                          anchor="middle", color=url_color, letter_spacing=4)
+    url, _ = outline_text(
+        "modern-python.org",
+        34,
+        x=640,
+        baseline_y=575,
+        anchor="middle",
+        color=url_color,
+        letter_spacing=4,
+    )
     return (
         _SVG_OPEN.format(w=1280, h=640)
         + f'<rect width="1280" height="640" fill="{bg}"/>'

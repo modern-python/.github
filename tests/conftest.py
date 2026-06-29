@@ -6,4 +6,5 @@ import pytest
 def parse_svg():
     def _parse(svg: str) -> ET.Element:
         return ET.fromstring(svg)  # raises on malformed XML
+
     return _parse

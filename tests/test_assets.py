@@ -30,13 +30,15 @@ def test_render_writes_avatar_and_apple_touch():
     _render()
     assert (ORG / "avatar.svg").exists()
     ET.parse(ORG / "avatar.svg")
-    apple = (ORG / "apple-touch-icon.svg")
+    apple = ORG / "apple-touch-icon.svg"
     assert apple.exists()
     assert 'points="45,40 57,50 45,60"' in apple.read_text()
     assert 'points="45,40 57,50 45,60"' in (ORG / "avatar.svg").read_text()
     if shutil.which("rsvg-convert"):
         assert (ORG / "avatar-1024.png").read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
-        assert (ORG / "apple-touch-icon-180.png").read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+        assert (ORG / "apple-touch-icon-180.png").read_bytes()[
+            :8
+        ] == b"\x89PNG\r\n\x1a\n"
 
 
 def test_render_writes_avatar_circle():
@@ -51,15 +53,15 @@ def test_render_writes_site_wordmark_and_mark():
     _render()
     light = (ORG / "wordmark.svg").read_text()
     assert ET.parse(ORG / "wordmark.svg") is not None
-    assert "#356852" in light and "#c98a00" in light   # green ink + gold-light
+    assert "#356852" in light and "#c98a00" in light  # green ink + gold-light
     dark = (ORG / "wordmark-dark.svg").read_text()
-    assert "#f4f1e8" in dark and "#f0b528" in dark      # cream + gold-dark
+    assert "#f4f1e8" in dark and "#f0b528" in dark  # cream + gold-dark
     for wm in ("wordmark.svg", "wordmark-dark.svg"):
-        assert "<rect width=" not in (ORG / wm).read_text()   # no background fill
+        assert "<rect width=" not in (ORG / wm).read_text()  # no background fill
     mark = (ORG / "mark.svg").read_text()
     assert ET.parse(ORG / "mark.svg") is not None
-    assert 'width="100" height="100"' not in mark       # transparent, no bg rect
-    assert 'points="45,40 57,50 45,60"' in mark         # chevron
+    assert 'width="100" height="100"' not in mark  # transparent, no bg rect
+    assert 'points="45,40 57,50 45,60"' in mark  # chevron
     assert "#f4f1e8" in mark and "#f0b528" in mark
 
 
@@ -70,8 +72,18 @@ def test_render_writes_social_cards():
     assert 'fill="#f4f1e8"' in cream and "#356852" in cream and "#c98a00" in cream
     green = (ORG / "social-card-green.svg").read_text()
     assert 'fill="#2f5e4a"' in green and "#f4f1e8" in green and "#f0b528" in green
-    for name in ("social-card", "social-card-green", "social-square", "social-square-green"):
+    for name in (
+        "social-card",
+        "social-card-green",
+        "social-square",
+        "social-square-green",
+    ):
         ET.parse(ORG / f"{name}.svg")
     if shutil.which("rsvg-convert"):
-        for name in ("social-card", "social-card-green", "social-square", "social-square-green"):
+        for name in (
+            "social-card",
+            "social-card-green",
+            "social-square",
+            "social-square-green",
+        ):
             assert (ORG / f"{name}.png").read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"

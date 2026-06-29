@@ -94,14 +94,25 @@ FASTSTREAM_PATH = (
 
 def bolt_disc(cx: float, cy: float, r: float) -> str:
     """FastAPI cue: lightning bolt knocked out of a gold disc."""
-    norm = [(0.30, -0.80), (-0.42, 0.18), (0.05, 0.18), (-0.22, 0.82), (0.48, -0.22), (0.05, -0.22)]
-    pts = " ".join(f"{cx + dx * r * 0.82:.1f},{cy + dy * r * 0.82:.1f}" for dx, dy in norm)
+    norm = [
+        (0.30, -0.80),
+        (-0.42, 0.18),
+        (0.05, 0.18),
+        (-0.22, 0.82),
+        (0.48, -0.22),
+        (0.05, -0.22),
+    ]
+    pts = " ".join(
+        f"{cx + dx * r * 0.82:.1f},{cy + dy * r * 0.82:.1f}" for dx, dy in norm
+    )
     return f'<circle cx="{cx}" cy="{cy}" r="{r:.1f}" fill="{GOLD}"/><polygon points="{pts}" fill="{CREAM}"/>'
 
 
 def star_disc(cx: float, cy: float, r: float) -> str:
     """Litestar cue: star knocked out of a gold disc."""
-    return f'<circle cx="{cx}" cy="{cy}" r="{r:.1f}" fill="{GOLD}"/>' + _star5(cx, cy, r * 0.72, CREAM)
+    return f'<circle cx="{cx}" cy="{cy}" r="{r:.1f}" fill="{GOLD}"/>' + _star5(
+        cx, cy, r * 0.72, CREAM
+    )
 
 
 def faststream(cx: float, cy: float, r: float) -> str:
@@ -139,11 +150,17 @@ def bars(cx: float, cy: float, r: float) -> str:
     y_cb = top + stub + r * 0.12
     y_bar = y_cb + cb
     heights = [1.0, 0.78, 0.55, 0.38]
-    out = [f'<rect x="{x0:.1f}" y="{y_cb:.1f}" width="{2 * r:.1f}" height="{cb:.1f}" rx="{cb / 2:.1f}" fill="{GOLD}"/>']
+    out = [
+        f'<rect x="{x0:.1f}" y="{y_cb:.1f}" width="{2 * r:.1f}" height="{cb:.1f}" rx="{cb / 2:.1f}" fill="{GOLD}"/>'
+    ]
     for i in range(4):
         x = x0 + i * (bw + gap)
-        out.append(f'<rect x="{x:.1f}" y="{y_stub:.1f}" width="{bw:.1f}" height="{stub:.1f}" fill="{_BAR_TINTS[i]}"/>')
-        out.append(f'<rect x="{x:.1f}" y="{y_bar:.1f}" width="{bw:.1f}" height="{r * heights[i]:.1f}" rx="1" fill="{_BAR_TINTS[i]}"/>')
+        out.append(
+            f'<rect x="{x:.1f}" y="{y_stub:.1f}" width="{bw:.1f}" height="{stub:.1f}" fill="{_BAR_TINTS[i]}"/>'
+        )
+        out.append(
+            f'<rect x="{x:.1f}" y="{y_bar:.1f}" width="{bw:.1f}" height="{r * heights[i]:.1f}" rx="1" fill="{_BAR_TINTS[i]}"/>'
+        )
     return "".join(out)
 
 
@@ -178,7 +195,7 @@ def rocket(cx: float, cy: float, r: float) -> str:
     """lite-bootstrap: a rocket (launch)."""
     body = (
         f'<path d="M{cx} {cy - r} Q{cx + 0.42 * r} {cy - 0.45 * r} {cx + 0.4 * r} {cy + 0.05 * r} '
-        f'L{cx + 0.36 * r} {cy + 0.42 * r} L{cx - 0.36 * r} {cy + 0.42 * r} '
+        f"L{cx + 0.36 * r} {cy + 0.42 * r} L{cx - 0.36 * r} {cy + 0.42 * r} "
         f'L{cx - 0.4 * r} {cy + 0.05 * r} Q{cx - 0.42 * r} {cy - 0.45 * r} {cx} {cy - r} Z" fill="{GOLD}"/>'
     )
     fins = (
@@ -247,7 +264,11 @@ def outbox(cx: float, cy: float, r: float) -> str:
 def db_retry(cx: float, cy: float, r: float) -> str:
     """db-retry: a database cylinder inside a two-head clockwise retry circle."""
     rad = 0.92 * r
-    return _cyl(cx, cy, r * 0.6) + _circ_arc(cx, cy, rad, 285, 425, 4.5) + _circ_arc(cx, cy, rad, 105, 245, 4.5)
+    return (
+        _cyl(cx, cy, r * 0.6)
+        + _circ_arc(cx, cy, rad, 285, 425, 4.5)
+        + _circ_arc(cx, cy, rad, 105, 245, 4.5)
+    )
 
 
 def eof_fixer(cx: float, cy: float, r: float) -> str:
@@ -273,7 +294,7 @@ def tag(cx: float, cy: float, r: float) -> str:
     """semvertag: a price/version tag with a punch-hole, vertically centred."""
     return (
         f'<path d="M{cx - 0.2 * r:.1f} {cy - 0.48 * r:.1f} L{cx + 0.75 * r:.1f} {cy - 0.48 * r:.1f} '
-        f'L{cx + 0.75 * r:.1f} {cy + 0.48 * r:.1f} L{cx - 0.2 * r:.1f} {cy + 0.48 * r:.1f} '
+        f"L{cx + 0.75 * r:.1f} {cy + 0.48 * r:.1f} L{cx - 0.2 * r:.1f} {cy + 0.48 * r:.1f} "
         f'L{cx - 0.75 * r:.1f} {cy:.1f} Z" fill="{GOLD}"/>'
         f'<circle cx="{cx - 0.28 * r:.1f}" cy="{cy:.1f}" r="{0.13 * r:.1f}" fill="{CREAM}"/>'
     )

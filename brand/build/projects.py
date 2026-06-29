@@ -64,14 +64,18 @@ def project_lockup(repo: str) -> str:
     inner = MANIFEST[repo]()
     name_x = _LOCKUP_H + _GAP
     name_svg, name_w = outline_text(
-        repo, _NAME_SIZE, x=name_x, baseline_y=_LOCKUP_H / 2 + _NAME_SIZE * 0.34,
-        anchor="start", color=t.GREEN_INK,
+        repo,
+        _NAME_SIZE,
+        x=name_x,
+        baseline_y=_LOCKUP_H / 2 + _NAME_SIZE * 0.34,
+        anchor="start",
+        color=t.GREEN_INK,
     )
     total_w = round(name_x + name_w + _GAP)
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {total_w} {_LOCKUP_H}" '
         f'role="img" aria-label="{repo}">'
-        f'<g>{mark_frame}{inner}</g>'
+        f"<g>{mark_frame}{inner}</g>"
         f"{name_svg}</svg>"
     )
 
