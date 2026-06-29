@@ -1,5 +1,5 @@
 ---
-summary: Per-project/family logo system — one constant snake-frame, gold inner symbol, one mark per repo, generated in brand/build/.
+summary: Per-project marks shipped — 17 repos, constant snake-frame + gold inner symbol, generated into brand/projects/.
 ---
 
 # Design: Per-project and per-family brand marks
