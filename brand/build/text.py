@@ -49,7 +49,9 @@ def outline_text(
     for ch in text:
         gname = cmap.get(ord(ch))
         if gname is None:
-            raise ValueError(f"character {ch!r} (U+{ord(ch):04X}) not in {font_path.name} cmap")
+            raise ValueError(
+                f"character {ch!r} (U+{ord(ch):04X}) not in {font_path.name} cmap"
+            )
         pen = SVGPathPen(glyphset)
         glyphset[gname].draw(pen)
         d = pen.getCommands()

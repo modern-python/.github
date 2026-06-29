@@ -38,7 +38,14 @@ lockup** pulls them into crop marks framing `MODERN` / `PYTHON` set in **Jost**
 | `social-card-green.svg` / `.png` | 1280×640, green alternate |
 | `social-square.svg` / `.png`, `social-square-green.*` | 640×640 (Telegram) |
 
+## Per-project marks (`brand/projects/`)
+
+Each repo gets a large-format mark: the constant green+gold snake-frame with
+one gold inner symbol (see `brand/build/projects.py::MANIFEST`). Regenerate
+with `uv run python -m brand.build.render`; outputs land in
+`brand/projects/<repo>/` as `mark.svg`, `lockup.svg` (+ PNGs). These are
+large-format only — every repo's favicon/avatar stays the org mark.
+
 ## Deferred (not in this kit)
 
-Per-project / per-repo marks, the subfamily system, and any inner glyphs are a
-later task. The header nav logo redesign is also a follow-up.
+The header nav logo redesign is a follow-up.
