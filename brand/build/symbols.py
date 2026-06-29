@@ -172,3 +172,73 @@ def graph(cx: float, cy: float, r: float, *, dashed: bool) -> str:
         f'<circle cx="{bl[0]:.1f}" cy="{bl[1]:.1f}" r="{nr:.1f}" fill="{GOLD}"/>'
         f'<circle cx="{br[0]:.1f}" cy="{br[1]:.1f}" r="{nr:.1f}" fill="{GOLD}"/>'
     )
+
+
+def rocket(cx: float, cy: float, r: float) -> str:
+    """lite-bootstrap: a rocket (launch)."""
+    body = (
+        f'<path d="M{cx} {cy - r} Q{cx + 0.42 * r} {cy - 0.45 * r} {cx + 0.4 * r} {cy + 0.05 * r} '
+        f'L{cx + 0.36 * r} {cy + 0.42 * r} L{cx - 0.36 * r} {cy + 0.42 * r} '
+        f'L{cx - 0.4 * r} {cy + 0.05 * r} Q{cx - 0.42 * r} {cy - 0.45 * r} {cx} {cy - r} Z" fill="{GOLD}"/>'
+    )
+    fins = (
+        f'<polygon points="{cx - 0.36 * r:.1f},{cy + 0.12 * r:.1f} {cx - 0.72 * r:.1f},{cy + 0.5 * r:.1f} {cx - 0.36 * r:.1f},{cy + 0.42 * r:.1f}" fill="{GOLD}"/>'
+        f'<polygon points="{cx + 0.36 * r:.1f},{cy + 0.12 * r:.1f} {cx + 0.72 * r:.1f},{cy + 0.5 * r:.1f} {cx + 0.36 * r:.1f},{cy + 0.42 * r:.1f}" fill="{GOLD}"/>'
+    )
+    window = f'<circle cx="{cx}" cy="{cy - 0.28 * r:.1f}" r="{0.16 * r:.1f}" fill="{CREAM}"/>'
+    flame = f'<polygon points="{cx - 0.18 * r:.1f},{cy + 0.42 * r:.1f} {cx + 0.18 * r:.1f},{cy + 0.42 * r:.1f} {cx:.1f},{cy + 0.8 * r:.1f}" fill="{GOLD}"/>'
+    return body + fins + window + flame
+
+
+def chain(cx: float, cy: float, r: float) -> str:
+    """httpware: two interlocked chain links (middleware chain)."""
+    sw = r * 0.2
+    return (
+        f'<rect x="{cx - 0.85 * r:.1f}" y="{cy - 0.3 * r:.1f}" width="{0.9 * r:.1f}" height="{0.6 * r:.1f}" rx="{0.3 * r:.1f}" fill="none" stroke="{GOLD}" stroke-width="{sw:.1f}"/>'
+        f'<rect x="{cx - 0.05 * r:.1f}" y="{cy - 0.3 * r:.1f}" width="{0.9 * r:.1f}" height="{0.6 * r:.1f}" rx="{0.3 * r:.1f}" fill="none" stroke="{GOLD}" stroke-width="{sw:.1f}"/>'
+    )
+
+
+def stopwatch(cx: float, cy: float, r: float) -> str:
+    """faststream-redis-timers: a stopwatch."""
+    c = cy + 0.07 * r
+    rr = r * 0.92
+    face = (
+        f'<circle cx="{cx}" cy="{c:.1f}" r="{0.9 * rr:.1f}" fill="none" stroke="{GOLD}" stroke-width="{rr * 0.16:.1f}"/>'
+        f'<line x1="{cx}" y1="{c:.1f}" x2="{cx}" y2="{c - 0.55 * rr:.1f}" stroke="{GOLD}" stroke-width="{rr * 0.15:.1f}" stroke-linecap="round"/>'
+        f'<line x1="{cx}" y1="{c:.1f}" x2="{cx + 0.42 * rr:.1f}" y2="{c + 0.18 * rr:.1f}" stroke="{GOLD}" stroke-width="{rr * 0.15:.1f}" stroke-linecap="round"/>'
+    )
+    btn = (
+        f'<rect x="{cx - 0.13 * r:.1f}" y="{cy - 1.18 * r:.1f}" width="{0.26 * r:.1f}" height="{0.2 * r:.1f}" rx="2" fill="{GOLD}"/>'
+        f'<line x1="{cx}" y1="{cy - 1.0 * r:.1f}" x2="{cx}" y2="{cy - 0.85 * r:.1f}" stroke="{GOLD}" stroke-width="{r * 0.14:.1f}"/>'
+    )
+    return face + btn
+
+
+def lanes(cx: float, cy: float, r: float, length: float = 1.7) -> str:
+    """faststream-concurrent-aiokafka: three staggered parallel arrows (middle longest)."""
+    out = ""
+    for i, dy in enumerate((-0.55 * r, 0.0, 0.55 * r)):
+        ln = length * r * (0.72 if i != 1 else 1.0)
+        x1 = cx - length * r / 2
+        x2 = x1 + ln
+        out += (
+            f'<line x1="{x1:.1f}" y1="{cy + dy:.1f}" x2="{x2 - 0.18 * r:.1f}" y2="{cy + dy:.1f}" '
+            f'stroke="{GOLD}" stroke-width="{r * 0.15:.1f}" stroke-linecap="round"/>'
+        )
+        out += _ah(x2, cy + dy, 0.0, r * 0.3)
+    return out
+
+
+def outbox(cx: float, cy: float, r: float) -> str:
+    """faststream-outbox: a database cylinder publishing concentric broadcast arcs."""
+    base = _cyl(cx - 0.28 * r, cy + 0.28 * r, r * 0.72, 0.72)
+    bx, by = cx, cy - 0.02 * r
+    out = f'<circle cx="{bx:.1f}" cy="{by:.1f}" r="{0.13 * r:.1f}" fill="{GOLD}"/>'
+    for k in (0.5, 0.82, 1.14):
+        kk = k * r * 0.72
+        out += (
+            f'<path d="M{bx + kk:.1f} {by:.1f} A {kk:.1f} {kk:.1f} 0 0 0 {bx:.1f} {by - kk:.1f}" '
+            f'fill="none" stroke="{GOLD}" stroke-width="{r * 0.72 * 0.14:.1f}"/>'
+        )
+    return base + out

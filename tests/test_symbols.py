@@ -33,3 +33,11 @@ def test_di_symbol_parses(name: str) -> None:
 def test_graph_dashed_vs_solid() -> None:
     assert "stroke-dasharray" in sym.graph(50, 50, 23, dashed=True)
     assert "stroke-dasharray" not in sym.graph(50, 50, 23, dashed=False)
+
+
+MSG_SYMBOLS = ["rocket", "chain", "stopwatch", "lanes", "outbox"]
+
+
+@pytest.mark.parametrize("name", MSG_SYMBOLS)
+def test_msg_symbol_parses(name: str) -> None:
+    minidom.parseString(_wrap(getattr(sym, name)(50, 50, 23)))
