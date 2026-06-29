@@ -89,7 +89,7 @@ their logo (see Risk for the one exception).
 | `modern-di-fastapi` | lightning **bolt knocked out of a gold disc** (evokes FastAPI's teal disc+bolt) |
 | `modern-di-litestar` | 5-point **star knocked out of a gold disc** (evokes Litestar's star) |
 | `modern-di-faststream` | the **FastStream delta/stream** shape, recoloured gold |
-| `modern-di-typer` | terminal window showing **`T>`** prompt (evokes Typer) |
+| `modern-di-typer` | terminal window showing **`>T`** prompt (evokes Typer) |
 | `modern-di-pytest` | **stepped bars** hanging from a crossbar, gold tints (evokes pytest's bar emblem) |
 
 **Templates** (2) — reuse the **org chevron mark** (no bespoke symbol):

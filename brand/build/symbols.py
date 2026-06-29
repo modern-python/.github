@@ -126,14 +126,33 @@ def faststream(cx: float, cy: float, r: float) -> str:
 
 
 def terminal(cx: float, cy: float, r: float) -> str:
-    """Typer cue: terminal window showing a T> prompt."""
-    return (
-        f'<rect x="{cx - r:.1f}" y="{cy - r * 0.72:.1f}" width="{2 * r:.1f}" height="{r * 1.44:.1f}" '
-        f'rx="{r * 0.2:.1f}" fill="{GOLD}"/>'
-        f'<text x="{cx - r * 0.58:.1f}" y="{cy + r * 0.42:.1f}" '
-        f'font-family="ui-monospace,Menlo,monospace" font-size="{r * 0.98:.1f}" '
-        f'font-weight="700" fill="{CREAM}">T&gt;</text>'
+    """Typer cue: terminal window showing a bold >T prompt (notched chevron + T),
+    drawn as paths so it is font-independent."""
+    screen = (
+        f'<rect x="{cx - r:.1f}" y="{cy - r * 0.72:.1f}" width="{2 * r:.1f}" '
+        f'height="{r * 1.44:.1f}" rx="{r * 0.2:.1f}" fill="{GOLD}"/>'
     )
+    # prompt chevron "❯": constant-thickness angle with a back V-notch
+    chx = cx - 0.40 * r
+    reach, hgt, th = 0.30 * r, 0.34 * r, 0.20 * r
+    pts = [
+        (chx - reach, cy - hgt),
+        (chx - reach + th, cy - hgt),
+        (chx + reach, cy - th * 0.15),
+        (chx + reach, cy + th * 0.15),
+        (chx - reach + th, cy + hgt),
+        (chx - reach, cy + hgt),
+        (chx - reach + th * 1.7, cy),
+    ]
+    chevron = '<polygon points="' + " ".join(f"{px:.1f},{py:.1f}" for px, py in pts) + f'" fill="{CREAM}"/>'
+    # bold T
+    tx = cx + 0.42 * r
+    half, hbar, stem, h = 0.32 * r, 0.16 * r, 0.16 * r, 0.62 * r
+    tee = (
+        f'<rect x="{tx - half:.1f}" y="{cy - 0.34 * r:.1f}" width="{2 * half:.1f}" height="{hbar:.1f}" rx="1.5" fill="{CREAM}"/>'
+        f'<rect x="{tx - stem / 2:.1f}" y="{cy - 0.34 * r:.1f}" width="{stem:.1f}" height="{h:.1f}" rx="1.5" fill="{CREAM}"/>'
+    )
+    return screen + chevron + tee
 
 
 def bars(cx: float, cy: float, r: float) -> str:
