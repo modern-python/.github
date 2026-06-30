@@ -1,4 +1,9 @@
-## `Modern Python`
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/modern-python/.github/main/brand/org/wordmark-dark.svg">
+    <img alt="Modern Python" src="https://raw.githubusercontent.com/modern-python/.github/main/brand/org/wordmark.svg" width="360">
+  </picture>
+</p>
 
 Open-source templates and libraries for building production-ready Python applications — web services, microservices, and the dependency injection that wires them together.
 
