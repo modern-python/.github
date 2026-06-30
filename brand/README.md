@@ -43,8 +43,22 @@ lockup** pulls them into crop marks framing `MODERN` / `PYTHON` set in **Jost**
 Each repo gets a large-format mark: the constant green+gold snake-frame with
 one gold inner symbol (see `brand/build/projects.py::MANIFEST`). Regenerate
 with `uv run python -m brand.build.render`; outputs land in
-`brand/projects/<repo>/` as `mark.svg`, `lockup.svg` (+ PNGs). These are
-large-format only — every repo's favicon/avatar stays the org mark.
+`brand/projects/<repo>/` as `mark.svg`, three lockup files (see below), and
+PNGs. These are large-format only — every repo's favicon/avatar stays the org mark.
+
+### Lockup outputs
+
+Each repo gets three lockup files:
+
+| File | Colourway | Use |
+|------|-----------|-----|
+| `lockup-light.svg` | green-ink + gold on transparent | GitHub light theme |
+| `lockup-dark.svg` | cream + gold-dark on transparent | GitHub dark theme |
+| `lockup.png` | light lockup rasterized + quantized | PyPI fallback (`<img>`) |
+
+The dark colourway (cream + `#f0b528` gold-dark) mirrors the org `wordmark-dark`.
+These are used as README banners across the org via a `<picture>` element that
+references the assets at their `raw.githubusercontent.com` URL in `.github`.
 Repos with a docs site also get a `social-card.svg` + `social-card.png`
 (1280×640 og:image): the repo mark on a green panel beside its name, tagline,
 and docs URL on cream. The docs-site repos are listed in

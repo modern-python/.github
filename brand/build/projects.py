@@ -58,10 +58,16 @@ def project_mark(repo: str) -> str:
     )
 
 
-def project_lockup(repo: str) -> str:
-    """Framed mark on the left + the repo name in Jost (green) to its right."""
-    mark_frame = g.project_frame(struct=t.GREEN_INK, accent=t.GOLD_LIGHT)
+def project_lockup(repo: str, *, dark: bool = False) -> str:
+    """Framed mark + the repo name in Jost. Light = green-ink/gold (light UIs);
+    dark = cream/gold-dark (dark UIs). Transparent background either way."""
+    struct = t.CREAM if dark else t.GREEN_INK
+    accent = t.GOLD_DARK if dark else t.GOLD_LIGHT
+    name_color = t.CREAM if dark else t.GREEN_INK
+    mark_frame = g.project_frame(struct=struct, accent=accent)
     inner = MANIFEST[repo]()
+    if dark:
+        inner = inner.replace(t.GOLD_LIGHT, t.GOLD_DARK)
     name_x = _LOCKUP_H + _GAP
     name_svg, name_w = outline_text(
         repo,
@@ -69,19 +75,18 @@ def project_lockup(repo: str) -> str:
         x=name_x,
         baseline_y=_LOCKUP_H / 2 + _NAME_SIZE * 0.34,
         anchor="start",
-        color=t.GREEN_INK,
+        color=name_color,
     )
     total_w = round(name_x + name_w + _GAP)
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {total_w} {_LOCKUP_H}" '
-        f'role="img" aria-label="{repo}">'
-        f"<g>{mark_frame}{inner}</g>"
-        f"{name_svg}</svg>"
+        f'role="img" aria-label="{repo}"><g>{mark_frame}{inner}</g>{name_svg}</svg>'
     )
 
 
 def render_projects(out_dir: Path | None = None) -> list[Path]:
-    """Write mark.svg, lockup.svg (+ PNGs) for every repo under out_dir/<repo>/.
+    """Write mark.svg, lockup-light.svg, lockup-dark.svg, lockup.png (+ mark PNGs)
+    for every repo under out_dir/<repo>/.
 
     Docs-site repos (DOCS_REPOS) also get social-card.svg/png (1280×640)."""
     base = out_dir if out_dir is not None else PROJECTS
@@ -93,7 +98,10 @@ def render_projects(out_dir: Path | None = None) -> list[Path]:
         svg.write_text(project_mark(repo) + "\n", encoding="utf-8")
         for sz in _PNG_SIZES:
             export_png(svg, d / f"mark-{sz}.png", width=sz, height=sz)
-        (d / "lockup.svg").write_text(project_lockup(repo) + "\n", encoding="utf-8")
+        (d / "lockup-light.svg").write_text(project_lockup(repo) + "\n", encoding="utf-8")
+        dark_svg = d / "lockup-dark.svg"
+        dark_svg.write_text(project_lockup(repo, dark=True) + "\n", encoding="utf-8")
+        export_png(d / "lockup-light.svg", d / "lockup.png")
         if repo in DOCS_REPOS:
             card = d / "social-card.svg"
             card.write_text(
