@@ -1,5 +1,5 @@
 ---
-summary: Wire each of the 7 docs-site repos to serve its social card as og:image, via a Material template override + self-hosted card.
+summary: docs-site og:image shipped — all 7 docs repos serve a self-hosted social card via a Material override; one PR per repo.
 ---
 
 # Design: docs-site og:image rollout
