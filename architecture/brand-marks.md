@@ -20,3 +20,8 @@ additionally get a 1280×640 `social-card.svg|png` — a two-panel og:image
 (green mark panel + cream name/tagline/url), built with the same frame +
 symbols and the `fit_text`/`wrap_text` helpers. Taglines are the canonical
 `profile/README.md` one-liners.
+
+All generated PNGs are palette-quantized in `raster.py` (`_quantize_png`,
+Pillow FASTOCTREE, `_PNG_COLORS` palette) so the committed binaries are
+indexed-colour and compact; alpha is preserved for the transparent marks.
+SVGs are left as generated.
