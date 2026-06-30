@@ -109,22 +109,31 @@ Category membership (from the current profile):
 ### 4. Templates table (PyPI-column-free)
 
 `fastapi-sqlalchemy-template` and `litestar-sqlalchemy-template` are not
-published to PyPI, so they get a separate table whose badge cell is **stars + a
-static Template chip** — no version/downloads columns, so no empty cells.
+published to PyPI (verified: PyPI returns 404), so they get a separate table
+whose badge cell is **stars + Context7 + a static Template chip** — no
+version/downloads columns, so no empty cells. Both templates have a Context7
+page (verified 200), so the Context7 badge applies under the "include where a
+page exists" rule.
 
 ```markdown
 [![Stars](https://img.shields.io/github/stars/modern-python/REPO)](https://github.com/modern-python/REPO/stargazers)
+[![Context7](https://img.shields.io/badge/Context7-docs-blue)](https://context7.com/modern-python/REPO)
 ![Template](https://img.shields.io/badge/type-template-blue)
 ```
 
-### 5. Per-repo verification (implementation step, not a design decision)
+### 5. Per-repo verification (done at design time, re-confirm at ship)
 
-Before committing, confirm for each published repo:
-- The **PyPI distribution name** (`PKG`) matches the assumed name (most equal the
-  repo name; the `faststream-*` utilities and `eof-fixer` must be checked, and
-  any repo not actually on PyPI is treated like a template — stars only).
-- A **Context7 page** exists at `context7.com/modern-python/REPO`; include the
-  Context7 badge only where it resolves (avoids dead links).
+Verified on 2026-06-30 (PyPI `…/pypi/<pkg>/json`, Context7
+`context7.com/modern-python/<repo>`):
+- **PyPI distribution name == repo name** for every package (read from each
+  `pyproject.toml` `[project].name`).
+- **All 15 library repos** return PyPI 200 and Context7 200 → full strip
+  (stars · version · downloads · Context7).
+- **Both templates** return PyPI 404 (stars-only, no version/downloads) and
+  Context7 200 (Context7 badge applies).
+
+Re-confirm badge/link liveness at ship (a package could be yanked between
+design and merge); any repo that has become unpublished drops to stars-only.
 
 ## Operations
 
