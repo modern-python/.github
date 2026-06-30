@@ -19,9 +19,11 @@ home where the cards are generated); no code changes land in `.github`.
 
 The cards shipped in `brand/projects/<repo>/social-card.png` (PR #23) but nothing
 consumes them yet — the docs sites have no `og:image`, so shared links are bare.
-Probing confirmed all 7 sites are live MkDocs Material with their subdomain
-`site_url` set, none use Material's `social` plugin (no auto-card to conflict
-with), and only `that-depends` has a `custom_dir` (`docs/overrides`).
+Probing confirmed all 7 sites are live MkDocs Material on their subdomain, none
+use Material's `social` plugin (no auto-card to conflict with), and only
+`that-depends` has a `custom_dir` (`docs/overrides`). (At rollout, one repo —
+`faststream-redis-timers` — turned out to have no `site_url` in `mkdocs.yml`; its
+PR added it, since the override needs it.)
 
 The 7 docs repos: `modern-di`, `that-depends`, `lite-bootstrap`, `httpware`,
 `faststream-redis-timers`, `faststream-outbox`, `semvertag`.
