@@ -50,6 +50,11 @@ Repos with a docs site also get a `social-card.svg` + `social-card.png`
 and docs URL on cream. The docs-site repos are listed in
 `brand/build/projects.py::DOCS_REPOS`.
 
+PNGs are palette-quantized at build time (`brand/build/raster.py`, Pillow
+FASTOCTREE) — indexed-colour and ~70–80% smaller than raw `rsvg-convert`
+output, with no visible change (the art is flat-colour). Regenerate with
+`uv run python -m brand.build.render`.
+
 ## Deferred (not in this kit)
 
 The header nav logo redesign is a follow-up.

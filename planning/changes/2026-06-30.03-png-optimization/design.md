@@ -1,5 +1,5 @@
 ---
-summary: Palette-quantize generated brand PNGs in the build (Pillow, FASTOCTREE) — ~70–80% smaller, visually lossless; SVGs untouched.
+summary: Brand PNGs palette-quantized in the build (Pillow FASTOCTREE) — committed indexed-colour, ~70-80% smaller, visually lossless.
 ---
 
 # Design: Brand PNG optimization
