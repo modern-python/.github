@@ -45,6 +45,10 @@ one gold inner symbol (see `brand/build/projects.py::MANIFEST`). Regenerate
 with `uv run python -m brand.build.render`; outputs land in
 `brand/projects/<repo>/` as `mark.svg`, `lockup.svg` (+ PNGs). These are
 large-format only — every repo's favicon/avatar stays the org mark.
+Repos with a docs site also get a `social-card.svg` + `social-card.png`
+(1280×640 og:image): the repo mark on a green panel beside its name, tagline,
+and docs URL on cream. The docs-site repos are listed in
+`brand/build/projects.py::DOCS_REPOS`.
 
 ## Deferred (not in this kit)
 

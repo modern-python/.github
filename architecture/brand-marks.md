@@ -15,3 +15,8 @@ project templates reuse the org chevron. `modern-di-faststream` is the only
 mark using a partner's literal logo path (FastStream's, recoloured); other
 integration cues are redrawn evocations. Outputs: `mark.svg`, `lockup.svg`
 (+ `mark-512/1024.png`). Regenerate via `uv run python -m brand.build.render`.
+Repos with a live docs site (`projects.py::DOCS_REPOS`, a subset of `MANIFEST`)
+additionally get a 1280×640 `social-card.svg|png` — a two-panel og:image
+(green mark panel + cream name/tagline/url), built with the same frame +
+symbols and the `fit_text`/`wrap_text` helpers. Taglines are the canonical
+`profile/README.md` one-liners.

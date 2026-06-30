@@ -144,7 +144,11 @@ def terminal(cx: float, cy: float, r: float) -> str:
         (chx - reach, cy + hgt),
         (chx - reach + th * 1.7, cy),
     ]
-    chevron = '<polygon points="' + " ".join(f"{px:.1f},{py:.1f}" for px, py in pts) + f'" fill="{CREAM}"/>'
+    chevron = (
+        '<polygon points="'
+        + " ".join(f"{px:.1f},{py:.1f}" for px, py in pts)
+        + f'" fill="{CREAM}"/>'
+    )
     # bold T
     tx = cx + 0.42 * r
     half, hbar, stem, h = 0.32 * r, 0.16 * r, 0.16 * r, 0.62 * r
