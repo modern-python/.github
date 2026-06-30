@@ -80,8 +80,9 @@ social cards), one edit covers them all.
 ### 2. Dependency
 
 Add `pillow` to the `dev` dependency group in `pyproject.toml` (beside
-`fonttools`, which the brand build already needs). `uv.lock` is git-ignored, so
-no lock churn.
+`fonttools`, which the brand build already needs). This repo **tracks** `uv.lock`
+(it's the site app, not a distributed package, and `uv.lock` is not in
+`.gitignore`), so the lock update is committed alongside.
 
 ### 3. Regenerate & commit
 
