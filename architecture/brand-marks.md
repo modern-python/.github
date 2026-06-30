@@ -25,3 +25,22 @@ All generated PNGs are palette-quantized in `raster.py` (`_quantize_png`,
 Pillow FASTOCTREE, `_PNG_COLORS` palette) so the committed binaries are
 indexed-colour and compact; alpha is preserved for the transparent marks.
 SVGs are left as generated.
+
+### Lockup colourways and README banners
+
+Each repo's `brand/projects/<repo>/` directory contains three lockup files in
+addition to `mark.svg` and `mark-512/1024.png`:
+
+- `lockup-light.svg` — green-ink text + gold accent on transparent background
+  (for light UIs).
+- `lockup-dark.svg` — cream text + gold-dark (`#f0b528`) accent on transparent
+  background (for dark UIs). This colourway mirrors `wordmark-dark` and the
+  on-green mark treatment.
+- `lockup.png` — the light lockup rasterized and palette-quantized; serves as
+  the PyPI `<img>` fallback (PyPI renders on a white background, so the light
+  lockup is the correct choice).
+
+Repo READMEs embed these as a centered `<picture>` banner that replaces the
+leading `# <repo>` heading. The `<source>` elements reference the assets via
+absolute `raw.githubusercontent.com/modern-python/.github/main/brand/projects/<repo>/`
+URLs so no asset files are committed to the individual repos.

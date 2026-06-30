@@ -1,5 +1,5 @@
 ---
-summary: Add a centered light/dark logo banner to all 17 repo READMEs, served from .github; generate light/dark/png lockups in brand/build.
+summary: README logos shipped — light/dark/png lockups generated in .github; centered <picture> banner replaces the H1 in all 17 repo READMEs.
 ---
 
 # Design: README logos
