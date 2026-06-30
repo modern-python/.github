@@ -14,7 +14,7 @@ frontmatter; dated by git.
    because every repo's CI enforces a 100%-coverage guard; it renders unlinked
    (there is no org-level coverage URL).
 4. **Four category tables** — `Project | What it is | Badges`, in order:
-   Project templates, Dependency injection, Microservices/HTTP & messaging,
+   Project templates, Dependency injection, Microservices, HTTP & messaging,
    Utilities. The `What it is` column carries the canonical ≤120-char one-liner
    (one of the three metadata surfaces kept consistent across GitHub
    description, pyproject `description`, and this blurb).
