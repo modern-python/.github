@@ -31,7 +31,7 @@ def test_transparent_mark_png_keeps_alpha_and_is_small(tmp_path: Path) -> None:
 def test_card_palette_is_actually_reduced(tmp_path: Path) -> None:
     _render(tmp_path)
     card = tmp_path / "modern-di" / "social-card.png"
-    colors = Image.open(card).convert("RGB").getcolors(maxcolors=100_000)
+    colors = Image.open(card).convert("RGBA").getcolors(maxcolors=100_000)
     assert colors is not None and len(colors) <= 40, (
         f"card should be palette-reduced; found {None if colors is None else len(colors)} colours"
     )
