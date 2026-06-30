@@ -81,7 +81,9 @@ def project_lockup(repo: str) -> str:
 
 
 def render_projects(out_dir: Path | None = None) -> list[Path]:
-    """Write mark.svg (+ PNGs) for every repo under out_dir/<repo>/."""
+    """Write mark.svg, lockup.svg (+ PNGs) for every repo under out_dir/<repo>/.
+
+    Docs-site repos (DOCS_REPOS) also get social-card.svg/png (1280×640)."""
     base = out_dir if out_dir is not None else PROJECTS
     written: list[Path] = []
     for repo in MANIFEST:
@@ -94,7 +96,10 @@ def render_projects(out_dir: Path | None = None) -> list[Path]:
         (d / "lockup.svg").write_text(project_lockup(repo) + "\n", encoding="utf-8")
         if repo in DOCS_REPOS:
             card = d / "social-card.svg"
-            card.write_text(project_social_card(repo, tagline=DOCS_REPOS[repo]) + "\n", encoding="utf-8")
+            card.write_text(
+                project_social_card(repo, tagline=DOCS_REPOS[repo]) + "\n",
+                encoding="utf-8",
+            )
             export_png(card, d / "social-card.png", width=_CARD_W, height=_CARD_H)
         written.append(svg)
     return written
@@ -106,12 +111,20 @@ def _measure(text: str, size: float) -> float:
 
 
 def fit_text(
-    text: str, base_size: float, max_w: float, *, color: str, x: float, baseline_y: float
+    text: str,
+    base_size: float,
+    max_w: float,
+    *,
+    color: str,
+    x: float,
+    baseline_y: float,
 ) -> tuple[str, float]:
     """Render `text` left-anchored; shrink the font so its width fits max_w."""
     natural = _measure(text, base_size)
     size = base_size if natural <= max_w else base_size * max_w / natural
-    svg, _ = outline_text(text, size, x=x, baseline_y=baseline_y, anchor="start", color=color)
+    svg, _ = outline_text(
+        text, size, x=x, baseline_y=baseline_y, anchor="start", color=color
+    )
     return svg, size
 
 
@@ -143,9 +156,9 @@ DOCS_REPOS: dict[str, str] = {
 
 _CARD_W = 1280
 _CARD_H = 640
-_PANEL = 460          # green panel width
-_TEXT_X = 520         # text column left edge
-_TEXT_W = 700         # text column width
+_PANEL = 460  # green panel width
+_TEXT_X = 520  # text column left edge
+_TEXT_W = 700  # text column width
 _NAME_BASE = 74
 _TAG_SIZE = 30
 _URL_SIZE = 26
@@ -167,17 +180,31 @@ def project_social_card(repo: str, *, tagline: str) -> str:
     block_h = _NAME_BASE + 26 + n * 38 + 44 + 30
     top = (_CARD_H - block_h) / 2
     name_base = top + _NAME_BASE
-    name_svg, _ = fit_text(repo, _NAME_BASE, _TEXT_W, color=t.GREEN_INK, x=_TEXT_X, baseline_y=name_base)
+    name_svg, _ = fit_text(
+        repo, _NAME_BASE, _TEXT_W, color=t.GREEN_INK, x=_TEXT_X, baseline_y=name_base
+    )
     y = name_base + 26
     tag_svg = ""
     for line in tag_lines:
         y += 38
-        seg, _ = outline_text(line, _TAG_SIZE, x=_TEXT_X, baseline_y=y, anchor="start", color=t.GREEN_MUTED)
+        seg, _ = outline_text(
+            line,
+            _TAG_SIZE,
+            x=_TEXT_X,
+            baseline_y=y,
+            anchor="start",
+            color=t.GREEN_MUTED,
+        )
         tag_svg += seg
     y += 44
     url_svg, _ = outline_text(
-        f"{repo}.modern-python.org", _URL_SIZE, x=_TEXT_X, baseline_y=y,
-        anchor="start", color=t.GOLD_LIGHT, letter_spacing=2,
+        f"{repo}.modern-python.org",
+        _URL_SIZE,
+        x=_TEXT_X,
+        baseline_y=y,
+        anchor="start",
+        color=t.GOLD_LIGHT,
+        letter_spacing=2,
     )
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_CARD_W} {_CARD_H}" '

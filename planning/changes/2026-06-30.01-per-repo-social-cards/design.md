@@ -1,5 +1,5 @@
 ---
-summary: Per-repo social cards (1280×640 og:image) for the 7 docs-site repos — two-panel green/cream, built on the project marks.
+summary: Per-repo social cards shipped — 1280×640 two-panel og:image for the 7 docs-site repos, generated into brand/projects/<repo>/social-card.*
 ---
 
 # Design: Per-repo social cards
