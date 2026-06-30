@@ -82,7 +82,7 @@ flat-style strip in a fixed order: **stars · version · downloads · Context7**
 | Column | Content |
 |--------|---------|
 | `Project` | repo name as inline code, linked to the GitHub repo |
-| `What it is` | canonical one-liner (carried over verbatim) |
+| `What it is` | canonical one-liner (reused from the old profile, sentence-cased with trailing punctuation stripped) |
 | `Badges` | stars · PyPI version · downloads/mo · Context7 (if a page exists) |
 
 Per-badge templates (`REPO` = GitHub repo name, `PKG` = PyPI distribution name):
@@ -110,7 +110,7 @@ Category membership (from the current profile):
 
 `fastapi-sqlalchemy-template` and `litestar-sqlalchemy-template` are not
 published to PyPI (verified: PyPI returns 404), so they get a separate table
-whose badge cell is **stars + Context7 + a static Template chip** — no
+whose badge cell is **stars + Context7 + a static `type: template` chip** — no
 version/downloads columns, so no empty cells. Both templates have a Context7
 page (verified 200), so the Context7 badge applies under the "include where a
 page exists" rule.
