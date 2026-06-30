@@ -92,3 +92,34 @@ def test_fit_text_shrinks_only_when_needed() -> None:
 def test_wrap_text_splits_long_and_keeps_short() -> None:
     assert len(p.wrap_text("short tagline", 30, 700)) == 1
     assert len(p.wrap_text("word " * 60, 30, 700)) > 1
+
+
+DOCS_EXPECTED = {
+    "modern-di", "that-depends", "lite-bootstrap", "httpware",
+    "faststream-redis-timers", "faststream-outbox", "semvertag",
+}
+
+CARD_ALLOWED = {
+    c.lower() for c in (
+        t.GREEN_INK, t.GREEN_SURFACE, t.GOLD_LIGHT, t.GOLD_DARK, t.CREAM, t.GREEN_MUTED,
+    )
+}
+
+
+def test_docs_repos_is_subset_of_manifest_and_exact() -> None:
+    assert set(p.DOCS_REPOS) == DOCS_EXPECTED
+    assert set(p.DOCS_REPOS) <= set(p.MANIFEST)
+
+
+@pytest.mark.parametrize("repo", sorted(DOCS_EXPECTED))
+def test_social_card_valid_and_palette(repo: str) -> None:
+    svg = p.project_social_card(repo, tagline=p.DOCS_REPOS[repo])
+    minidom.parseString(svg)
+    assert 'viewBox="0 0 1280 640"' in svg
+    hexes = {h.lower() for h in re.findall(r"#[0-9a-fA-F]{6}", svg)}
+    assert hexes <= CARD_ALLOWED, f"{repo} stray colours: {hexes - CARD_ALLOWED}"
+
+
+def test_social_card_includes_url_and_name(repo: str = "modern-di") -> None:
+    svg = p.project_social_card(repo, tagline=p.DOCS_REPOS[repo])
+    assert f'aria-label="{repo}' in svg  # accessible label carries the repo

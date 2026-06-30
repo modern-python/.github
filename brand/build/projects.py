@@ -125,3 +125,58 @@ def wrap_text(text: str, size: float, max_w: float) -> list[str]:
     if cur:
         lines.append(cur)
     return lines
+
+
+DOCS_REPOS: dict[str, str] = {
+    "modern-di": "powerful DI framework with scopes",
+    "that-depends": "predecessor DI framework, still actively maintained",
+    "lite-bootstrap": "lightweight package for bootstrapping new microservices",
+    "httpware": "HTTP client framework with sync/async clients, middleware chain, and built-in resilience (retry, bulkhead)",
+    "faststream-redis-timers": "FastStream broker integration for Redis-backed distributed timer scheduling",
+    "faststream-outbox": "FastStream broker integration for the transactional outbox pattern with Postgres",
+    "semvertag": "auto-tag your GitHub/GitLab repo with semantic version tags from CI",
+}
+
+_CARD_W = 1280
+_CARD_H = 640
+_PANEL = 460          # green panel width
+_TEXT_X = 520         # text column left edge
+_TEXT_W = 700         # text column width
+_NAME_BASE = 74
+_TAG_SIZE = 30
+_URL_SIZE = 26
+
+
+def project_social_card(repo: str, *, tagline: str) -> str:
+    """1280x640 og:image: green mark panel + cream name/tagline/url panel."""
+    panels = (
+        f'<rect width="{_PANEL}" height="{_CARD_H}" fill="{t.GREEN_SURFACE}"/>'
+        f'<rect x="{_PANEL}" width="{_CARD_W - _PANEL}" height="{_CARD_H}" fill="{t.CREAM}"/>'
+    )
+    frame = g.project_frame(struct=t.CREAM, accent=t.GOLD_DARK)
+    inner = MANIFEST[repo]()
+    mark = f'<g transform="translate(80,170) scale(3.0)">{frame}{inner}</g>'
+
+    tag_lines = wrap_text(tagline, _TAG_SIZE, _TEXT_W)
+    n = len(tag_lines)
+    # block = name + 26 gap + n*38 tagline lines + 44 gap + url(30); centre vertically
+    block_h = _NAME_BASE + 26 + n * 38 + 44 + 30
+    top = (_CARD_H - block_h) / 2
+    name_base = top + _NAME_BASE
+    name_svg, _ = fit_text(repo, _NAME_BASE, _TEXT_W, color=t.GREEN_INK, x=_TEXT_X, baseline_y=name_base)
+    y = name_base + 26
+    tag_svg = ""
+    for line in tag_lines:
+        y += 38
+        seg, _ = outline_text(line, _TAG_SIZE, x=_TEXT_X, baseline_y=y, anchor="start", color=t.GREEN_MUTED)
+        tag_svg += seg
+    y += 44
+    url_svg, _ = outline_text(
+        f"{repo}.modern-python.org", _URL_SIZE, x=_TEXT_X, baseline_y=y,
+        anchor="start", color=t.GOLD_LIGHT, letter_spacing=2,
+    )
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_CARD_W} {_CARD_H}" '
+        f'role="img" aria-label="{repo} — {tagline}">'
+        f"{panels}{mark}{name_svg}{tag_svg}{url_svg}</svg>"
+    )
