@@ -92,6 +92,10 @@ def render_projects(out_dir: Path | None = None) -> list[Path]:
         for sz in _PNG_SIZES:
             export_png(svg, d / f"mark-{sz}.png", width=sz, height=sz)
         (d / "lockup.svg").write_text(project_lockup(repo) + "\n", encoding="utf-8")
+        if repo in DOCS_REPOS:
+            card = d / "social-card.svg"
+            card.write_text(project_social_card(repo, tagline=DOCS_REPOS[repo]) + "\n", encoding="utf-8")
+            export_png(card, d / "social-card.png", width=_CARD_W, height=_CARD_H)
         written.append(svg)
     return written
 

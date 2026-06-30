@@ -123,3 +123,13 @@ def test_social_card_valid_and_palette(repo: str) -> None:
 def test_social_card_includes_url_and_name(repo: str = "modern-di") -> None:
     svg = p.project_social_card(repo, tagline=p.DOCS_REPOS[repo])
     assert f'aria-label="{repo}' in svg  # accessible label carries the repo
+
+
+def test_render_projects_writes_cards_for_docs_repos_only(tmp_path: Path) -> None:
+    p.render_projects(out_dir=tmp_path)
+    for repo in DOCS_EXPECTED:
+        card = tmp_path / repo / "social-card.svg"
+        assert card.is_file() and card.read_text(encoding="utf-8").startswith("<svg")
+    non_docs = set(p.MANIFEST) - DOCS_EXPECTED
+    for repo in non_docs:
+        assert not (tmp_path / repo / "social-card.svg").exists()
