@@ -79,3 +79,16 @@ def test_lockup_is_valid_and_names_repo(repo: str) -> None:
 def test_render_projects_writes_lockup(tmp_path: Path) -> None:
     p.render_projects(out_dir=tmp_path)
     assert (tmp_path / "modern-di" / "lockup.svg").is_file()
+
+
+def test_fit_text_shrinks_only_when_needed() -> None:
+    short_svg, short_size = p.fit_text("hi", 74, 700, color="#356852", x=0, baseline_y=0)
+    assert short_size == 74  # fits, unchanged
+    long_svg, long_size = p.fit_text("x" * 80, 74, 700, color="#356852", x=0, baseline_y=0)
+    assert long_size < 74    # too wide -> shrunk
+    assert "<g" in short_svg and "<g" in long_svg
+
+
+def test_wrap_text_splits_long_and_keeps_short() -> None:
+    assert len(p.wrap_text("short tagline", 30, 700)) == 1
+    assert len(p.wrap_text("word " * 60, 30, 700)) > 1

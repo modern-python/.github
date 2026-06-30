@@ -94,3 +94,34 @@ def render_projects(out_dir: Path | None = None) -> list[Path]:
         (d / "lockup.svg").write_text(project_lockup(repo) + "\n", encoding="utf-8")
         written.append(svg)
     return written
+
+
+def _measure(text: str, size: float) -> float:
+    _, w = outline_text(text, size, x=0, baseline_y=0, anchor="start", color="#000000")
+    return w
+
+
+def fit_text(
+    text: str, base_size: float, max_w: float, *, color: str, x: float, baseline_y: float
+) -> tuple[str, float]:
+    """Render `text` left-anchored; shrink the font so its width fits max_w."""
+    natural = _measure(text, base_size)
+    size = base_size if natural <= max_w else base_size * max_w / natural
+    svg, _ = outline_text(text, size, x=x, baseline_y=baseline_y, anchor="start", color=color)
+    return svg, size
+
+
+def wrap_text(text: str, size: float, max_w: float) -> list[str]:
+    """Greedy word-wrap to lines no wider than max_w."""
+    lines: list[str] = []
+    cur = ""
+    for word in text.split():
+        trial = (cur + " " + word).strip()
+        if cur and _measure(trial, size) > max_w:
+            lines.append(cur)
+            cur = word
+        else:
+            cur = trial
+    if cur:
+        lines.append(cur)
+    return lines
