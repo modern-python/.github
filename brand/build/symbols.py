@@ -116,8 +116,8 @@ def _circ_arc(
 
 
 def async_loop(cx: float, cy: float, r: float) -> str:
-    """aiohttp cue: an async event-loop cycle (two chasing arrows) knocked out
-    of a gold disc."""
+    """aiohttp cue: an async event-loop cycle — two opposed curved arrows
+    knocked out of a gold disc."""
     rad = r * 0.52
     w = 3.4
     loop = _circ_arc(cx, cy, rad, 25, 165, w, color=CREAM) + _circ_arc(
