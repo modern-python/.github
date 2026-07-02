@@ -83,8 +83,9 @@ the same badge set as its siblings (Stars, PyPI, Downloads, Context7).
 
 Add one bullet to the `Dependency injection { #di }` list after the Litestar
 line: `` `modern-di-starlette` — `modern-di` integration for Starlette.`` Also
-extend the "The stack" sentence to read "...shared across FastAPI, Starlette,
-Litestar, FastStream, and Typer" so the narrative names the new integration.
+extend the "The stack" sentence to read "...shared across FastAPI, Litestar,
+Starlette, FastStream, and Typer" so the narrative names the new integration
+(matching the table/manifest order fastapi -> litestar -> starlette).
 
 ## Operations
 
