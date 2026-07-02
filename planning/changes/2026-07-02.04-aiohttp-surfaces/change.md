@@ -20,6 +20,12 @@ PyPI. Progress so far:
   Downloads badge on the new profile row 404s until the package is published to
   PyPI and pepy indexes it — same self-healing lag pattern seen for
   `modern-di-starlette`. All other elements (repo link, Stars badge) resolve.
+- **DI section sorted alphabetically (folded in).** Per maintainer request, the
+  Dependency injection integrations are now ordered alphabetically across the
+  profile table, the docs DI list, and the `MANIFEST` (`modern-di` stays first,
+  `that-depends` last). This supersedes the earlier "insert after Starlette"
+  placement — `modern-di-aiohttp` now lands in its alphabetical slot. Future
+  integrations slot in alphabetically, no insertion-point decision needed.
 
 The brand mark and assets are already done and merged (bundle
 `2026-07-02.02-aiohttp-brand`, PR #31) — `brand/projects/modern-di-aiohttp/`
