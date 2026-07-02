@@ -21,6 +21,7 @@ EXPECTED_REPOS = {
     "modern-di-fastapi",
     "modern-di-litestar",
     "modern-di-starlette",
+    "modern-di-aiohttp",
     "modern-di-faststream",
     "modern-di-typer",
     "modern-di-pytest",

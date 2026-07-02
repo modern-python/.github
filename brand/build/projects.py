@@ -21,6 +21,7 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "modern-di-fastapi": lambda: sym.bolt_disc(_CX, _CY, R),
     "modern-di-litestar": lambda: sym.star_disc(_CX, _CY, R),
     "modern-di-starlette": lambda: sym.sparkle_cluster(_CX, _CY, R),
+    "modern-di-aiohttp": lambda: sym.async_loop(_CX, _CY, R),
     "modern-di-faststream": lambda: sym.faststream(_CX, _CY, R),
     "modern-di-typer": lambda: sym.terminal(_CX, _CY, R),
     "modern-di-pytest": lambda: sym.bars(_CX, _CY, R),
