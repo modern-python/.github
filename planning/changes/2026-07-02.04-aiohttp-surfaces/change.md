@@ -14,21 +14,16 @@ PyPI. Progress so far:
   `https://modern-di.modern-python.org`; topics set to `python,
   dependency-injection, di, ioc-container, modern-di, aiohttp`. Verified via
   `gh repo view`.
-- **Profile README row + docs-site listing — still BLOCKED on PyPI.** The
-  package is not on PyPI yet (`/pypi/modern-di-aiohttp/json` → 404), so the
-  Downloads (pepy) badge would 404 and the package is not pip-installable.
-  Decision: do not advertise an uninstallable package. Apply the profile/docs
-  edits below once the package is on PyPI.
+- **Profile README row + docs-site listing — DONE (shipped ahead of PyPI).**
+  Maintainer chose to ship the listing now even though the package is not on
+  PyPI yet (`/pypi/modern-di-aiohttp/json` → 404). Consequence: the pepy
+  Downloads badge on the new profile row 404s until the package is published to
+  PyPI and pepy indexes it — same self-healing lag pattern seen for
+  `modern-di-starlette`. All other elements (repo link, Stars badge) resolve.
 
 The brand mark and assets are already done and merged (bundle
 `2026-07-02.02-aiohttp-brand`, PR #31) — `brand/projects/modern-di-aiohttp/`
 exists on `main`.
-
-## Remaining precondition (for the profile/docs listing)
-
-```bash
-curl -s -o /dev/null -w '%{http_code}' https://pypi.org/pypi/modern-di-aiohttp/json   # must be 200
-```
 
 ## Precondition check (run first, all must pass)
 

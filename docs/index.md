@@ -67,7 +67,7 @@ production Python services. Use one piece or all of them — each is independent
 - **Wire your dependencies** with
   [`modern-di`](https://github.com/modern-python/modern-di) — typed, scoped
   dependency injection with one wiring shared across FastAPI, Litestar,
-  Starlette, FastStream, and Typer.
+  Starlette, aiohttp, FastStream, and Typer.
   ([`that-depends`](https://github.com/modern-python/that-depends), its
   production-proven predecessor, is still maintained.)
 - **Call other services reliably** with
@@ -99,6 +99,7 @@ catalog below.
 - [`modern-di-fastapi`](https://github.com/modern-python/modern-di-fastapi) — `modern-di` integration for FastAPI.
 - [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar) — `modern-di` integration for Litestar.
 - [`modern-di-starlette`](https://github.com/modern-python/modern-di-starlette) — `modern-di` integration for Starlette.
+- [`modern-di-aiohttp`](https://github.com/modern-python/modern-di-aiohttp) — `modern-di` integration for aiohttp.
 - [`modern-di-faststream`](https://github.com/modern-python/modern-di-faststream) — `modern-di` integration for FastStream.
 - [`modern-di-typer`](https://github.com/modern-python/modern-di-typer) — `modern-di` integration for Typer.
 - [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest) — `modern-di` integration for pytest.
