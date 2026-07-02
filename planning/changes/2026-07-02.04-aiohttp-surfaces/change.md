@@ -6,16 +6,29 @@ summary: Ready-to-fire — add modern-di-aiohttp to the profile README, docs sit
 
 ## Status
 
-**BLOCKED / staged.** Do not execute until
-`github.com/modern-python/modern-di-aiohttp` is public **and** the package is on
-PyPI. As of 2026-07-02 the repo does not resolve and PyPI returns 404, so the
-Stars/Downloads badges and the repo link would 404 and `gh repo edit` would
-fail. This bundle records the exact edits so they can be applied in one pass the
-moment the repo ships.
+**Partially applied.** The repo went public before the package was published to
+PyPI. Progress so far:
+
+- **GitHub repo settings — DONE.** Applied once the repo was public: description
+  was already `modern-di integration for aiohttp`; homepage set to
+  `https://modern-di.modern-python.org`; topics set to `python,
+  dependency-injection, di, ioc-container, modern-di, aiohttp`. Verified via
+  `gh repo view`.
+- **Profile README row + docs-site listing — still BLOCKED on PyPI.** The
+  package is not on PyPI yet (`/pypi/modern-di-aiohttp/json` → 404), so the
+  Downloads (pepy) badge would 404 and the package is not pip-installable.
+  Decision: do not advertise an uninstallable package. Apply the profile/docs
+  edits below once the package is on PyPI.
 
 The brand mark and assets are already done and merged (bundle
 `2026-07-02.02-aiohttp-brand`, PR #31) — `brand/projects/modern-di-aiohttp/`
-exists on `main`. Only the three public surfaces remain.
+exists on `main`.
+
+## Remaining precondition (for the profile/docs listing)
+
+```bash
+curl -s -o /dev/null -w '%{http_code}' https://pypi.org/pypi/modern-di-aiohttp/json   # must be 200
+```
 
 ## Precondition check (run first, all must pass)
 
