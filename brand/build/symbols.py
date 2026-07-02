@@ -84,7 +84,9 @@ def sparkle_cluster(cx: float, cy: float, r: float) -> str:
     return big + small
 
 
-def _circ_arc(cx: float, cy: float, rad: float, a0: float, a1: float, w: float) -> str:
+def _circ_arc(
+    cx: float, cy: float, rad: float, a0: float, a1: float, w: float, color: str = GOLD
+) -> str:
     """Clockwise arc a0->a1 (deg, increasing) with a leading arrowhead at a1."""
     a1s = a1 - 7  # stop the stroke short so the head caps it cleanly
     x0 = cx + rad * math.cos(math.radians(a0))
@@ -94,7 +96,7 @@ def _circ_arc(cx: float, cy: float, rad: float, a0: float, a1: float, w: float) 
     large = 1 if (a1s - a0) % 360 > 180 else 0
     d = (
         f'<path d="M{x0:.1f} {y0:.1f} A {rad:.1f} {rad:.1f} 0 {large} 1 {x1:.1f} {y1:.1f}" '
-        f'fill="none" stroke="{GOLD}" stroke-width="{w}" stroke-linecap="butt"/>'
+        f'fill="none" stroke="{color}" stroke-width="{w}" stroke-linecap="butt"/>'
     )
     ex = cx + rad * math.cos(math.radians(a1))
     ey = cy + rad * math.sin(math.radians(a1))
@@ -108,9 +110,20 @@ def _circ_arc(cx: float, cy: float, rad: float, a0: float, a1: float, w: float) 
     d += (
         f'<polygon points="{tip[0]:.1f},{tip[1]:.1f} '
         f"{base[0] + width * px:.1f},{base[1] + width * py:.1f} "
-        f'{base[0] - width * px:.1f},{base[1] - width * py:.1f}" fill="{GOLD}"/>'
+        f'{base[0] - width * px:.1f},{base[1] - width * py:.1f}" fill="{color}"/>'
     )
     return d
+
+
+def async_loop(cx: float, cy: float, r: float) -> str:
+    """aiohttp cue: an async event-loop cycle (two chasing arrows) knocked out
+    of a gold disc."""
+    rad = r * 0.52
+    w = 3.4
+    loop = _circ_arc(cx, cy, rad, 25, 165, w, color=CREAM) + _circ_arc(
+        cx, cy, rad, 205, 345, w, color=CREAM
+    )
+    return f'<circle cx="{cx}" cy="{cy}" r="{r:.1f}" fill="{GOLD}"/>' + loop
 
 
 FASTSTREAM_PATH = (
