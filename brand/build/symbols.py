@@ -54,6 +54,36 @@ def _star5(cx: float, cy: float, radius: float, color: str, inner: float = 0.42)
     return f'<polygon points="{body}" fill="{color}"/>'
 
 
+def _sparkle4(cx: float, cy: float, radius: float, color: str, inner: float = 0.34) -> str:
+    """Four-point sparkle (concave star) centred on (cx,cy)."""
+    pts: list[tuple[float, float]] = []
+    for i in range(4):
+        ao = -90 + i * 90
+        pts.append(
+            (
+                cx + radius * math.cos(math.radians(ao)),
+                cy + radius * math.sin(math.radians(ao)),
+            )
+        )
+        ai = ao + 45
+        pts.append(
+            (
+                cx + radius * inner * math.cos(math.radians(ai)),
+                cy + radius * inner * math.sin(math.radians(ai)),
+            )
+        )
+    body = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    return f'<polygon points="{body}" fill="{color}"/>'
+
+
+def sparkle_cluster(cx: float, cy: float, r: float) -> str:
+    """Starlette cue: a large four-point sparkle with a small companion
+    (a "little star" — starlette)."""
+    big = _sparkle4(cx - 0.174 * r, cy + 0.130 * r, r * 0.82, GOLD)
+    small = _sparkle4(cx + 0.565 * r, cy - 0.522 * r, r * 0.36, GOLD)
+    return big + small
+
+
 def _circ_arc(cx: float, cy: float, rad: float, a0: float, a1: float, w: float) -> str:
     """Clockwise arc a0->a1 (deg, increasing) with a leading arrowhead at a1."""
     a1s = a1 - 7  # stop the stroke short so the head caps it cleanly
