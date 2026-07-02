@@ -1,0 +1,94 @@
+---
+summary: Ready-to-fire — add modern-di-aiohttp to the profile README, docs site, and its GitHub repo settings once the repo is public.
+---
+
+# Change: modern-di-aiohttp public surfaces (deferred)
+
+## Status
+
+**BLOCKED / staged.** Do not execute until
+`github.com/modern-python/modern-di-aiohttp` is public **and** the package is on
+PyPI. As of 2026-07-02 the repo does not resolve and PyPI returns 404, so the
+Stars/Downloads badges and the repo link would 404 and `gh repo edit` would
+fail. This bundle records the exact edits so they can be applied in one pass the
+moment the repo ships.
+
+The brand mark and assets are already done and merged (bundle
+`2026-07-02.02-aiohttp-brand`, PR #31) — `brand/projects/modern-di-aiohttp/`
+exists on `main`. Only the three public surfaces remain.
+
+## Precondition check (run first, all must pass)
+
+```bash
+gh repo view modern-python/modern-di-aiohttp --json name          # resolves
+curl -s -o /dev/null -w '%{http_code}' https://pypi.org/pypi/modern-di-aiohttp/json   # 200
+```
+
+## Edits
+
+Canonical one-liner, used verbatim: **`modern-di integration for aiohttp`**
+(note lowercase `aiohttp`). Insert everywhere immediately **after**
+`modern-di-starlette` (order: fastapi -> litestar -> starlette -> aiohttp).
+
+### 1. `profile/README.md` — Dependency injection table
+
+Insert after the `modern-di-starlette` row. Match the current 4-column format
+(`| Project | What it is | Stars | Downloads |`, post-#30 — no PyPI/Context7):
+
+```markdown
+| [`modern-di-aiohttp`](https://github.com/modern-python/modern-di-aiohttp) | modern-di integration for aiohttp | [![Stars](https://img.shields.io/github/stars/modern-python/modern-di-aiohttp)](https://github.com/modern-python/modern-di-aiohttp/stargazers) | [![Downloads](https://static.pepy.tech/badge/modern-di-aiohttp/month)](https://pepy.tech/projects/modern-di-aiohttp) |
+```
+
+### 2. `docs/index.md` — DI list (`## Dependency injection { #di }`)
+
+Insert after the `modern-di-starlette` bullet:
+
+```markdown
+- [`modern-di-aiohttp`](https://github.com/modern-python/modern-di-aiohttp) — `modern-di` integration for aiohttp.
+```
+
+### 3. `docs/index.md` — "The stack" sentence
+
+Add `aiohttp,` after `Starlette,`. Replace:
+
+```
+  dependency injection with one wiring shared across FastAPI, Litestar,
+  Starlette, FastStream, and Typer.
+```
+
+with:
+
+```
+  dependency injection with one wiring shared across FastAPI, Litestar,
+  Starlette, aiohttp, FastStream, and Typer.
+```
+
+### 4. GitHub repo settings (read-then-diff, apply only what's missing)
+
+```bash
+gh repo view modern-python/modern-di-aiohttp --json description,homepageUrl,repositoryTopics
+gh repo edit modern-python/modern-di-aiohttp \
+  --description "modern-di integration for aiohttp" \
+  --homepage "https://modern-di.modern-python.org" \
+  --add-topic python --add-topic dependency-injection --add-topic di \
+  --add-topic ioc-container --add-topic modern-di --add-topic aiohttp
+```
+
+## Verification (post-publish)
+
+- `just check-planning` -> `planning: OK`; `just test` green (no code touched,
+  but run the gate).
+- `grep -c modern-di-aiohttp profile/README.md` -> 1; `... docs/index.md` -> 1
+  (the DI bullet; the stack sentence names "aiohttp", not the slug).
+- Badge/link resolve: `curl -sI` the Stars + Downloads badge URLs and the repo
+  link return 200 (Downloads may lag until pepy indexes the new package — the
+  same self-healing lag seen for modern-di-starlette; note it, do not block).
+- `gh repo view` reflects the intended description, homepage, and topics.
+- The `modern-di-aiohttp` README's brand images already resolve (assets on
+  `main` since #31).
+
+## Notes
+
+Ship as one PR (this bundle finalized + the two file edits) once unblocked; the
+GitHub-settings step is out-of-repo and applied alongside. Independent of any
+other pending work.
