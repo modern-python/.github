@@ -18,13 +18,13 @@ MANIFEST: dict[str, Callable[[], str]] = {
     # dependency injection
     "modern-di": lambda: sym.graph(_CX, _CY, R, dashed=True),
     "that-depends": lambda: sym.graph(_CX, _CY, R, dashed=False),
-    "modern-di-fastapi": lambda: sym.bolt_disc(_CX, _CY, R),
-    "modern-di-litestar": lambda: sym.star_disc(_CX, _CY, R),
-    "modern-di-starlette": lambda: sym.sparkle_cluster(_CX, _CY, R),
     "modern-di-aiohttp": lambda: sym.async_loop(_CX, _CY, R),
+    "modern-di-fastapi": lambda: sym.bolt_disc(_CX, _CY, R),
     "modern-di-faststream": lambda: sym.faststream(_CX, _CY, R),
-    "modern-di-typer": lambda: sym.terminal(_CX, _CY, R),
+    "modern-di-litestar": lambda: sym.star_disc(_CX, _CY, R),
     "modern-di-pytest": lambda: sym.bars(_CX, _CY, R),
+    "modern-di-starlette": lambda: sym.sparkle_cluster(_CX, _CY, R),
+    "modern-di-typer": lambda: sym.terminal(_CX, _CY, R),
     # templates — reuse the org chevron
     "fastapi-sqlalchemy-template": lambda: sym.chevron(_CX, _CY, R - 1),
     "litestar-sqlalchemy-template": lambda: sym.chevron(_CX, _CY, R - 1),
