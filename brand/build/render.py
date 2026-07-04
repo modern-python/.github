@@ -2,6 +2,7 @@ from pathlib import Path
 
 from brand.build import geometry as g
 from brand.build import tokens as t
+from brand.build.apparel import render_apparel
 from brand.build.projects import render_projects
 from brand.build.raster import export_png
 
@@ -92,6 +93,9 @@ def render() -> None:
 
     # Per-project marks (brand/projects/<repo>/).
     render_projects()
+
+    # Apparel artwork (brand/apparel/).
+    render_apparel()
 
 
 def main() -> None:

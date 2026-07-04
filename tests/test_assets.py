@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ORG = Path("brand/org")
+APPAREL = Path("brand/apparel")
 
 
 def _render():
@@ -87,3 +88,24 @@ def test_render_writes_social_cards():
             "social-square-green",
         ):
             assert (ORG / f"{name}.png").read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+def test_render_writes_apparel():
+    _render()
+    chest = APPAREL / "chest-mark.svg"
+    back = APPAREL / "back-lockup.svg"
+    assert chest.exists() and back.exists()
+    ET.parse(chest)
+    ET.parse(back)
+    ctext = chest.read_text()
+    assert 'points="45,40 57,50 45,60"' in ctext  # chevron
+    assert 'width="100" height="100"' not in ctext  # transparent, no bg rect
+    assert "#f4f1e8" in ctext and "#f0b528" in ctext
+    btext = back.read_text()
+    assert 'aria-label="Modern Python, modern-python.org"' in btext
+    assert "<text" not in btext  # outlined URL
+    assert "<rect width=" not in btext  # transparent
+    assert "#f4f1e8" in btext and "#f0b528" in btext
+    if shutil.which("rsvg-convert"):
+        for name in ("chest-mark-1050.png", "back-lockup-2400.png"):
+            assert (APPAREL / name).read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
