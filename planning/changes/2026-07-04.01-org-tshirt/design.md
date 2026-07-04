@@ -58,7 +58,7 @@ def apparel_back(*, struct: str, gold: str) -> str:
     )
     return (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="118 32 304 228" '
-        'role="img" aria-label="Modern Python — modern-python.org">'
+        'role="img" aria-label="Modern Python, modern-python.org">'
         + lockup_body(struct=struct, gold=gold)
         + url
         + "</svg>"
