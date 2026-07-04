@@ -83,6 +83,28 @@ def mark(*, struct: str, gold: str) -> str:
     return _SVG_OPEN.format(w=100, h=100) + _icon_mark(struct, gold) + "</svg>"
 
 
+def apparel_back(*, struct: str, gold: str) -> str:
+    """Back-of-shirt lockup: the MODERN/PYTHON wordmark with the full domain
+    outlined beneath it, transparent, for the cream+gold-dark colorway. Extends
+    the `wordmark` viewBox downward to seat the URL centered on the same axis."""
+    url, _ = outline_text(
+        "modern-python.org",
+        18,
+        x=270,
+        baseline_y=240,
+        anchor="middle",
+        color=gold,
+        letter_spacing=3,
+    )
+    return (
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="118 32 304 228" '
+        'role="img" aria-label="Modern Python, modern-python.org">'
+        + lockup_body(struct=struct, gold=gold)
+        + url
+        + "</svg>"
+    )
+
+
 def social_card(*, bg: str, struct: str, gold: str, url_color: str) -> str:
     body = lockup_body(struct=struct, gold=gold)
     url, _ = outline_text(
