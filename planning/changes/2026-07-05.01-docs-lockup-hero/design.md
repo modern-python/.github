@@ -1,0 +1,196 @@
+---
+summary: Show each docs-site project's lockup as a centered light/dark hero on its docs home page, replacing the plain `# Title` H1.
+---
+
+# Design: Per-project lockup hero on docs home pages
+
+## Summary
+
+The seven repos with a live docs site (`projects.py::DOCS_REPOS`: `modern-di`,
+`that-depends`, `lite-bootstrap`, `httpware`, `faststream-redis-timers`,
+`faststream-outbox`, `semvertag`) open their docs home page with a plain
+`# <Title>` Markdown heading and no project logo in the page body. This change
+replaces that H1 with a centered hero showing the project's **lockup** (mark +
+project name), theme-aware across light and dark, exactly mirroring the org
+site's own `.mp-hero` wordmark treatment. The lockups already exist in
+`brand/projects/<repo>/`; the rollout vendors two SVGs into each repo, edits
+`docs/index.md`, and adds a small CSS block. Seven repos, one PR each, piloted
+on `that-depends`.
+
+## Motivation
+
+Goal is **brand recognition**: the per-project marks already appear as README
+banners across the org, but a visitor landing on `httpware.modern-python.org`
+(or any project docs site) sees only text — the org mark in the header nav and a
+plain `# httpware` heading. The mark that identifies the project everywhere else
+is absent from the one page most likely to be a visitor's entry point. Putting
+the lockup at the top of each docs home page ties the docs surface to the same
+mark used on GitHub and PyPI, so the mark and the project become associated
+across every surface.
+
+The org home page (`docs/index.md` in this repo) already proves the pattern: its
+H1 is a centered light/dark `<img>` swap of `wordmark.svg` / `wordmark-dark.svg`
+driven by `.mp-hero` CSS. This change is the per-project application of that
+established pattern.
+
+## Non-goals
+
+- No changes to the header nav logo or favicon — those stay the org mark/favicon
+  on every site (recognition of the *org*), unchanged.
+- No new brand assets and no regeneration — `lockup-light.svg` / `lockup-dark.svg`
+  already exist for all seven repos.
+- No changes to the org home page or to repos without a docs site.
+- Not hiding nav/toc on the docs home pages — these are real docs entry pages,
+  unlike the org landing page.
+
+## Design
+
+The change is identical in shape across all seven repos; only three values vary
+per repo: the repo name (lockup `alt` text), the H1 text being removed, and
+the CSS filename the repo's `extra_css` loads.
+
+### 1. Vendor two lockup SVGs into `docs/assets/`
+
+Copy from this repo into each target repo:
+
+```
+brand/projects/<repo>/lockup-light.svg  ->  <repo>/docs/assets/lockup-light.svg
+brand/projects/<repo>/lockup-dark.svg   ->  <repo>/docs/assets/lockup-dark.svg
+```
+
+Docs sites **vendor** brand assets (each already carries `docs/assets/mark.svg`,
+`favicon.svg`, `social-card.png` as committed copies). Vendoring the lockup is
+consistent with that precedent and keeps `mkdocs build --strict` self-contained
+— see Risk for the rejected hotlink alternative. Asset filenames (`lockup-light.svg`,
+`lockup-dark.svg`) do not collide with the existing `mark.svg`.
+
+### 2. Replace the `# Title` H1 in `docs/index.md` with a hero block
+
+The lockup `<img>` becomes the page's H1, carrying the repo name as its alt text
+— the same accessibility technique the org home page uses. No `title:` front
+matter is added: MkDocs Material derives the home page's browser-tab title from
+`site_name` (the `page.is_homepage` branch), independent of the H1, so the tab
+title stays the bare repo name; the sidebar nav label comes from the `nav:` entry
+(where the home page is listed) or is simply absent (where it is not), never from
+the H1 text. Adding `title:` would instead force Material's `{title} - {site_name}`
+branch and, because `site_name` equals the repo name, duplicate it in the tab
+(`that-depends - that-depends`). The redundant "Welcome to the `<repo>` documentation!" greeting (present
+in most, e.g. `modern-di`, `that-depends`, `lite-bootstrap`, `faststream-redis-timers`)
+is dropped — the lockup already names the project — and the page proceeds
+straight to its substantive first paragraph. Repos whose intro is a single
+blended paragraph (e.g. `httpware`, `faststream-outbox`, `semvertag`, which have
+no separate "Welcome" line) keep that paragraph verbatim.
+
+Before (`that-depends/docs/index.md`):
+
+```markdown
+# That Depends
+
+Welcome to the `that-depends` documentation!
+
+`that-depends` is a python dependency injection framework which ...
+```
+
+After:
+
+```markdown
+<div class="mp-hero" markdown>
+
+<h1 class="mp-lockup">
+<img class="mp-logo mp-logo--light" src="assets/lockup-light.svg" alt="that-depends">
+<img class="mp-logo mp-logo--dark" src="assets/lockup-dark.svg" alt="" aria-hidden="true">
+</h1>
+
+</div>
+
+`that-depends` is a python dependency injection framework which ...
+```
+
+The dark `<img>` is `aria-hidden` with empty alt so screen readers announce the
+project name once. Everything below the intro is unchanged.
+
+### 3. Append the hero CSS to the repo's brand stylesheet
+
+Append to whichever file the repo's `extra_css` already lists (`css/brand.css`
+for `modern-di` / `that-depends`; other repos may use `stylesheets/extra.css` —
+match the existing entry). This is the org home page's `.mp-hero` rule, adapted
+for the lockup class name:
+
+```css
+/* Centered project lockup hero on the docs home page */
+.mp-hero {
+  text-align: center;
+  margin: 1.5rem 0 2.5rem;
+}
+.mp-hero .mp-lockup {
+  margin: 0;
+  font-size: 0;   /* collapse whitespace between the stacked <img> variants */
+  line-height: 0;
+}
+.mp-hero .mp-logo {
+  max-width: 420px;
+  width: 70%;
+  height: auto;
+}
+/* Light lockup by default; cream lockup in dark (slate) mode. */
+.mp-hero .mp-logo--dark { display: none; }
+[data-md-color-scheme="slate"] .mp-hero .mp-logo--light { display: none; }
+[data-md-color-scheme="slate"] .mp-hero .mp-logo--dark  { display: inline; }
+```
+
+Lockups have viewBox `0 0 ~280 100` (wide), so `max-width: 420px` caps the
+rendered height near ~150px — a proportionate hero, not an oversized banner.
+
+### 4. Document the convention in this repo
+
+Add a short "docs home page hero" note to `architecture/brand-marks.md` (beside
+the existing README-banner note), recording that docs sites vendor the lockup as
+a centered `.mp-hero` — contrasted with the README `<picture>` hotlink approach —
+and add a one-line pointer in `brand/README.md`'s per-project marks section. This
+promotion rides in the same PR as the planning bundle (this `.github` repo's
+slice of the rollout).
+
+## Rollout
+
+Full lane, executed **pilot then replicate**:
+
+1. **`that-depends`** — pilot end to end (branch, PR, CI, maintainer review,
+   merge). Lock the exact three-part diff.
+2. Replicate the identical change to `lite-bootstrap`, `httpware`,
+   `faststream-redis-timers`, `faststream-outbox`, `semvertag`.
+3. **`modern-di`** last, once its branch is free.
+
+Each target repo is a separate PR in its own repo. This `.github` repo carries
+its own PR for the planning bundle + architecture/brand-README docs (step 4).
+
+## Testing
+
+Per repo, at the branch HEAD with the repo's pinned docs deps
+(`pip install -r docs/requirements.txt` or the repo's documented docs env):
+
+- `mkdocs build --strict` passes — proves the two `assets/lockup-*.svg` refs and
+  the CSS reference resolve with no warnings (strict fails on broken internal links).
+- `mkdocs serve`, open the home page, confirm: the lockup renders centered; the
+  light variant shows in default theme and the cream variant after toggling to
+  dark (slate); the browser tab title is the project name; no duplicate project
+  name remains in the body.
+
+## Risk
+
+- **Hotlink vs vendor (low / decided).** READMEs reference lockups via
+  `raw.githubusercontent.com` with no committed assets. Reusing that for docs
+  would avoid vendoring, but external URLs are not checked by `mkdocs --strict`,
+  are subject to CDN caching lag and CSP, and break offline builds. Docs sites
+  already vendor every other brand asset, so vendoring is the consistent, robust
+  choice. Rejected hotlinking.
+- **CSS filename drift (low).** Repos differ in the stylesheet `extra_css` loads.
+  Mitigation: read each repo's `mkdocs.yml` `extra_css` and append to that exact
+  file; the pilot documents the check.
+- **Long project names (low).** The widest lockup still fits under `max-width:
+  420px`; visually verified on the pilot before replicating.
+- **Lost H1 semantics (low).** The lockup `<img>` sits inside an `<h1>` with the
+  repo name as alt text, so the page keeps exactly one H1 with an accessible name.
+  The browser-tab title is unaffected (Material uses `site_name` on the home page)
+  and the sidebar label comes from `nav:`, not the H1 — verified across all seven
+  repos: five list the home page in `nav:` (Quick-Start / Overview / Quick Start),
+  two do not list it at all (no sidebar entry to break).
