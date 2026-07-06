@@ -50,3 +50,9 @@ Open-source templates and libraries for building production-ready Python applica
 | [`db-retry`](https://github.com/modern-python/db-retry) | Retry helpers for PostgreSQL / SQLAlchemy database operations | [![Stars](https://img.shields.io/github/stars/modern-python/db-retry)](https://github.com/modern-python/db-retry/stargazers) | [![Downloads](https://static.pepy.tech/badge/db-retry/month)](https://pepy.tech/projects/db-retry) |
 | [`eof-fixer`](https://github.com/modern-python/eof-fixer) | Automatically fix newlines at the end of files | [![Stars](https://img.shields.io/github/stars/modern-python/eof-fixer)](https://github.com/modern-python/eof-fixer/stargazers) | [![Downloads](https://static.pepy.tech/badge/eof-fixer/month)](https://pepy.tech/projects/eof-fixer) |
 | [`semvertag`](https://github.com/modern-python/semvertag) | Auto-tag your GitHub/GitLab repo with semantic version tags from CI | [![Stars](https://img.shields.io/github/stars/modern-python/semvertag)](https://github.com/modern-python/semvertag/stargazers) | [![Downloads](https://static.pepy.tech/badge/semvertag/month)](https://pepy.tech/projects/semvertag) |
+
+### Support
+
+If these projects save you time, consider supporting development on [Boosty](https://boosty.to/lesnik512).
+
+[![Boosty](https://img.shields.io/badge/Boosty-support-f15f2c?logo=boosty&logoColor=white)](https://boosty.to/lesnik512)
