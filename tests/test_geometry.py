@@ -82,6 +82,22 @@ def test_apparel_back_wordmark_plus_url(parse_svg):
     assert svg.count("<path") > g.wordmark(struct="#f4f1e8", gold="#f0b528").count("<path")
 
 
+def test_boosty_cover(parse_svg):
+    svg = g.boosty_cover(bg="#2f5e4a", struct="#f4f1e8", gold="#f0b528")
+    el = parse_svg(svg)
+    assert el.attrib["viewBox"] == "0 0 1920 480"
+    assert 'fill="#2f5e4a"' in svg  # full-bleed green bg
+    assert "translate(582.0,25.0) scale(1.4)" in svg  # centered lockup
+    assert "M138 122 L138 50 L210 50" in svg  # carries the lockup crops
+    assert "<text" not in svg  # tagline outlined, not live text
+    assert "#f4f1e8" in svg and "#f0b528" in svg
+    assert "var(" not in svg
+    # the tagline adds outlined glyph paths beyond the bare wordmark
+    assert svg.count("<path") > g.wordmark(
+        struct="#f4f1e8", gold="#f0b528"
+    ).count("<path")
+
+
 def test_icon_circle(parse_svg):
     svg = g.icon_circle(bg="#2f5e4a", struct="#f4f1e8", gold="#f0b528")
     el = parse_svg(svg)

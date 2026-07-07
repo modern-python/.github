@@ -138,6 +138,32 @@ def social_square(*, bg: str, struct: str, gold: str) -> str:
     )
 
 
+def boosty_cover(*, bg: str, struct: str, gold: str) -> str:
+    """Wide Boosty profile-header banner: the MODERN/PYTHON lockup centered over
+    an outlined tagline, on a full-bleed background. 4:1 (1920x480); the
+    lower-left is left clear for Boosty's avatar/name overlay."""
+    body = lockup_body(struct=struct, gold=gold)
+    s = 1.4
+    tx = round(1920 / 2 - 270 * s, 1)  # box-center horizontally (lockup box 540 wide)
+    ty = round(200 - 125 * s, 1)  # lockup center ~y200, leaving room for the tagline
+    tagline, _ = outline_text(
+        "Open-source Python for production",
+        30,
+        x=960,
+        baseline_y=400,
+        anchor="middle",
+        color=gold,
+        letter_spacing=4,
+    )
+    return (
+        _SVG_OPEN.format(w=1920, h=480)
+        + f'<rect width="1920" height="480" fill="{bg}"/>'
+        + f'<g transform="translate({tx},{ty}) scale({s})">{body}</g>'
+        + tagline
+        + "</svg>"
+    )
+
+
 def project_frame(
     *,
     struct: str,
