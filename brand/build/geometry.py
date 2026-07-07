@@ -140,42 +140,19 @@ def social_square(*, bg: str, struct: str, gold: str) -> str:
 
 def boosty_cover(*, bg: str, struct: str, gold: str) -> str:
     """Boosty profile-header banner — 8:1 (1920x240), Boosty's documented header
-    size. The strip is too shallow to stack, so the MODERN/PYTHON lockup and the
-    outlined tagline sit side by side, centered as a pair on a full-bleed
-    background. The tagline width is measured to center the whole row."""
+    size. Just the MODERN/PYTHON lockup, centered on a full-bleed field. It is
+    kept in the horizontal center (visual box 540 wide, centered on x=960) so
+    Boosty's responsive side-cropping and the lower-left avatar overlay never
+    clip it; no tagline, since Boosty renders the bio as text below the avatar."""
     w, h = 1920, 240
-    s = 0.9  # lockup scale; its visual box is x[134,406] (width 272), y-center 125
-    lock_w = 272 * s
-    tagline_text = "Open-source Python for production"
-    tag_size = 40
-    gap = 60  # px between lockup and tagline
-    _, tag_w = outline_text(
-        tagline_text,
-        tag_size,
-        x=0,
-        baseline_y=0,
-        anchor="start",
-        color=gold,
-        letter_spacing=4,
-    )
-    x0 = (w - (lock_w + gap + tag_w)) / 2  # left edge of the centered row
-    tx = round(x0 - 134 * s, 1)  # seat the lockup's visual-left at x0
-    ty = round(h / 2 - 125 * s, 1)  # center the lockup vertically
+    s = 1.1  # lockup box is 540x250 (visual y-center 125)
+    tx = round(w / 2 - 270 * s, 1)  # box-center horizontally
+    ty = round(h / 2 - 125 * s, 1)  # box-center vertically
     body = lockup_body(struct=struct, gold=gold)
-    tagline, _ = outline_text(
-        tagline_text,
-        tag_size,
-        x=round(x0 + lock_w + gap, 1),
-        baseline_y=round(h / 2 + tag_size * 0.32, 1),  # optical vertical center
-        anchor="start",
-        color=gold,
-        letter_spacing=4,
-    )
     return (
         _SVG_OPEN.format(w=w, h=h)
         + f'<rect width="{w}" height="{h}" fill="{bg}"/>'
         + f'<g transform="translate({tx},{ty}) scale({s})">{body}</g>'
-        + tagline
         + "</svg>"
     )
 

@@ -88,13 +88,13 @@ def test_boosty_cover(parse_svg):
     assert el.attrib["viewBox"] == "0 0 1920 240"  # 8:1 Boosty header
     assert 'fill="#2f5e4a"' in svg  # full-bleed green bg
     assert 'width="1920" height="240"' in svg  # full-bleed rect
-    assert "scale(0.9)" in svg  # lockup scaled into the short strip
+    assert "translate(663.0,-17.5) scale(1.1)" in svg  # lockup centered on x=960
     assert "M138 122 L138 50 L210 50" in svg  # carries the lockup crops
-    assert "<text" not in svg  # tagline outlined, not live text
+    assert "<text" not in svg  # no live text (and no tagline)
     assert "#f4f1e8" in svg and "#f0b528" in svg
     assert "var(" not in svg
-    # the tagline adds outlined glyph paths beyond the bare wordmark
-    assert svg.count("<path") > g.wordmark(
+    # minimal: just the lockup, so no glyph paths beyond the bare wordmark
+    assert svg.count("<path") == g.wordmark(
         struct="#f4f1e8", gold="#f0b528"
     ).count("<path")
 

@@ -1,5 +1,5 @@
 ---
-summary: Add a Boosty profile cover to the brand generator — an 8:1 1920x240 green-colorway header banner (MODERN/PYTHON lockup + "Open-source Python for production" tagline, side by side) as SVG + PNG in brand/org/.
+summary: Add a Boosty profile cover to the brand generator — an 8:1 1920x240 green-colorway header banner with the MODERN/PYTHON lockup centered on a green field (no tagline), kept in the crop-safe center clear of Boosty's avatar overlay, as SVG + PNG in brand/org/.
 ---
 
 # Design: modern-python Boosty profile cover
@@ -10,13 +10,14 @@ Add a new **Boosty cover** output to the brand kit (`brand/build/`) that renders
 a wide profile-header banner for the org's Boosty page (`boosty.to/lesnik512`).
 It is **8:1 at 1920×240** — Boosty's documented profile-header size. It uses the
 green colorway (green surface `#2f5e4a` with cream + gold-dark ink) — the same
-treatment as `social-card-green` and the org avatar — so the banner sits as one
-green field beside the (green) Boosty avatar. The short strip is too shallow to
-stack, so the existing MODERN/PYTHON `lockup_body` and the outlined tagline
-`Open-source Python for production` sit **side by side**, centered as a pair.
-Everything is drawn from existing `geometry.py` primitives; the only new geometry
-is the horizontal-banner composition. Outputs land in `brand/org/` as vector SVG
-plus a 1920×240 PNG, regenerable via `uv run python -m brand.build.render`.
+treatment as `social-card-green` and the org avatar. The banner is deliberately
+**minimal**: just the existing MODERN/PYTHON `lockup_body`, centered on the green
+field, **no tagline** (Boosty already renders the bio as text below the avatar,
+so a tagline in the cover would duplicate it). Centering matters — Boosty
+overlays the avatar on the lower-left and crops the header responsively on
+narrow viewports, so the lockup is kept in the horizontal center where nothing
+clips it. Outputs land in `brand/org/` as vector SVG plus a 1920×240 PNG,
+regenerable via `uv run python -m brand.build.render`.
 
 ## Motivation
 
@@ -43,51 +44,32 @@ interactively against a rendered draft.
 ### 1. Cover geometry — `brand/build/geometry.py`
 
 Add `boosty_cover(*, bg, struct, gold)`: a complete `<svg>` (viewBox
-`0 0 1920 240`) with a full-bleed `bg` rect, the `lockup_body()` lockup scaled
-`0.9`, and the outlined tagline set to its right — the pair centered as a row.
-It reuses `lockup_body()` (the MODERN/PYTHON crop-mark lockup in the 540×250
-space) and `outline_text()` (the same font-outlining path the social card URL
-uses, so nothing depends on a font at serve time). Because 240 px is too short
-to stack the lockup over a tagline, the layout is horizontal; the tagline width
-is measured (from `outline_text`'s returned advance) so the whole row centers on
-x=960.
+`0 0 1920 240`) with a full-bleed `bg` rect and the `lockup_body()` lockup scaled
+`1.1` and centered — nothing else. It reuses `lockup_body()` (the MODERN/PYTHON
+crop-mark lockup in the 540×250 space); the lockup's box center (270, 125) is
+placed on the banner center (960, 120), so `translate` resolves to
+`translate(663.0,-17.5) scale(1.1)`.
 
 ```python
 def boosty_cover(*, bg: str, struct: str, gold: str) -> str:
-    """Boosty profile-header banner — 8:1 (1920x240). The lockup and the
-    outlined tagline sit side by side, centered as a pair."""
+    """Boosty profile-header banner — 8:1 (1920x240). Just the MODERN/PYTHON
+    lockup, centered on a full-bleed field; no tagline."""
     w, h = 1920, 240
-    s = 0.9  # lockup visual box is x[134,406] (width 272), y-center 125
-    lock_w = 272 * s
-    tagline_text = "Open-source Python for production"
-    tag_size = 40
-    gap = 60
-    _, tag_w = outline_text(
-        tagline_text, tag_size, x=0, baseline_y=0,
-        anchor="start", color=gold, letter_spacing=4,
-    )
-    x0 = (w - (lock_w + gap + tag_w)) / 2
-    tx = round(x0 - 134 * s, 1)  # seat the lockup's visual-left at x0
-    ty = round(h / 2 - 125 * s, 1)
+    s = 1.1  # lockup box is 540x250 (visual y-center 125)
+    tx = round(w / 2 - 270 * s, 1)  # box-center horizontally
+    ty = round(h / 2 - 125 * s, 1)  # box-center vertically
     body = lockup_body(struct=struct, gold=gold)
-    tagline, _ = outline_text(
-        tagline_text, tag_size, x=round(x0 + lock_w + gap, 1),
-        baseline_y=round(h / 2 + tag_size * 0.32, 1),
-        anchor="start", color=gold, letter_spacing=4,
-    )
     return (
         _SVG_OPEN.format(w=w, h=h)
         + f'<rect width="{w}" height="{h}" fill="{bg}"/>'
         + f'<g transform="translate({tx},{ty}) scale({s})">{body}</g>'
-        + tagline
         + "</svg>"
     )
 ```
 
-The tagline is set in `gold` (gold-dark) on the green surface; MODERN is `struct`
-(cream) and PYTHON is `gold`, so the banner stays within the on-green two-ink
-treatment. The centered row keeps content clear of Boosty's lower-left avatar
-overlay.
+MODERN is `struct` (cream) and PYTHON is `gold` (gold-dark), so the banner stays
+within the on-green two-ink treatment. There is no tagline text, so `outline_text`
+is not used here.
 
 ### 2. Render wiring — `brand/build/render.py`
 
@@ -113,10 +95,11 @@ width/height change.
 ## Testing
 
 - New `tests/test_geometry.py::test_boosty_cover`: viewBox is `0 0 1920 240`;
-  full-bleed `bg` rect (`width="1920" height="240"`) present; lockup scaled
-  (`scale(0.9)`); carries the lockup crops (`M138 122 L138 50 L210 50`); tagline
-  is outlined (glyph `<path>`s, **no** `<text>`); more `<path>`s than a bare
-  `wordmark`; only cream + gold-dark inks over the green; no `var(`.
+  full-bleed `bg` rect (`width="1920" height="240"`) present; centered lockup
+  placement (`translate(663.0,-17.5) scale(1.1)`); carries the lockup crops
+  (`M138 122 L138 50 L210 50`); **no** `<text>`; the same `<path>` count as a
+  bare `wordmark` (minimal — no tagline glyphs); only cream + gold-dark inks over
+  the green; no `var(`.
 - Extend `tests/test_assets.py::test_render_writes_social_cards` (or a sibling)
   to assert `brand/org/boosty-cover.svg` parses and the green colors are present,
   and that the PNG magic bytes are present when `rsvg-convert` is available.
@@ -131,8 +114,12 @@ width/height change.
   is 1920×240 (8:1), per Boosty creator guides; this ships at exactly that. The
   SVG is resolution-independent, so a future slot change is only an `export_png`
   dimension edit.
-- **Low: avatar overlaps the lockup.** The avatar sits lower-left; the centered
-  content row starts well right of it. Mitigated by the centered composition.
+- **Low: avatar overlaps the lockup.** The avatar sits lower-left; the lockup is
+  horizontally centered, well clear of it, and Boosty's narrow-viewport crop
+  keeps the center — so the centered mark survives. Mitigated by the composition.
+- **Resolved: tagline duplicated the bio.** An earlier draft set the tagline in
+  the cover; Boosty already shows the bio (`Open-source Python for production`)
+  as text below the avatar, so the cover tagline was dropped.
 - **Low: PNG absent in CI** if `rsvg-convert` is unavailable. Same behavior as
   every other target — the SVG still generates; the PNG is committed from a dev
   machine with librsvg.
