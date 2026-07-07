@@ -5,9 +5,9 @@
 > superpowers:executing-plans to implement this plan task-by-task. Steps
 > use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add a Boosty profile-cover target to the brand generator that emits a
-wide 1920×480 green-colorway banner (MODERN/PYTHON lockup + tagline) as SVG +
-PNG in `brand/org/`.
+**Goal:** Add a Boosty profile-cover target to the brand generator that emits an
+8:1 1920×240 green-colorway header banner (MODERN/PYTHON lockup + tagline, side
+by side) as SVG + PNG in `brand/org/`.
 
 **Spec:** [`design.md`](./design.md)
 
@@ -19,11 +19,11 @@ PNG in `brand/org/`.
 
 - Green colorway only: `bg = #2f5e4a` (`tokens.GREEN_SURFACE`), `struct = #f4f1e8`
   (`tokens.CREAM`), `gold = #f0b528` (`tokens.GOLD_DARK`). No other colors.
-- Cover SVG viewBox is exactly `0 0 1920 480`; lockup placement is
-  `translate(582.0,25.0) scale(1.4)`; tagline is
-  `outline_text("Open-source Python for production", 30, x=960, baseline_y=400,
-  anchor="middle", color=gold, letter_spacing=4)`.
-- PNG size: `width=1920, height=480`.
+- Cover SVG viewBox is exactly `0 0 1920 240` (8:1, Boosty's header slot); the
+  lockup is `scale(0.9)`; the tagline `Open-source Python for production` is
+  outlined at `tag_size=40`, `letter_spacing=4`, set to the lockup's right with a
+  60 px gap, and the pair is centered on x=960 using the measured tagline width.
+- PNG size: `width=1920, height=240`.
 - All imports at module level; annotate all function arguments; `ty: ignore`
   never `type: ignore`.
 - Brand casing in prose: `modern-python`, `modern-di`. Tagline has no trailing
@@ -49,9 +49,10 @@ PNG in `brand/org/`.
 def test_boosty_cover(parse_svg):
     svg = g.boosty_cover(bg="#2f5e4a", struct="#f4f1e8", gold="#f0b528")
     el = parse_svg(svg)
-    assert el.attrib["viewBox"] == "0 0 1920 480"
+    assert el.attrib["viewBox"] == "0 0 1920 240"  # 8:1 Boosty header
     assert 'fill="#2f5e4a"' in svg  # full-bleed green bg
-    assert "translate(582.0,25.0) scale(1.4)" in svg  # centered lockup
+    assert 'width="1920" height="240"' in svg  # full-bleed rect
+    assert "scale(0.9)" in svg  # lockup scaled into the short strip
     assert "M138 122 L138 50 L210 50" in svg  # carries the lockup crops
     assert "<text" not in svg  # tagline outlined, not live text
     assert "#f4f1e8" in svg and "#f0b528" in svg
@@ -93,7 +94,7 @@ def test_render_writes_boosty_cover():
     assert cover.exists()
     ET.parse(cover)
     text = cover.read_text()
-    assert 'viewBox="0 0 1920 480"' in text
+    assert 'viewBox="0 0 1920 240"' in text
     assert 'fill="#2f5e4a"' in text and "#f4f1e8" in text and "#f0b528" in text
     assert "<text" not in text and "var(" not in text
     if shutil.which("rsvg-convert"):
@@ -114,7 +115,7 @@ def test_render_writes_boosty_cover():
         g.boosty_cover(bg=t.GREEN_SURFACE, struct=t.CREAM, gold=t.GOLD_DARK),
     )
     export_png(
-        ORG / "boosty-cover.svg", ORG / "boosty-cover.png", width=1920, height=480
+        ORG / "boosty-cover.svg", ORG / "boosty-cover.png", width=1920, height=240
     )
 ```
 

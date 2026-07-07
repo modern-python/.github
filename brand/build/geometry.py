@@ -139,25 +139,41 @@ def social_square(*, bg: str, struct: str, gold: str) -> str:
 
 
 def boosty_cover(*, bg: str, struct: str, gold: str) -> str:
-    """Wide Boosty profile-header banner: the MODERN/PYTHON lockup centered over
-    an outlined tagline, on a full-bleed background. 4:1 (1920x480); the
-    lower-left is left clear for Boosty's avatar/name overlay."""
+    """Boosty profile-header banner — 8:1 (1920x240), Boosty's documented header
+    size. The strip is too shallow to stack, so the MODERN/PYTHON lockup and the
+    outlined tagline sit side by side, centered as a pair on a full-bleed
+    background. The tagline width is measured to center the whole row."""
+    w, h = 1920, 240
+    s = 0.9  # lockup scale; its visual box is x[134,406] (width 272), y-center 125
+    lock_w = 272 * s
+    tagline_text = "Open-source Python for production"
+    tag_size = 40
+    gap = 60  # px between lockup and tagline
+    _, tag_w = outline_text(
+        tagline_text,
+        tag_size,
+        x=0,
+        baseline_y=0,
+        anchor="start",
+        color=gold,
+        letter_spacing=4,
+    )
+    x0 = (w - (lock_w + gap + tag_w)) / 2  # left edge of the centered row
+    tx = round(x0 - 134 * s, 1)  # seat the lockup's visual-left at x0
+    ty = round(h / 2 - 125 * s, 1)  # center the lockup vertically
     body = lockup_body(struct=struct, gold=gold)
-    s = 1.4
-    tx = round(1920 / 2 - 270 * s, 1)  # box-center horizontally (lockup box 540 wide)
-    ty = round(200 - 125 * s, 1)  # lockup center ~y200, leaving room for the tagline
     tagline, _ = outline_text(
-        "Open-source Python for production",
-        30,
-        x=960,
-        baseline_y=400,
-        anchor="middle",
+        tagline_text,
+        tag_size,
+        x=round(x0 + lock_w + gap, 1),
+        baseline_y=round(h / 2 + tag_size * 0.32, 1),  # optical vertical center
+        anchor="start",
         color=gold,
         letter_spacing=4,
     )
     return (
-        _SVG_OPEN.format(w=1920, h=480)
-        + f'<rect width="1920" height="480" fill="{bg}"/>'
+        _SVG_OPEN.format(w=w, h=h)
+        + f'<rect width="{w}" height="{h}" fill="{bg}"/>'
         + f'<g transform="translate({tx},{ty}) scale({s})">{body}</g>'
         + tagline
         + "</svg>"

@@ -85,9 +85,10 @@ def test_apparel_back_wordmark_plus_url(parse_svg):
 def test_boosty_cover(parse_svg):
     svg = g.boosty_cover(bg="#2f5e4a", struct="#f4f1e8", gold="#f0b528")
     el = parse_svg(svg)
-    assert el.attrib["viewBox"] == "0 0 1920 480"
+    assert el.attrib["viewBox"] == "0 0 1920 240"  # 8:1 Boosty header
     assert 'fill="#2f5e4a"' in svg  # full-bleed green bg
-    assert "translate(582.0,25.0) scale(1.4)" in svg  # centered lockup
+    assert 'width="1920" height="240"' in svg  # full-bleed rect
+    assert "scale(0.9)" in svg  # lockup scaled into the short strip
     assert "M138 122 L138 50 L210 50" in svg  # carries the lockup crops
     assert "<text" not in svg  # tagline outlined, not live text
     assert "#f4f1e8" in svg and "#f0b528" in svg

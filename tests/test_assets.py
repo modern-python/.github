@@ -96,7 +96,7 @@ def test_render_writes_boosty_cover():
     assert cover.exists()
     ET.parse(cover)
     text = cover.read_text()
-    assert 'viewBox="0 0 1920 480"' in text
+    assert 'viewBox="0 0 1920 240"' in text
     assert 'fill="#2f5e4a"' in text and "#f4f1e8" in text and "#f0b528" in text
     assert "<text" not in text and "var(" not in text
     if shutil.which("rsvg-convert"):

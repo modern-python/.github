@@ -78,7 +78,7 @@ def render() -> None:
         g.boosty_cover(bg=t.GREEN_SURFACE, struct=t.CREAM, gold=t.GOLD_DARK),
     )
     export_png(
-        ORG / "boosty-cover.svg", ORG / "boosty-cover.png", width=1920, height=480
+        ORG / "boosty-cover.svg", ORG / "boosty-cover.png", width=1920, height=240
     )
 
     # Square (Telegram / square social) — cream + green.
