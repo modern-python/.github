@@ -138,6 +138,25 @@ def social_square(*, bg: str, struct: str, gold: str) -> str:
     )
 
 
+def boosty_cover(*, bg: str, struct: str, gold: str) -> str:
+    """Boosty profile-header banner — 8:1 (1920x240), Boosty's documented header
+    size. Just the MODERN/PYTHON lockup, centered on a full-bleed field. It is
+    kept in the horizontal center (visual box 540 wide, centered on x=960) so
+    Boosty's responsive side-cropping and the lower-left avatar overlay never
+    clip it; no tagline, since Boosty renders the bio as text below the avatar."""
+    w, h = 1920, 240
+    s = 1.1  # lockup box is 540x250 (visual y-center 125)
+    tx = round(w / 2 - 270 * s, 1)  # box-center horizontally
+    ty = round(h / 2 - 125 * s, 1)  # box-center vertically
+    body = lockup_body(struct=struct, gold=gold)
+    return (
+        _SVG_OPEN.format(w=w, h=h)
+        + f'<rect width="{w}" height="{h}" fill="{bg}"/>'
+        + f'<g transform="translate({tx},{ty}) scale({s})">{body}</g>'
+        + "</svg>"
+    )
+
+
 def project_frame(
     *,
     struct: str,

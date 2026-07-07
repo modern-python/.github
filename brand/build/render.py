@@ -72,6 +72,15 @@ def render() -> None:
         height=640,
     )
 
+    # Boosty profile cover (green colorway) — brand/org/boosty-cover.*
+    _write(
+        ORG / "boosty-cover.svg",
+        g.boosty_cover(bg=t.GREEN_SURFACE, struct=t.CREAM, gold=t.GOLD_DARK),
+    )
+    export_png(
+        ORG / "boosty-cover.svg", ORG / "boosty-cover.png", width=1920, height=240
+    )
+
     # Square (Telegram / square social) — cream + green.
     _write(
         ORG / "social-square.svg",
