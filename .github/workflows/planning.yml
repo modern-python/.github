@@ -14,5 +14,5 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.11"
-      - name: Validate planning bundles
+      - name: Validate planning changes
         run: uv run python planning/index.py --check
