@@ -6,7 +6,7 @@ language). These files carry **no frontmatter** and are dated by git.
 
 **Promotion rule:** when a change alters a capability's behavior, hand-edit the
 matching `architecture/<capability>.md` in the **same PR** as the code — the edit
-rides in the same diff and is reviewed with it. The change bundle in
+rides in the same diff and is reviewed with it. The change file in
 `planning/changes/` stays as the *why*; this directory stays *true*.
 
 Capability files and `glossary.md` are authored **lazily** — each appears when the

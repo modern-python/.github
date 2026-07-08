@@ -57,9 +57,11 @@ if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
 ## Workflow
 
 Planning follows the convention in [`planning/README.md`](planning/README.md) —
-its **Quick path** is authoritative. Pick a lane (Full = `design.md` + `plan.md`,
-Lightweight = `change.md`, Tiny = conventional commit), create a bundle under
-`planning/changes/YYYY-MM-DD.NN-<slug>/` from `planning/_templates/`, and run
+its **Quick path** is authoritative. Pick a lane (Full = a change file from the
+design template, Lightweight = a change file from the change template, Tiny =
+conventional commit), create the change file at
+`planning/changes/YYYY-MM-DD.NN-<slug>.md` from `planning/_templates/`, keep the
+executor's plan in git-ignored scratch (`.superpowers/`), and run
 `just check-planning` before pushing. The applied convention version is in
 `planning/.convention-version`; update it via the canonical repo's `APPLY.md`.
 
@@ -68,5 +70,5 @@ Lightweight = `change.md`, Tiny = conventional commit), create a bundle under
 `architecture/` (repo root) is the living truth about what this repo does now —
 one file per capability plus `glossary.md`, no frontmatter, authored lazily.
 **When a change alters a capability's behavior, update the matching
-`architecture/<capability>.md` in the same PR.** The change bundle in
+`architecture/<capability>.md` in the same PR.** The change file in
 `planning/changes/` stays as the *why*.
