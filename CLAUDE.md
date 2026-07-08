@@ -70,5 +70,5 @@ executor's plan in git-ignored scratch (`.superpowers/`), and run
 `architecture/` (repo root) is the living truth about what this repo does now —
 one file per capability plus `glossary.md`, no frontmatter, authored lazily.
 **When a change alters a capability's behavior, update the matching
-`architecture/<capability>.md` in the same PR.** The change bundle in
+`architecture/<capability>.md` in the same PR.** The change file in
 `planning/changes/` stays as the *why*.
