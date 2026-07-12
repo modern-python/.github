@@ -158,6 +158,26 @@ FASTSTREAM_PATH = (
     "h370.45c51.9,0,84.33-56.18,58.38-101.12Z"
 )
 
+# Flask's own horn, from Pallets' docs/_static/flask-icon.svg (500x500 space).
+# Their Flask Artwork License permits the logo "or a modified version" to be used
+# by anyone to refer to the Flask project, so this recolour is sanctioned.
+FLASK_PATHS = (
+    "M224.446,59.975c-0.056,-4.151 -0.483,-5.543 -2.7,-6.823c-2.104,-1.393 -5.288,-1.421 "
+    "-8.329,-0.085l-204.674,87.64c-3.042,1.336 -5.913,4.008 -7.448,6.908c-1.535,2.899 "
+    "-1.705,5.97 -0.511,8.158l17.084,31.384l0.228,0.369c1.847,2.928 6.026,3.696 10.29,1.82"
+    "l1.251,-0.54c5.344,22.4 14.1,50.429 25.783,70.413l178.294,-79.794c-2.559,-23.14 "
+    "-9.552,-89.602 -9.268,-119.479l0,0.029Z",
+    "M238.603,205.776l-171.698,76.838c10.091,19.132 22.542,39.428 37.722,58.986c50.429,"
+    "-25.698 100.887,-51.396 151.316,-77.094c-3.269,-8.471 -6.452,-17.653 -17.34,-58.73Z",
+    "M497.601,388.846l-12.139,-18.535c-1.819,-2.018 -4.633,-2.786 -7.106,-1.791l-15.578,"
+    "5.999c-1.848,-2.047 -4.52,-2.815 -7.135,-1.791c-5.089,1.99 -10.206,4.008 -15.294,5.998"
+    "c-1.649,0.625 -2.104,1.847 -1.791,3.439l0.995,4.861c-28.711,3.099 -77.236,1.564 "
+    "-120.701,-32.577c-19.216,-15.066 -37.239,-36.386 -52.277,-66.206l-144.75,73.768"
+    "c26.466,29.08 59.697,54.864 100.973,70.385c57.422,21.633 130.593,23.679 222.838,-13.475"
+    "l0.512,2.616c0.455,2.928 3.98,6.026 8.755,4.15l15.323,-5.97c5.258,-1.99 5.287,-6.026 "
+    "4.519,-8.641l19.729,-7.704c2.217,-0.853 9.096,-6.169 3.183,-14.526l-0.056,-0Z",
+)
+
 
 def bolt_disc(cx: float, cy: float, r: float) -> str:
     """FastAPI cue: lightning bolt knocked out of a gold disc."""
@@ -470,3 +490,14 @@ def task_q(cx: float, cy: float, r: float) -> str:
         f'r="{0.12 * r:.1f}" fill="{CREAM}"/>'
     )
     return ring + tail + eye
+
+
+def flask_horn(cx: float, cy: float, r: float) -> str:
+    """Flask cue: Flask's own drinking horn (a rhyton — not a lab flask),
+    recoloured gold. The bands are negative space in the source artwork."""
+    sc = (2.04 * r) / 500.0
+    body = "".join(f'<path d="{d}" fill="{GOLD}"/>' for d in FLASK_PATHS)
+    return (
+        f'<g transform="translate({cx - 250 * sc:.2f},{cy - 248 * sc:.2f}) '
+        f'scale({sc:.4f})">{body}</g>'
+    )

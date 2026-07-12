@@ -51,7 +51,7 @@ def test_util_symbol_parses(name: str) -> None:
     minidom.parseString(_wrap(getattr(sym, name)(50, 50, 23)))
 
 
-NEW_SYMBOLS = ["plane", "hopper", "pod", "celery_stalk", "task_q"]
+NEW_SYMBOLS = ["plane", "hopper", "pod", "celery_stalk", "task_q", "flask_horn"]
 
 
 @pytest.mark.parametrize("name", NEW_SYMBOLS)

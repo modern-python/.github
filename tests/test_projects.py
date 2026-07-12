@@ -40,6 +40,7 @@ EXPECTED_REPOS = {
     "compose2pod",
     "modern-di-celery",
     "modern-di-taskiq",
+    "modern-di-flask",
 }
 
 
