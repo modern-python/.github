@@ -415,10 +415,20 @@ def plane(cx: float, cy: float, r: float) -> str:
     disc with no pictorial element, so the honest cue is Telegram itself."""
     hull = ((-0.95, 0.02), (0.95, -0.78), (0.30, 0.86), (0.02, 0.28))
     body = " ".join(f"{cx + dx * r:.1f},{cy + dy * r:.1f}" for dx, dy in hull)
+    # Crease runs fold-point -> nose (hull[3] -> hull[1]), a chord that meets
+    # the hull exactly at those two vertices. Inset both ends off the
+    # vertices (and use a butt cap, not round) so the stroke's own width
+    # can't spill past the polygon at the nose's sharp point.
+    fold, nose = hull[3], hull[1]
+    ex, ey = nose[0] - fold[0], nose[1] - fold[1]
+    elen = math.hypot(ex, ey)
+    ux, uy = ex / elen, ey / elen
+    inset = 0.20 * r
+    x0, y0 = cx + fold[0] * r + ux * inset, cy + fold[1] * r + uy * inset
+    x1, y1 = cx + nose[0] * r - ux * inset, cy + nose[1] * r - uy * inset
     crease = (
-        f'<path d="M{cx + 0.02 * r:.1f} {cy + 0.28 * r:.1f} '
-        f'L{cx + 0.95 * r:.1f} {cy - 0.78 * r:.1f}" fill="none" stroke="{CREAM}" '
-        f'stroke-width="{r * 0.11:.1f}" stroke-linecap="round"/>'
+        f'<path d="M{x0:.1f} {y0:.1f} L{x1:.1f} {y1:.1f}" fill="none" stroke="{CREAM}" '
+        f'stroke-width="{r * 0.11:.1f}" stroke-linecap="butt"/>'
     )
     return f'<polygon points="{body}" fill="{GOLD}"/>{crease}'
 
@@ -448,16 +458,26 @@ def pod(cx: float, cy: float, r: float) -> str:
 
 
 def celery_stalk(cx: float, cy: float, r: float) -> str:
-    """Celery cue: their icon redrawn — a banded capsule with the pale open C
-    at its right end. Measured off celery_512.png; Celery ships no SVG (see
-    celery/celery#5981), and the C is *open* (facing right), not a closed ring."""
+    """Celery cue: their icon redrawn — a banded capsule with an open C,
+    stroked the same gold as the body, at its right end. Measured off
+    celery_512.png; Celery ships no SVG (see celery/celery#5981), and the C
+    is *open* (facing right), not a closed ring."""
     s = (2.35 * r) / 512.0
     body = (
         '<path d="M103,154 L440,154 A102,102 0 0 1 440,358 L103,358 '
         f'A102,102 0 0 1 103,154 Z" fill="{GOLD}"/>'
     )
+    band_w = 9.0
+    # The capsule's left cap is a semicircle (centre 103,256 r=102), so its
+    # boundary curves inward away from y=256. A plain x1="8" pokes past that
+    # curve for the off-centre bands. Inset each band's start to the cap's
+    # boundary at the band's *farthest* edge (accounting for the stroke's own
+    # width), plus a small safety margin, so the whole stroke — not just its
+    # centreline — stays inside the gold. max() keeps the already-safe centre
+    # band (whose boundary is well left of 8) visually unchanged.
     bands = "".join(
-        f'<line x1="8" y1="{y}" x2="470" y2="{y}" stroke="{CREAM}" stroke-width="9"/>'
+        f'<line x1="{max(8.0, 103 - math.sqrt(102**2 - (abs(256 - y) + band_w / 2) ** 2) + 1.5):.1f}" '
+        f'y1="{y}" x2="470" y2="{y}" stroke="{CREAM}" stroke-width="{band_w:.0f}"/>'
         for y in (205, 256, 307)
     )
     arc = (
@@ -471,8 +491,8 @@ def celery_stalk(cx: float, cy: float, r: float) -> str:
 
 
 def task_q(cx: float, cy: float, r: float) -> str:
-    """taskiq cue: the Q-creature from their wordmark — a thick ring with an
-    eye and a descender crossing it. taskiq publishes no icon-only mark."""
+    """taskiq cue: the Q-creature from their wordmark — a thick ring with a
+    descender crossing it. taskiq publishes no icon-only mark."""
     ang = math.radians(48)
     dx, dy = math.cos(ang), math.sin(ang)
     ring_y = cy - 0.06 * r
@@ -485,11 +505,7 @@ def task_q(cx: float, cy: float, r: float) -> str:
         f'x2="{cx + 1.02 * r * dx:.1f}" y2="{ring_y + 1.02 * r * dy:.1f}" '
         f'stroke="{GOLD}" stroke-width="{r * 0.30:.1f}" stroke-linecap="butt"/>'
     )
-    eye = (
-        f'<circle cx="{cx - 0.22 * r:.1f}" cy="{cy - 0.28 * r:.1f}" '
-        f'r="{0.12 * r:.1f}" fill="{CREAM}"/>'
-    )
-    return ring + tail + eye
+    return ring + tail
 
 
 def flask_horn(cx: float, cy: float, r: float) -> str:
