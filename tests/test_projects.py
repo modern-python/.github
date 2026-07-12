@@ -36,6 +36,8 @@ EXPECTED_REPOS = {
     "db-retry",
     "eof-fixer",
     "semvertag",
+    "modern-di-arq",
+    "compose2pod",
 }
 
 

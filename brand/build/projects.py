@@ -20,6 +20,7 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "that-depends": lambda: sym.graph(_CX, _CY, R, dashed=False),
     "modern-di-aiohttp": lambda: sym.async_loop(_CX, _CY, R),
     "modern-di-aiogram": lambda: sym.plane(_CX, _CY, R),
+    "modern-di-arq": lambda: sym.hopper(_CX, _CY, R),
     "modern-di-fastapi": lambda: sym.bolt_disc(_CX, _CY, R),
     "modern-di-faststream": lambda: sym.faststream(_CX, _CY, R),
     "modern-di-litestar": lambda: sym.star_disc(_CX, _CY, R),
@@ -39,6 +40,7 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "db-retry": lambda: sym.db_retry(_CX, _CY, R),
     "eof-fixer": lambda: sym.eof_fixer(_CX, _CY, R),
     "semvertag": lambda: sym.tag(_CX, _CY, R),
+    "compose2pod": lambda: sym.pod(_CX, _CY, R),
 }
 
 

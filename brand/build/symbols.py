@@ -401,3 +401,27 @@ def plane(cx: float, cy: float, r: float) -> str:
         f'stroke-width="{r * 0.11:.1f}" stroke-linecap="round"/>'
     )
     return f'<polygon points="{body}" fill="{GOLD}"/>{crease}'
+
+
+def hopper(cx: float, cy: float, r: float) -> str:
+    """arq cue: jobs dropping into a hopper, one emerging — a queue being
+    drained. arq ships no logo, so this is drawn from what arq is."""
+    jobs = "".join(
+        _box(cx + dx * r, cy - 0.72 * r, r * 0.34) for dx in (-0.52, 0.0, 0.52)
+    )
+    hull = ((-0.86, -0.30), (0.86, -0.30), (0.20, 0.34), (-0.20, 0.34))
+    funnel = " ".join(f"{cx + dx * r:.1f},{cy + dy * r:.1f}" for dx, dy in hull)
+    return (
+        f'{jobs}<polygon points="{funnel}" fill="{GOLD}"/>'
+        + _box(cx, cy + 0.76 * r, r * 0.34)
+    )
+
+
+def pod(cx: float, cy: float, r: float) -> str:
+    """compose2pod cue: Podman's heptagon holding three composed containers —
+    both ends of the Compose-to-Podman conversion in one shape."""
+    return _ngon(cx, cy, r * 0.98, 7, 90, r * 0.15) + (
+        _box(cx - 0.34 * r, cy - 0.20 * r, r * 0.36)
+        + _box(cx + 0.30 * r, cy - 0.20 * r, r * 0.36)
+        + _box(cx - 0.02 * r, cy + 0.30 * r, r * 0.36)
+    )
