@@ -425,3 +425,48 @@ def pod(cx: float, cy: float, r: float) -> str:
         + _box(cx + 0.30 * r, cy - 0.20 * r, r * 0.36)
         + _box(cx - 0.02 * r, cy + 0.30 * r, r * 0.36)
     )
+
+
+def celery_stalk(cx: float, cy: float, r: float) -> str:
+    """Celery cue: their icon redrawn — a banded capsule with the pale open C
+    at its right end. Measured off celery_512.png; Celery ships no SVG (see
+    celery/celery#5981), and the C is *open* (facing right), not a closed ring."""
+    s = (2.35 * r) / 512.0
+    body = (
+        '<path d="M103,154 L440,154 A102,102 0 0 1 440,358 L103,358 '
+        f'A102,102 0 0 1 103,154 Z" fill="{GOLD}"/>'
+    )
+    bands = "".join(
+        f'<line x1="8" y1="{y}" x2="470" y2="{y}" stroke="{CREAM}" stroke-width="9"/>'
+        for y in (205, 256, 307)
+    )
+    arc = (
+        '<path d="M493,179 A77,77 0 1 0 493,333" fill="none" '
+        f'stroke="{GOLD}" stroke-width="50" stroke-linecap="round"/>'
+    )
+    return (
+        f'<g transform="translate({cx - 256 * s:.2f},{cy - 256 * s:.2f}) '
+        f'scale({s:.4f})">{body}{bands}{arc}</g>'
+    )
+
+
+def task_q(cx: float, cy: float, r: float) -> str:
+    """taskiq cue: the Q-creature from their wordmark — a thick ring with an
+    eye and a descender crossing it. taskiq publishes no icon-only mark."""
+    ang = math.radians(48)
+    dx, dy = math.cos(ang), math.sin(ang)
+    ring_y = cy - 0.06 * r
+    ring = (
+        f'<circle cx="{cx:.1f}" cy="{ring_y:.1f}" r="{0.62 * r:.1f}" fill="none" '
+        f'stroke="{GOLD}" stroke-width="{r * 0.34:.1f}"/>'
+    )
+    tail = (
+        f'<line x1="{cx + 0.24 * r * dx:.1f}" y1="{ring_y + 0.24 * r * dy:.1f}" '
+        f'x2="{cx + 1.02 * r * dx:.1f}" y2="{ring_y + 1.02 * r * dy:.1f}" '
+        f'stroke="{GOLD}" stroke-width="{r * 0.30:.1f}" stroke-linecap="butt"/>'
+    )
+    eye = (
+        f'<circle cx="{cx - 0.22 * r:.1f}" cy="{cy - 0.28 * r:.1f}" '
+        f'r="{0.12 * r:.1f}" fill="{CREAM}"/>'
+    )
+    return ring + tail + eye

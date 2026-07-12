@@ -38,6 +38,8 @@ EXPECTED_REPOS = {
     "semvertag",
     "modern-di-arq",
     "compose2pod",
+    "modern-di-celery",
+    "modern-di-taskiq",
 }
 
 
