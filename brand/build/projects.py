@@ -19,6 +19,7 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "modern-di": lambda: sym.graph(_CX, _CY, R, dashed=True),
     "that-depends": lambda: sym.graph(_CX, _CY, R, dashed=False),
     "modern-di-aiohttp": lambda: sym.async_loop(_CX, _CY, R),
+    "modern-di-aiogram": lambda: sym.plane(_CX, _CY, R),
     "modern-di-fastapi": lambda: sym.bolt_disc(_CX, _CY, R),
     "modern-di-faststream": lambda: sym.faststream(_CX, _CY, R),
     "modern-di-litestar": lambda: sym.star_disc(_CX, _CY, R),

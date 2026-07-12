@@ -25,6 +25,7 @@ EXPECTED_REPOS = {
     "modern-di-faststream",
     "modern-di-typer",
     "modern-di-pytest",
+    "modern-di-aiogram",
     "fastapi-sqlalchemy-template",
     "litestar-sqlalchemy-template",
     "lite-bootstrap",

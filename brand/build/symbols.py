@@ -76,6 +76,30 @@ def _sparkle4(cx: float, cy: float, radius: float, color: str, inner: float = 0.
     return f'<polygon points="{body}" fill="{color}"/>'
 
 
+def _box(cx: float, cy: float, s: float, fill: str = GOLD) -> str:
+    """Rounded square (a container / job token) centred on (cx,cy)."""
+    return (
+        f'<rect x="{cx - s / 2:.1f}" y="{cy - s / 2:.1f}" width="{s:.1f}" '
+        f'height="{s:.1f}" rx="{s * 0.18:.1f}" fill="{fill}"/>'
+    )
+
+
+def _ngon(cx: float, cy: float, rad: float, n: int, start: float, w: float) -> str:
+    """Regular n-gon outline; `start` is the angle (deg) of the first vertex."""
+    pts = [
+        (
+            cx + rad * math.cos(math.radians(start + i * 360 / n)),
+            cy + rad * math.sin(math.radians(start + i * 360 / n)),
+        )
+        for i in range(n)
+    ]
+    body = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    return (
+        f'<polygon points="{body}" fill="none" stroke="{GOLD}" '
+        f'stroke-width="{w:.1f}" stroke-linejoin="round"/>'
+    )
+
+
 def sparkle_cluster(cx: float, cy: float, r: float) -> str:
     """Starlette cue: a large four-point sparkle with a small companion
     (a "little star" — starlette)."""
@@ -364,3 +388,16 @@ def tag(cx: float, cy: float, r: float) -> str:
         f'L{cx - 0.75 * r:.1f} {cy:.1f} Z" fill="{GOLD}"/>'
         f'<circle cx="{cx - 0.28 * r:.1f}" cy="{cy:.1f}" r="{0.13 * r:.1f}" fill="{CREAM}"/>'
     )
+
+
+def plane(cx: float, cy: float, r: float) -> str:
+    """aiogram cue: Telegram's paper plane. aiogram's own logo is a lettered
+    disc with no pictorial element, so the honest cue is Telegram itself."""
+    hull = ((-0.95, 0.02), (0.95, -0.78), (0.30, 0.86), (0.02, 0.28))
+    body = " ".join(f"{cx + dx * r:.1f},{cy + dy * r:.1f}" for dx, dy in hull)
+    crease = (
+        f'<path d="M{cx + 0.02 * r:.1f} {cy + 0.28 * r:.1f} '
+        f'L{cx + 0.95 * r:.1f} {cy - 0.78 * r:.1f}" fill="none" stroke="{CREAM}" '
+        f'stroke-width="{r * 0.11:.1f}" stroke-linecap="round"/>'
+    )
+    return f'<polygon points="{body}" fill="{GOLD}"/>{crease}'
