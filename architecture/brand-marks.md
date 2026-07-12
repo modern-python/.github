@@ -21,9 +21,17 @@ One large-format logo per repo: the constant green+gold snake-frame
 (`geometry.py::project_frame`, margin 9 / arm 53 / stroke 11) with a single
 gold inner symbol (`symbols.py`) chosen per repo in `projects.py::MANIFEST`.
 Two-colour (green + gold); repos differ by symbol shape, not colour. The two
-project templates reuse the org chevron. `modern-di-faststream` is the only
-mark using a partner's literal logo path (FastStream's, recoloured); other
-integration cues are redrawn evocations. Outputs: `mark.svg`,
+project templates reuse the org chevron. Two marks are built from a partner's
+literal logo path, recoloured: `modern-di-faststream` (FastStream's) and
+`modern-di-flask` (Flask's horn — the Flask Artwork License permits the logo
+"or a modified version" to be used to refer to the project). Other
+integration cues are redrawn evocations, and three had nothing to redraw
+from: `arq` publishes no logo at all, while `aiogram`'s logo is a lettered
+disc and `taskiq`'s a wordmark, so those marks are inventions (a Telegram
+plane, a hopper, and taskiq's Q-creature). `modern-di-grpc` deliberately
+departs from gRPC's mark: theirs needs the arrow and the diamonds to be
+different inks, which the gold/cream palette cannot supply, so only the
+arrow survives. Outputs: `mark.svg`,
 `lockup-light.svg`, `lockup-dark.svg`, `lockup.png` (+ `mark-512/1024.png`).
 Regenerate via `uv run python -m brand.build.render`.
 Repos with a live docs site (`projects.py::DOCS_REPOS`, a subset of `MANIFEST`)
