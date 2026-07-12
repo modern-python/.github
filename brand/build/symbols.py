@@ -501,3 +501,26 @@ def flask_horn(cx: float, cy: float, r: float) -> str:
         f'<g transform="translate({cx - 250 * sc:.2f},{cy - 248 * sc:.2f}) '
         f'scale({sc:.4f})">{body}</g>'
     )
+
+
+def rpc_arrow(cx: float, cy: float, r: float) -> str:
+    """gRPC cue: a bidirectional call. gRPC's real mark (two diamonds pierced by
+    an arrow) needs two inks that contrast with each other *and* with the page;
+    our two-colour palette cannot supply that, so the mark keeps the arrow alone,
+    with the heads symmetrized (gRPC's own are unequal, sized to their diamonds)."""
+    w = r * 0.17
+    half, reach, rise = 0.98 * r, 0.34 * r, 0.46 * r
+    out = (
+        f'<line x1="{cx - half + w / 2:.1f}" y1="{cy:.1f}" '
+        f'x2="{cx + half - w / 2:.1f}" y2="{cy:.1f}" stroke="{GOLD}" '
+        f'stroke-width="{w:.1f}" stroke-linecap="round"/>'
+    )
+    for sgn in (-1, 1):
+        tx = cx + sgn * half
+        out += (
+            f'<polyline points="{tx - sgn * reach:.1f},{cy - rise:.1f} '
+            f"{tx:.1f},{cy:.1f} "
+            f'{tx - sgn * reach:.1f},{cy + rise:.1f}" fill="none" stroke="{GOLD}" '
+            f'stroke-width="{w:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+        )
+    return out

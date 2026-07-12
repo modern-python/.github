@@ -41,6 +41,7 @@ EXPECTED_REPOS = {
     "modern-di-celery",
     "modern-di-taskiq",
     "modern-di-flask",
+    "modern-di-grpc",
 }
 
 
