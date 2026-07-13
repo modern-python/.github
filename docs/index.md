@@ -99,13 +99,13 @@ catalog below.
 !!! tip "Which one should I use?"
 
     Start new projects on [`modern-di`](https://github.com/modern-python/modern-di)
-    — a minimal core plus the integrations listed below. Async apps are first-class:
-    the resolve path itself stays synchronous, and resources that need to `await` are
-    constructed in the framework lifespan
-    ([recipe](https://modern-di.modern-python.org/recipes/async-lifespan/)).
+    — a minimal core plus the integrations listed below.
 
-    [`that-depends`](https://github.com/modern-python/that-depends) is the async-first
-    sibling and stays maintained; it ships a migration guide to `modern-di`.
+    [`that-depends`](https://github.com/modern-python/that-depends) is the earlier,
+    async-first sibling and stays maintained. Coming from it? `modern-di` ships a
+    [migration guide](https://modern-di.modern-python.org/migration/from-that-depends/)
+    — and one
+    [from `dependency-injector`](https://modern-di.modern-python.org/migration/from-dependency-injector/).
 
 - [`modern-di`](https://github.com/modern-python/modern-di) — powerful DI framework with scopes.
 - [`modern-di-aiogram`](https://github.com/modern-python/modern-di-aiogram) — `modern-di` integration for aiogram.
