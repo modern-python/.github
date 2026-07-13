@@ -66,8 +66,9 @@ production Python services. Use one piece or all of them — each is independent
   SQLAlchemy 2, PostgreSQL, with dependency injection already wired.
 - **Wire your dependencies** with
   [`modern-di`](https://github.com/modern-python/modern-di) — typed, scoped
-  dependency injection with one wiring shared across FastAPI, Litestar,
-  Starlette, aiohttp, FastStream, and Typer.
+  dependency injection with one wiring shared across web frameworks (FastAPI,
+  Litestar, Starlette, Flask, aiohttp), task queues (Celery, arq, taskiq), RPC
+  and messaging (gRPC, FastStream, aiogram), and CLIs (Typer).
   ([`that-depends`](https://github.com/modern-python/that-depends), its
   production-proven predecessor, is still maintained.)
 - **Call other services reliably** with
@@ -96,12 +97,18 @@ catalog below.
 ## Dependency injection { #di }
 
 - [`modern-di`](https://github.com/modern-python/modern-di) — powerful DI framework with scopes.
+- [`modern-di-aiogram`](https://github.com/modern-python/modern-di-aiogram) — `modern-di` integration for aiogram.
 - [`modern-di-aiohttp`](https://github.com/modern-python/modern-di-aiohttp) — `modern-di` integration for aiohttp.
+- [`modern-di-arq`](https://github.com/modern-python/modern-di-arq) — `modern-di` integration for arq.
+- [`modern-di-celery`](https://github.com/modern-python/modern-di-celery) — `modern-di` integration for Celery.
 - [`modern-di-fastapi`](https://github.com/modern-python/modern-di-fastapi) — `modern-di` integration for FastAPI.
 - [`modern-di-faststream`](https://github.com/modern-python/modern-di-faststream) — `modern-di` integration for FastStream.
+- [`modern-di-flask`](https://github.com/modern-python/modern-di-flask) — `modern-di` integration for Flask.
+- [`modern-di-grpc`](https://github.com/modern-python/modern-di-grpc) — `modern-di` integration for gRPC.
 - [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar) — `modern-di` integration for Litestar.
 - [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest) — `modern-di` integration for pytest.
 - [`modern-di-starlette`](https://github.com/modern-python/modern-di-starlette) — `modern-di` integration for Starlette.
+- [`modern-di-taskiq`](https://github.com/modern-python/modern-di-taskiq) — `modern-di` integration for taskiq.
 - [`modern-di-typer`](https://github.com/modern-python/modern-di-typer) — `modern-di` integration for Typer.
 - [`that-depends`](https://github.com/modern-python/that-depends) — predecessor DI framework, still actively maintained.
 
@@ -115,6 +122,7 @@ catalog below.
 
 ## Utilities { #utilities }
 
+- [`compose2pod`](https://github.com/modern-python/compose2pod) — convert a Docker Compose file into a script that runs its services as a single Podman pod.
 - [`db-retry`](https://github.com/modern-python/db-retry) — retry helpers for database operations.
 - [`eof-fixer`](https://github.com/modern-python/eof-fixer) — automatically fix newlines at the end of files.
 - [`semvertag`](https://github.com/modern-python/semvertag) — auto-tag your GitHub/GitLab repo with semantic version tags from CI.
