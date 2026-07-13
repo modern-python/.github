@@ -21,12 +21,9 @@ Open-source templates and libraries for building production-ready Python applica
 
 ### Dependency injection
 
-**Which one?** Start new projects on [`modern-di`](https://github.com/modern-python/modern-di)
-— a minimal core plus the integrations below. Async apps are first-class: the
-resolve path itself stays synchronous, and resources that need to `await` are built
-in the framework lifespan. [`that-depends`](https://github.com/modern-python/that-depends)
-is the async-first sibling and stays maintained; it ships a migration guide to
-`modern-di`.
+**Which one?** Start new projects on [`modern-di`](https://github.com/modern-python/modern-di) — a minimal core plus the integrations below. Async apps are first-class: the resolve path itself stays synchronous, and resources that need to `await` are built in the framework lifespan.
+
+[`that-depends`](https://github.com/modern-python/that-depends) is the async-first sibling and stays maintained; it ships a migration guide to `modern-di`.
 
 | Project | What it is | Stars | Downloads |
 |---|---|---|---|
