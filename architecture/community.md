@@ -6,10 +6,23 @@ dated by git.
 ## What exists today
 
 **GitHub Discussions is the org's only owned channel**, and its primary support
-and feedback surface. It is enabled on `modern-di`, `that-depends`, and `.github`
-— not yet org-wide. There is deliberately **no Discord and no Telegram room**:
-see `planning/deferred.md`, which holds the plan to open them and the reason they
-are not open yet.
+and feedback surface. It exists at two levels:
+
+- **Org-level** — [`/orgs/modern-python/discussions`](https://github.com/orgs/modern-python/discussions),
+  backed by this `.github` repo. This is the catch-all forum, and the one
+  [`SUPPORT.md`](../SUPPORT.md) routes every project's users to.
+- **Per-repo** — enabled on `modern-di`, `that-depends`, and the three repos the
+  launch promotes: `httpware`, `faststream-outbox`, `lite-bootstrap`. Deliberately
+  **not** enabled org-wide: 20-odd empty Discussion tabs would read as a dead
+  project, the same empty-room failure described below. A repo gets its own tab
+  when it has traffic to fill it.
+
+Only `that-depends` has real activity today; the other surfaces are seeded but
+empty, and launch traffic is what is expected to fill them.
+
+There is deliberately **no Discord and no Telegram room**: see
+`planning/deferred.md`, which holds the plan to open them and the reason they are
+not open yet.
 
 ## Why Discussions, and why nothing else yet
 
