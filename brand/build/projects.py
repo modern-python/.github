@@ -19,11 +19,17 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "modern-di": lambda: sym.graph(_CX, _CY, R, dashed=True),
     "that-depends": lambda: sym.graph(_CX, _CY, R, dashed=False),
     "modern-di-aiohttp": lambda: sym.async_loop(_CX, _CY, R),
+    "modern-di-aiogram": lambda: sym.plane(_CX, _CY, R),
+    "modern-di-arq": lambda: sym.hopper(_CX, _CY, R),
+    "modern-di-celery": lambda: sym.celery_stalk(_CX, _CY, R),
     "modern-di-fastapi": lambda: sym.bolt_disc(_CX, _CY, R),
     "modern-di-faststream": lambda: sym.faststream(_CX, _CY, R),
+    "modern-di-flask": lambda: sym.flask_horn(_CX, _CY, R),
+    "modern-di-grpc": lambda: sym.rpc_arrow(_CX, _CY, R),
     "modern-di-litestar": lambda: sym.star_disc(_CX, _CY, R),
     "modern-di-pytest": lambda: sym.bars(_CX, _CY, R),
     "modern-di-starlette": lambda: sym.sparkle_cluster(_CX, _CY, R),
+    "modern-di-taskiq": lambda: sym.task_q(_CX, _CY, R),
     "modern-di-typer": lambda: sym.terminal(_CX, _CY, R),
     # templates — reuse the org chevron
     "fastapi-sqlalchemy-template": lambda: sym.chevron(_CX, _CY, R - 1),
@@ -38,6 +44,7 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "db-retry": lambda: sym.db_retry(_CX, _CY, R),
     "eof-fixer": lambda: sym.eof_fixer(_CX, _CY, R),
     "semvertag": lambda: sym.tag(_CX, _CY, R),
+    "compose2pod": lambda: sym.pod(_CX, _CY, R),
 }
 
 

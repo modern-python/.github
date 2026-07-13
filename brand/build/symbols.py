@@ -23,12 +23,20 @@ def _cyl(
 ) -> str:
     """Database cylinder centred on (cx,cy)."""
     rx = 0.5 * r * w
+    ry = 0.16 * r
+    top = cy - h / 2 * r
+    # The top cap's upper arc IS the cylinder's silhouette, so a rim stroke
+    # centred on that ellipse would put half its width outside the gold —
+    # invisible on cream, but white ink on dark. Shrink the rim's radii by half
+    # the stroke width (plus a hair of margin) so the whole stroke lands inside.
+    rim_w = 0.8
+    inset = rim_w / 2 + 0.1
     return (
-        f'<ellipse cx="{cx}" cy="{cy - h / 2 * r:.1f}" rx="{rx:.1f}" ry="{0.16 * r:.1f}" fill="{fill}"/>'
-        f'<rect x="{cx - rx:.1f}" y="{cy - h / 2 * r:.1f}" width="{2 * rx:.1f}" height="{h * r:.1f}" fill="{fill}"/>'
-        f'<ellipse cx="{cx}" cy="{cy + h / 2 * r:.1f}" rx="{rx:.1f}" ry="{0.16 * r:.1f}" fill="{fill}"/>'
-        f'<ellipse cx="{cx}" cy="{cy - h / 2 * r:.1f}" rx="{rx:.1f}" ry="{0.16 * r:.1f}" '
-        f'fill="none" stroke="{CREAM}" stroke-width="0.8"/>'
+        f'<ellipse cx="{cx}" cy="{top:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{fill}"/>'
+        f'<rect x="{cx - rx:.1f}" y="{top:.1f}" width="{2 * rx:.1f}" height="{h * r:.1f}" fill="{fill}"/>'
+        f'<ellipse cx="{cx}" cy="{cy + h / 2 * r:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{fill}"/>'
+        f'<ellipse cx="{cx}" cy="{top:.1f}" rx="{rx - inset:.1f}" ry="{ry - inset:.1f}" '
+        f'fill="none" stroke="{CREAM}" stroke-width="{rim_w}"/>'
     )
 
 
@@ -74,6 +82,30 @@ def _sparkle4(cx: float, cy: float, radius: float, color: str, inner: float = 0.
         )
     body = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
     return f'<polygon points="{body}" fill="{color}"/>'
+
+
+def _box(cx: float, cy: float, s: float, fill: str = GOLD) -> str:
+    """Rounded square (a container / job token) centred on (cx,cy)."""
+    return (
+        f'<rect x="{cx - s / 2:.1f}" y="{cy - s / 2:.1f}" width="{s:.1f}" '
+        f'height="{s:.1f}" rx="{s * 0.18:.1f}" fill="{fill}"/>'
+    )
+
+
+def _ngon(cx: float, cy: float, rad: float, n: int, start: float, w: float) -> str:
+    """Regular n-gon outline; `start` is the angle (deg) of the first vertex."""
+    pts = [
+        (
+            cx + rad * math.cos(math.radians(start + i * 360 / n)),
+            cy + rad * math.sin(math.radians(start + i * 360 / n)),
+        )
+        for i in range(n)
+    ]
+    body = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+    return (
+        f'<polygon points="{body}" fill="none" stroke="{GOLD}" '
+        f'stroke-width="{w:.1f}" stroke-linejoin="round"/>'
+    )
 
 
 def sparkle_cluster(cx: float, cy: float, r: float) -> str:
@@ -132,6 +164,26 @@ FASTSTREAM_PATH = (
     "-1.8-7.2-7.12-.05-3.08.97-6.22,2.6-8.57L327.1,58.07l-12.71-22.02c-25.95-44.94-90.82"
     "-44.94-116.77,0l-92.61,160.41L12.39,356.87c-25.95,44.94,6.49,101.12,58.38,101.12"
     "h370.45c51.9,0,84.33-56.18,58.38-101.12Z"
+)
+
+# Flask's own horn, from Pallets' docs/_static/flask-icon.svg (500x500 space).
+# Their Flask Artwork License permits the logo "or a modified version" to be used
+# by anyone to refer to the Flask project, so this recolour is sanctioned.
+FLASK_PATHS = (
+    "M224.446,59.975c-0.056,-4.151 -0.483,-5.543 -2.7,-6.823c-2.104,-1.393 -5.288,-1.421 "
+    "-8.329,-0.085l-204.674,87.64c-3.042,1.336 -5.913,4.008 -7.448,6.908c-1.535,2.899 "
+    "-1.705,5.97 -0.511,8.158l17.084,31.384l0.228,0.369c1.847,2.928 6.026,3.696 10.29,1.82"
+    "l1.251,-0.54c5.344,22.4 14.1,50.429 25.783,70.413l178.294,-79.794c-2.559,-23.14 "
+    "-9.552,-89.602 -9.268,-119.479l0,0.029Z",
+    "M238.603,205.776l-171.698,76.838c10.091,19.132 22.542,39.428 37.722,58.986c50.429,"
+    "-25.698 100.887,-51.396 151.316,-77.094c-3.269,-8.471 -6.452,-17.653 -17.34,-58.73Z",
+    "M497.601,388.846l-12.139,-18.535c-1.819,-2.018 -4.633,-2.786 -7.106,-1.791l-15.578,"
+    "5.999c-1.848,-2.047 -4.52,-2.815 -7.135,-1.791c-5.089,1.99 -10.206,4.008 -15.294,5.998"
+    "c-1.649,0.625 -2.104,1.847 -1.791,3.439l0.995,4.861c-28.711,3.099 -77.236,1.564 "
+    "-120.701,-32.577c-19.216,-15.066 -37.239,-36.386 -52.277,-66.206l-144.75,73.768"
+    "c26.466,29.08 59.697,54.864 100.973,70.385c57.422,21.633 130.593,23.679 222.838,-13.475"
+    "l0.512,2.616c0.455,2.928 3.98,6.026 8.755,4.15l15.323,-5.97c5.258,-1.99 5.287,-6.026 "
+    "4.519,-8.641l19.729,-7.704c2.217,-0.853 9.096,-6.169 3.183,-14.526l-0.056,-0Z",
 )
 
 
@@ -364,3 +416,146 @@ def tag(cx: float, cy: float, r: float) -> str:
         f'L{cx - 0.75 * r:.1f} {cy:.1f} Z" fill="{GOLD}"/>'
         f'<circle cx="{cx - 0.28 * r:.1f}" cy="{cy:.1f}" r="{0.13 * r:.1f}" fill="{CREAM}"/>'
     )
+
+
+def plane(cx: float, cy: float, r: float) -> str:
+    """aiogram cue: Telegram's paper plane. aiogram's own logo is a lettered
+    disc with no pictorial element, so the honest cue is Telegram itself."""
+    hull = ((-0.95, 0.02), (0.95, -0.78), (0.30, 0.86), (0.02, 0.28))
+    body = " ".join(f"{cx + dx * r:.1f},{cy + dy * r:.1f}" for dx, dy in hull)
+    # Crease runs fold-point -> nose (hull[3] -> hull[1]), a chord that meets
+    # the hull exactly at those two vertices. Use a butt cap, not round, so
+    # the stroke's own width can't spill past the polygon.
+    #
+    # The two ends need different insets. hull[1] (nose) is a sharp,
+    # non-reflex vertex — a butt cap placed at the vertex itself pokes the
+    # 0.11*r-wide stroke past both adjoining edges, so it needs a real inset
+    # (~0.154*r is the minimum for this vertex's angle; 0.20*r keeps margin).
+    # hull[3] (fold) is the polygon's REFLEX vertex (interior angle ~229deg),
+    # and the crease direction sits ~23deg clear of the nearest edge, so a
+    # butt cap placed essentially at the fold vertex already stays inside the
+    # gold (~0.021*r of margin) — only a token inset is needed there. Insetting
+    # it as much as the nose end made the crease read as a floating stripe
+    # instead of a fold running notch-to-nose.
+    fold, nose = hull[3], hull[1]
+    ex, ey = nose[0] - fold[0], nose[1] - fold[1]
+    elen = math.hypot(ex, ey)
+    ux, uy = ex / elen, ey / elen
+    inset_fold = 0.05 * r
+    inset_nose = 0.20 * r
+    x0, y0 = cx + fold[0] * r + ux * inset_fold, cy + fold[1] * r + uy * inset_fold
+    x1, y1 = cx + nose[0] * r - ux * inset_nose, cy + nose[1] * r - uy * inset_nose
+    crease = (
+        f'<path d="M{x0:.1f} {y0:.1f} L{x1:.1f} {y1:.1f}" fill="none" stroke="{CREAM}" '
+        f'stroke-width="{r * 0.11:.1f}" stroke-linecap="butt"/>'
+    )
+    return f'<polygon points="{body}" fill="{GOLD}"/>{crease}'
+
+
+def hopper(cx: float, cy: float, r: float) -> str:
+    """arq cue: jobs dropping into a hopper, one emerging — a queue being
+    drained. arq ships no logo, so this is drawn from what arq is."""
+    jobs = "".join(
+        _box(cx + dx * r, cy - 0.72 * r, r * 0.34) for dx in (-0.52, 0.0, 0.52)
+    )
+    hull = ((-0.86, -0.30), (0.86, -0.30), (0.20, 0.34), (-0.20, 0.34))
+    funnel = " ".join(f"{cx + dx * r:.1f},{cy + dy * r:.1f}" for dx, dy in hull)
+    return (
+        f'{jobs}<polygon points="{funnel}" fill="{GOLD}"/>'
+        + _box(cx, cy + 0.76 * r, r * 0.34)
+    )
+
+
+def pod(cx: float, cy: float, r: float) -> str:
+    """compose2pod cue: Podman's heptagon holding three composed containers —
+    both ends of the Compose-to-Podman conversion in one shape."""
+    return _ngon(cx, cy, r * 0.98, 7, 90, r * 0.15) + (
+        _box(cx - 0.34 * r, cy - 0.20 * r, r * 0.36)
+        + _box(cx + 0.30 * r, cy - 0.20 * r, r * 0.36)
+        + _box(cx - 0.02 * r, cy + 0.30 * r, r * 0.36)
+    )
+
+
+def celery_stalk(cx: float, cy: float, r: float) -> str:
+    """Celery cue: their icon redrawn — a banded capsule with an open C,
+    stroked the same gold as the body, at its right end. Measured off
+    celery_512.png; Celery ships no SVG (see celery/celery#5981), and the C
+    is *open* (facing right), not a closed ring."""
+    s = (2.35 * r) / 512.0
+    body = (
+        '<path d="M103,154 L440,154 A102,102 0 0 1 440,358 L103,358 '
+        f'A102,102 0 0 1 103,154 Z" fill="{GOLD}"/>'
+    )
+    band_w = 9.0
+    # The capsule's left cap is a semicircle (centre 103,256 r=102), so its
+    # boundary curves inward away from y=256. A plain x1="8" pokes past that
+    # curve for the off-centre bands. Inset each band's start to the cap's
+    # boundary at the band's *farthest* edge (accounting for the stroke's own
+    # width), plus a small safety margin, so the whole stroke — not just its
+    # centreline — stays inside the gold. max() keeps the already-safe centre
+    # band (whose boundary is well left of 8) visually unchanged.
+    bands = "".join(
+        f'<line x1="{max(8.0, 103 - math.sqrt(102**2 - (abs(256 - y) + band_w / 2) ** 2) + 1.5):.1f}" '
+        f'y1="{y}" x2="470" y2="{y}" stroke="{CREAM}" stroke-width="{band_w:.0f}"/>'
+        for y in (205, 256, 307)
+    )
+    arc = (
+        '<path d="M493,179 A77,77 0 1 0 493,333" fill="none" '
+        f'stroke="{GOLD}" stroke-width="50" stroke-linecap="round"/>'
+    )
+    return (
+        f'<g transform="translate({cx - 256 * s:.2f},{cy - 256 * s:.2f}) '
+        f'scale({s:.4f})">{body}{bands}{arc}</g>'
+    )
+
+
+def task_q(cx: float, cy: float, r: float) -> str:
+    """taskiq cue: the Q-creature from their wordmark — a thick ring with a
+    descender crossing it. taskiq publishes no icon-only mark."""
+    ang = math.radians(48)
+    dx, dy = math.cos(ang), math.sin(ang)
+    ring_y = cy - 0.06 * r
+    ring = (
+        f'<circle cx="{cx:.1f}" cy="{ring_y:.1f}" r="{0.62 * r:.1f}" fill="none" '
+        f'stroke="{GOLD}" stroke-width="{r * 0.34:.1f}"/>'
+    )
+    tail = (
+        f'<line x1="{cx + 0.24 * r * dx:.1f}" y1="{ring_y + 0.24 * r * dy:.1f}" '
+        f'x2="{cx + 1.02 * r * dx:.1f}" y2="{ring_y + 1.02 * r * dy:.1f}" '
+        f'stroke="{GOLD}" stroke-width="{r * 0.30:.1f}" stroke-linecap="butt"/>'
+    )
+    return ring + tail
+
+
+def flask_horn(cx: float, cy: float, r: float) -> str:
+    """Flask cue: Flask's own drinking horn (a rhyton — not a lab flask),
+    recoloured gold. The bands are negative space in the source artwork."""
+    sc = (2.04 * r) / 500.0
+    body = "".join(f'<path d="{d}" fill="{GOLD}"/>' for d in FLASK_PATHS)
+    return (
+        f'<g transform="translate({cx - 250 * sc:.2f},{cy - 248 * sc:.2f}) '
+        f'scale({sc:.4f})">{body}</g>'
+    )
+
+
+def rpc_arrow(cx: float, cy: float, r: float) -> str:
+    """gRPC cue: a bidirectional call. gRPC's real mark (two diamonds pierced by
+    an arrow) needs two inks that contrast with each other *and* with the page;
+    our two-colour palette cannot supply that, so the mark keeps the arrow alone,
+    with the heads symmetrized (gRPC's own are unequal, sized to their diamonds)."""
+    w = r * 0.17
+    half, reach, rise = 0.98 * r, 0.34 * r, 0.46 * r
+    out = (
+        f'<line x1="{cx - half + w / 2:.1f}" y1="{cy:.1f}" '
+        f'x2="{cx + half - w / 2:.1f}" y2="{cy:.1f}" stroke="{GOLD}" '
+        f'stroke-width="{w:.1f}" stroke-linecap="round"/>'
+    )
+    for sgn in (-1, 1):
+        tx = cx + sgn * half
+        out += (
+            f'<polyline points="{tx - sgn * reach:.1f},{cy - rise:.1f} '
+            f"{tx:.1f},{cy:.1f} "
+            f'{tx - sgn * reach:.1f},{cy + rise:.1f}" fill="none" stroke="{GOLD}" '
+            f'stroke-width="{w:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+        )
+    return out

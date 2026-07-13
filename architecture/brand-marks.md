@@ -20,10 +20,28 @@ dimensions in `render.py`.
 One large-format logo per repo: the constant green+gold snake-frame
 (`geometry.py::project_frame`, margin 9 / arm 53 / stroke 11) with a single
 gold inner symbol (`symbols.py`) chosen per repo in `projects.py::MANIFEST`.
-Two-colour (green + gold); repos differ by symbol shape, not colour. The two
-project templates reuse the org chevron. `modern-di-faststream` is the only
-mark using a partner's literal logo path (FastStream's, recoloured); other
-integration cues are redrawn evocations. Outputs: `mark.svg`,
+Two-colour (green + gold); repos differ by symbol shape, not colour. Every mark
+renders on a transparent background, so `CREAM` is only ever a knockout painted
+ON TOP OF a `GOLD` shape, never standalone ink directly on the background:
+standalone cream is invisible on light surfaces (cream-on-cream) but shows as
+stray bright-white ink once the same `mark.svg` sits on a dark one, e.g.
+`lockup-dark.svg`'s README banner half. Enforced for **every** manifest repo, with
+no exemptions, by `tests/test_projects.py::test_no_cream_on_transparent`, which
+rasters each mark with its cream knockouts stripped and fails on any pixel that
+turns transparent instead of staying gold-backed. `_cyl`'s cream rim is inset by
+half its stroke width for exactly this reason — centred on the top cap's ellipse,
+half the stroke would have fallen outside the cylinder's silhouette. The two
+project templates reuse the org chevron. Two marks are built from a partner's
+literal logo path, recoloured: `modern-di-faststream` (FastStream's) and
+`modern-di-flask` (Flask's horn — the Flask Artwork License permits the logo
+"or a modified version" to be used to refer to the project). Other
+integration cues are redrawn evocations, and three had nothing to redraw
+from: `arq` publishes no logo at all, while `aiogram`'s logo is a lettered
+disc and `taskiq`'s a wordmark, so those marks are inventions (a Telegram
+plane, a hopper, and taskiq's Q-creature). `modern-di-grpc` deliberately
+departs from gRPC's mark: theirs needs the arrow and the diamonds to be
+different inks, which the gold/cream palette cannot supply, so only the
+arrow survives. Outputs: `mark.svg`,
 `lockup-light.svg`, `lockup-dark.svg`, `lockup.png` (+ `mark-512/1024.png`).
 Regenerate via `uv run python -m brand.build.render`.
 Repos with a live docs site (`projects.py::DOCS_REPOS`, a subset of `MANIFEST`)

@@ -49,3 +49,24 @@ UTIL_SYMBOLS = ["db_retry", "eof_fixer", "tag"]
 @pytest.mark.parametrize("name", UTIL_SYMBOLS)
 def test_util_symbol_parses(name: str) -> None:
     minidom.parseString(_wrap(getattr(sym, name)(50, 50, 23)))
+
+
+NEW_SYMBOLS = [
+    "plane",
+    "hopper",
+    "pod",
+    "celery_stalk",
+    "task_q",
+    "flask_horn",
+    "rpc_arrow",
+]
+
+
+@pytest.mark.parametrize("name", NEW_SYMBOLS)
+def test_new_symbol_parses(name: str) -> None:
+    minidom.parseString(_wrap(getattr(sym, name)(50, 50, 23)))
+
+
+def test_box_and_ngon_emit_parseable_svg() -> None:
+    minidom.parseString(_wrap(sym._box(50, 50, 20)))
+    minidom.parseString(_wrap(sym._ngon(50, 50, 22, 7, 90, 3.5)))

@@ -1,10 +1,13 @@
 import re
+import shutil
 from pathlib import Path
 from xml.dom import minidom
 import pytest
+from PIL import Image
 from brand.build import geometry as g
 from brand.build import tokens as t
 from brand.build import projects as p
+from brand.build.raster import export_png
 
 
 def test_project_frame_parses_and_uses_tokens() -> None:
@@ -25,6 +28,7 @@ EXPECTED_REPOS = {
     "modern-di-faststream",
     "modern-di-typer",
     "modern-di-pytest",
+    "modern-di-aiogram",
     "fastapi-sqlalchemy-template",
     "litestar-sqlalchemy-template",
     "lite-bootstrap",
@@ -35,6 +39,12 @@ EXPECTED_REPOS = {
     "db-retry",
     "eof-fixer",
     "semvertag",
+    "modern-di-arq",
+    "compose2pod",
+    "modern-di-celery",
+    "modern-di-taskiq",
+    "modern-di-flask",
+    "modern-di-grpc",
 }
 
 
@@ -153,3 +163,74 @@ def test_render_projects_writes_cards_for_docs_repos_only(tmp_path: Path) -> Non
     non_docs = set(p.MANIFEST) - DOCS_EXPECTED
     for repo in non_docs:
         assert not (tmp_path / repo / "social-card.svg").exists()
+
+
+# Regression guard for the transparent-background invariant: every mark is
+# drawn on a transparent background, and CREAM is only ever a knockout
+# painted ON TOP OF a GOLD shape — never standalone ink directly on the
+# background. Violate that and the mark looks fine on a cream/light page
+# (cream-on-cream is invisible) but shows stray bright-white ink once the
+# same mark.svg is placed on a dark surface (e.g. lockup-dark.svg's README
+# banner half). Parametrized over EXPECTED_REPOS (the full manifest, like
+# every other guard in this file) so a repo added later is covered
+# automatically instead of needing to be opted in.
+#
+def _cream_pixels_without_gold_beneath(
+    repo: str, tmp_path: Path, size: int = 256
+) -> list[tuple[int, int]]:
+    """Rasterize `repo`'s mark twice — once normally, once with every CREAM
+    knockout stripped to `none` — and return the (x, y) of every pixel that
+    is CREAM in the normal render but transparent once CREAM is stripped.
+    Such a pixel has no gold underneath it: it is standalone cream ink
+    sitting directly on the transparent background."""
+    svg = p.project_mark(repo)
+    normal_svg = tmp_path / f"{repo}-normal.svg"
+    normal_svg.write_text(svg, encoding="utf-8")
+    normal_png = tmp_path / f"{repo}-normal.png"
+    assert export_png(normal_svg, normal_png, width=size, height=size)
+
+    stripped = svg.replace(t.CREAM, "none")
+    # A literal, case-sensitive replace silently no-ops if cream were ever
+    # written in a different form (e.g. uppercase hex, rgb()) — make that
+    # loud instead of letting the guard pass vacuously against an unchanged
+    # (still-opaque) render.
+    if t.CREAM in svg:
+        assert stripped != svg, (
+            f"{repo}: stripping {t.CREAM} left the SVG unchanged — "
+            "the guard would compare a render against itself"
+        )
+    stripped_svg = tmp_path / f"{repo}-stripped.svg"
+    stripped_svg.write_text(stripped, encoding="utf-8")
+    stripped_png = tmp_path / f"{repo}-stripped.png"
+    assert export_png(stripped_svg, stripped_png, width=size, height=size)
+
+    normal_im = Image.open(normal_png).convert("RGBA")
+    stripped_im = Image.open(stripped_png).convert("RGBA")
+    cream_rgb = tuple(int(t.CREAM[i : i + 2], 16) for i in (1, 3, 5))
+    tol = 10
+    bad: list[tuple[int, int]] = []
+    for idx, ((r, gg, b, a), (_, _, _, sa)) in enumerate(
+        zip(normal_im.getdata(), stripped_im.getdata())
+    ):
+        if a < 200:
+            continue
+        if (
+            abs(r - cream_rgb[0]) < tol
+            and abs(gg - cream_rgb[1]) < tol
+            and abs(b - cream_rgb[2]) < tol
+            and sa < 50
+        ):
+            bad.append((idx % size, idx // size))
+    return bad
+
+
+@pytest.mark.skipif(
+    shutil.which("rsvg-convert") is None, reason="rsvg-convert not installed"
+)
+@pytest.mark.parametrize("repo", sorted(EXPECTED_REPOS))
+def test_no_cream_on_transparent(repo: str, tmp_path: Path) -> None:
+    bad = _cream_pixels_without_gold_beneath(repo, tmp_path)
+    assert not bad, (
+        f"{repo}: {len(bad)} cream pixel(s) with no gold beneath, e.g. {bad[:5]} "
+        "— this mark will show stray white ink on dark surfaces"
+    )
