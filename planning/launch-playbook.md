@@ -35,7 +35,7 @@ Suggested order: **modern-di (HN+Reddit)** → **stack announcement** →
 > I kept building a FastAPI API, a FastStream worker, and a Typer CLI that all shared the same business logic — and rewiring the same dependencies three times, once per entrypoint. modern-di is my attempt at *one* typed wiring shared across all of them.
 >
 > What it does:
-> - **Type-based autowiring** — your constructor type hints *are* the graph; no `Provide[...]` markers or string keys.
+> - **Type-based autowiring, no decorators** — your constructor type hints *are* the graph. modern-di ships no `@inject`/`@provide` decorator at all; your handlers keep only the framework's own route decorator.
 > - **Explicit scopes** (APP → REQUEST → …) with **build-time** cycle- and scope-violation checks.
 > - **Sync resolution by design** — async setup/teardown lives in the framework lifespan, not in resolution. This is deliberate and permanent, not a missing feature.
 > - **Official integrations** for FastAPI, Litestar, Starlette, Flask, aiohttp, FastStream, Celery, arq, taskiq, aiogram, gRPC, and Typer — plus a first-party pytest plugin that turns any dependency into a fixture.
@@ -43,7 +43,9 @@ Suggested order: **modern-di (HN+Reddit)** → **stack announcement** →
 >
 > Where it honestly stands:
 > - If you're building a single FastAPI service and everything is request-scoped, FastAPI's `Depends` is enough — you don't need this.
-> - The closest library is **Dishka**, which is considerably more established (~1.2k stars to my ~60) and supports async resolution and custom scopes. If you need either, use Dishka. Integration coverage is now roughly comparable between the two. modern-di's bets are a simpler sync-only model, the first-party pytest plugin, and being one consistent small stack.
+> - The closest library is **Dishka**, which is considerably more established (~1.2k stars to my ~60) and supports async resolution and custom scopes. If you need either, use Dishka. Integration coverage is now roughly comparable between the two. modern-di's bets are the decorator-free model (Dishka needs `@provide` on your providers and an `@inject` on every handler; modern-di needs neither), a simpler sync-only core, the first-party pytest plugin, and being one consistent small stack.
+>
+> To be precise about "decorator-free," since it's the claim I'd most want challenged: the *graph* is pure type annotations, and there is no DI decorator anywhere. At the web-framework boundary you do still name the provider — `FromDI(Dependencies.user_service)` in a FastAPI signature — because that's how FastAPI's own DI hooks in.
 > - It's young but actively developed, and deliberately conservative — the docs have a "design decisions" page for what it leaves out on purpose (auto-binding, in-package integrations, graph rendering).
 >
 > Docs include a full comparison and a "do you even need a DI container?" page: https://modern-di.modern-python.org
@@ -71,7 +73,7 @@ comment; the honest "when not to use it" is what earns goodwill.
 > **Comparison**
 > - **vs FastAPI `Depends` / Litestar `Provide`:** great inside one app, but don't span workers/CLIs or give typed app-scoped singletons; modern-di shares one wiring across all entrypoints.
 > - **vs `dependency-injector`:** type-based autowiring instead of `Provide[...]` markers; nested request scopes; first-party pytest plugin.
-> - **vs Dishka** (the closest library): Dishka is considerably more established (~1.2k stars) and supports async resolution + custom scopes — pick it if you need those. Integration coverage is now roughly comparable. modern-di bets on a simpler sync-only model and a first-party pytest plugin.
+> - **vs Dishka** (the closest library): Dishka is considerably more established (~1.2k stars) and supports async resolution + custom scopes — pick it if you need those. Integration coverage is now roughly comparable. modern-di bets on a decorator-free model (no `@provide`, no `@inject` on your handlers), a simpler sync-only core, and a first-party pytest plugin.
 > - **vs `that-depends`** (my earlier framework): modern-di adds explicit scopes and drops global state; that-depends stays maintained for async resolution.
 >
 > Docs + comparison: https://modern-di.modern-python.org

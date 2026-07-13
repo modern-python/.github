@@ -96,6 +96,13 @@ catalog below.
 
 ## Dependency injection { #di }
 
+!!! tip "Which one should I use?"
+
+    Start new projects on [`modern-di`](https://github.com/modern-python/modern-di)
+    — sync resolution, a minimal core, and the integrations listed below. Reach for
+    [`that-depends`](https://github.com/modern-python/that-depends) when you need
+    **async resolution**; it stays maintained and ships a migration guide.
+
 - [`modern-di`](https://github.com/modern-python/modern-di) — powerful DI framework with scopes.
 - [`modern-di-aiogram`](https://github.com/modern-python/modern-di-aiogram) — `modern-di` integration for aiogram.
 - [`modern-di-aiohttp`](https://github.com/modern-python/modern-di-aiohttp) — `modern-di` integration for aiohttp.

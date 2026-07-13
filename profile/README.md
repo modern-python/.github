@@ -21,6 +21,11 @@ Open-source templates and libraries for building production-ready Python applica
 
 ### Dependency injection
 
+**Which one?** Start new projects on [`modern-di`](https://github.com/modern-python/modern-di)
+— sync resolution, minimal core, and the integrations below. Reach for
+[`that-depends`](https://github.com/modern-python/that-depends) when you need
+**async resolution**; it stays maintained, and it ships a migration guide.
+
 | Project | What it is | Stars | Downloads |
 |---|---|---|---|
 | [`modern-di`](https://github.com/modern-python/modern-di) | Powerful dependency-injection framework with IoC container and scopes | [![Stars](https://img.shields.io/github/stars/modern-python/modern-di)](https://github.com/modern-python/modern-di/stargazers) | [![Downloads](https://static.pepy.tech/badge/modern-di/month)](https://pepy.tech/projects/modern-di) |
