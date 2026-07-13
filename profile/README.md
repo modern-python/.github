@@ -14,10 +14,10 @@ Open-source templates and libraries for building production-ready Python applica
 
 ### Project templates
 
-| Project | What it is | Stars | Badges |
-|---|---|---|---|
-| [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template) | Dockerized FastAPI + SQLAlchemy 2 + PostgreSQL app template with DI | [![Stars](https://img.shields.io/github/stars/modern-python/fastapi-sqlalchemy-template)](https://github.com/modern-python/fastapi-sqlalchemy-template/stargazers) | ![Template](https://img.shields.io/badge/type-template-blue) |
-| [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template) | Dockerized Litestar + SQLAlchemy 2 + PostgreSQL app template with DI | [![Stars](https://img.shields.io/github/stars/modern-python/litestar-sqlalchemy-template)](https://github.com/modern-python/litestar-sqlalchemy-template/stargazers) | ![Template](https://img.shields.io/badge/type-template-blue) |
+| Project | What it is | Stars |
+|---|---|---|
+| [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template) | Dockerized FastAPI + SQLAlchemy 2 + PostgreSQL app template with DI | [![Stars](https://img.shields.io/github/stars/modern-python/fastapi-sqlalchemy-template)](https://github.com/modern-python/fastapi-sqlalchemy-template/stargazers) |
+| [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template) | Dockerized Litestar + SQLAlchemy 2 + PostgreSQL app template with DI | [![Stars](https://img.shields.io/github/stars/modern-python/litestar-sqlalchemy-template)](https://github.com/modern-python/litestar-sqlalchemy-template/stargazers) |
 
 ### Dependency injection
 
