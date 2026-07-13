@@ -37,13 +37,14 @@ Suggested order: **modern-di (HN+Reddit)** → **stack announcement** →
 > What it does:
 > - **Type-based autowiring** — your constructor type hints *are* the graph, and providers are plain class attributes on a `Group`. There is no `@provide` decorator and no string keys. In the FastAPI, Litestar, FastStream and taskiq integrations your handlers need no DI decorator either — just the framework's own route decorator.
 > - **Explicit scopes** (APP → REQUEST → …) with **build-time** cycle- and scope-violation checks.
-> - **Sync resolution by design** — async setup/teardown lives in the framework lifespan, not in resolution. This is deliberate and permanent, not a missing feature.
+> - **Async apps are first-class; the *resolve path* is synchronous.** `container.resolve(X)` never awaits — but the container is an async context manager, async finalizers are supported, and genuinely async resources (an `aiohttp` session, an `asyncpg` pool) are constructed in the framework lifespan and injected by type. Most of the integrations are async frameworks. Keeping `await` out of resolution is deliberate and permanent, not a missing feature.
 > - **Official integrations** for FastAPI, Litestar, Starlette, Flask, aiohttp, FastStream, Celery, arq, taskiq, aiogram, gRPC, and Typer — plus a first-party pytest plugin that turns any dependency into a fixture.
 > - Zero-dependency core, MIT, 116 releases.
 >
 > Where it honestly stands:
 > - If you're building a single FastAPI service and everything is request-scoped, FastAPI's `Depends` is enough — you don't need this.
-> - The closest library is **Dishka**, which is considerably more established (~1.2k stars to my ~60) and supports async resolution and custom scopes. If you need either, use Dishka. Integration coverage is now roughly comparable between the two. modern-di's bets are a lighter declaration model, a simpler sync-only core, the first-party pytest plugin, and being one consistent small stack.
+> - The closest library is **Dishka** — considerably more established (~1.2k stars to my ~60), with custom scopes and `await` inside resolution. modern-di deliberately takes the other road: an async resource (an `aiohttp` session, an `asyncpg` pool) is constructed in the framework lifespan and injected by type via a `ContextProvider`, so the resolve path stays synchronous. There's a recipe for exactly this: https://modern-di.modern-python.org/recipes/async-lifespan/
+> - Integration coverage between the two is now roughly comparable. modern-di's bets are a lighter declaration model, a smaller core, the first-party pytest plugin, and being one consistent small stack.
 >
 > On the declaration model, precisely — because I'd rather state the limits than have them found: providers are plain class attributes, so there's no `@provide` anywhere, and in the FastAPI/Litestar/FastStream/taskiq integrations handlers need no DI decorator. But seven of the other integrations (Starlette, Flask, aiohttp, Celery, arq, aiogram, Typer) *do* need an `@inject`, and at the FastAPI boundary you still name the provider (`FromDI(Dependencies.user_service)`), because that's how FastAPI's own DI hooks in. So: lighter than Dishka on declarations, not "decorator-free."
 > - It's young but actively developed, and deliberately conservative — the docs have a "design decisions" page for what it leaves out on purpose (auto-binding, in-package integrations, graph rendering).
@@ -51,7 +52,7 @@ Suggested order: **modern-di (HN+Reddit)** → **stack announcement** →
 > Docs include a full comparison and a "do you even need a DI container?" page: https://modern-di.modern-python.org
 > Repo: https://github.com/modern-python/modern-di
 >
-> Happy to dig into the design — especially the sync-only decision.
+> Happy to dig into the design — especially the decision to keep `await` out of the resolve path.
 
 Etiquette: post Tue–Thu ~8–10am ET; never ask for upvotes; reply to every
 comment; the honest "when not to use it" is what earns goodwill.
@@ -65,7 +66,7 @@ comment; the honest "when not to use it" is what earns goodwill.
 **Body:**
 
 > **What My Project Does**
-> modern-di is a dependency-injection framework. You declare providers once (type-based autowiring from constructor hints), and resolve them with explicit scopes (APP → REQUEST → …) and build-time cycle/scope checks. The same container wires your FastAPI app, your FastStream workers, your Celery/arq/taskiq tasks, your Typer CLI, and your tests — via 13 official integrations and a first-party pytest plugin that turns any dependency into a fixture. Sync resolution by design; async lives in the framework lifespan.
+> modern-di is a dependency-injection framework. You declare providers once (type-based autowiring from constructor hints), and resolve them with explicit scopes (APP → REQUEST → …) and build-time cycle/scope checks. The same container wires your FastAPI app, your FastStream workers, your Celery/arq/taskiq tasks, your Typer CLI, and your tests — via 13 official integrations and a first-party pytest plugin that turns any dependency into a fixture. Async apps are first-class — most of the integrations are async frameworks; what's synchronous is the *resolve path* itself, with async construction and teardown handled in the framework lifespan.
 >
 > **Target Audience**
 > Python teams whose business logic runs behind *more than one entrypoint* (an API plus workers/CLIs) and who want one wiring instead of three. It's production-intended but young — early adopters welcome. If you have a single web service where everything is request-scoped, framework-native `Depends`/`Provide` is enough and modern-di is overkill.
@@ -73,8 +74,8 @@ comment; the honest "when not to use it" is what earns goodwill.
 > **Comparison**
 > - **vs FastAPI `Depends` / Litestar `Provide`:** great inside one app, but don't span workers/CLIs or give typed app-scoped singletons; modern-di shares one wiring across all entrypoints.
 > - **vs `dependency-injector`:** type-based autowiring instead of `Provide[...]` markers; nested request scopes; first-party pytest plugin.
-> - **vs Dishka** (the closest library): Dishka is considerably more established (~1.2k stars) and supports async resolution + custom scopes — pick it if you need those. Integration coverage is now roughly comparable. modern-di bets on a lighter declaration model (providers are plain class attributes — no `@provide`; and no `@inject` in the FastAPI/Litestar/FastStream/taskiq integrations, though seven others do need one), a simpler sync-only core, and a first-party pytest plugin.
-> - **vs `that-depends`** (my earlier framework): modern-di adds explicit scopes and drops global state; that-depends stays maintained for async resolution.
+> - **vs Dishka** (the closest library): Dishka is considerably more established (~1.2k stars), has custom scopes, and awaits inside resolution. modern-di takes the other road — async resources are built in the lifespan and injected by type through a `ContextProvider` ([recipe](https://modern-di.modern-python.org/recipes/async-lifespan/)), so resolution stays sync. Integration coverage is now roughly comparable. modern-di bets on a lighter declaration model (providers are plain class attributes — no `@provide`; and no `@inject` in the FastAPI/Litestar/FastStream/taskiq integrations, though seven others do need one), a smaller core, and a first-party pytest plugin.
+> - **vs `that-depends`** (my earlier framework): modern-di adds explicit scopes and drops global state; that-depends remains the async-first sibling and stays maintained.
 >
 > Docs + comparison: https://modern-di.modern-python.org
 
@@ -85,7 +86,7 @@ comment; the honest "when not to use it" is what earns goodwill.
 Submit the link **https://modern-di.modern-python.org** (the docs, not the bare
 repo), tag `python`. Authored comment:
 
-> Typed DI for Python with explicit scopes, built so one container wires a FastAPI app, FastStream workers, and a Typer CLI together. Sync-only by design. The docs include an honest comparison vs dependency-injector/Dishka and a "do you even need DI?" section. Author here — happy to discuss the sync-only call.
+> Typed DI for Python with explicit scopes, built so one container wires a FastAPI app, FastStream workers, and a Typer CLI together. Async apps are first-class; the resolve path itself never awaits, by design. The docs include an honest comparison vs dependency-injector/Dishka and a "do you even need DI?" section. Author here — happy to discuss the no-await-in-resolve call.
 
 Only post if you have a Lobsters account with karma; it's allergic to drive-by
 self-promo.
@@ -132,9 +133,12 @@ of four parallel copies that drift apart. Thirteen official integrations cover t
 web frameworks (FastAPI, Litestar, Starlette, Flask, aiohttp), the task queues
 (Celery, arq, taskiq), messaging, gRPC, and the CLI. It uses type-based autowiring
 (your constructor hints are the graph), explicit scopes with build-time validation,
-and a first-party pytest plugin that turns any dependency into a fixture. It's
-deliberately sync-only:
-async setup and teardown belong in the framework lifespan, not in resolution. If
+and a first-party pytest plugin that turns any dependency into a fixture. Async
+applications are first-class — most of those integrations are async frameworks.
+What is deliberately synchronous is the *resolve path*: a resource that genuinely
+needs to `await` (an `aiohttp` session, an `asyncpg` pool) is constructed in the
+framework lifespan and injected by type through a `ContextProvider`, so resolution
+itself never awaits. If
 you only have a single web service, your framework's own `Depends` is enough —
 modern-di earns its place when you have a second entrypoint. (The docs include an
 honest comparison with dependency-injector and Dishka, and a "do you even need
