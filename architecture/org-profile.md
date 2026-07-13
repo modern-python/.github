@@ -13,19 +13,24 @@ frontmatter; dated by git.
    live) and a static `coverage 100%` badge. The coverage claim holds org-wide
    because every repo's CI enforces a 100%-coverage guard; it renders unlinked
    (there is no org-level coverage URL).
-4. **Four category tables** — `Project | What it is | Badges`, in order:
-   **Project templates**, **Dependency injection**, **Microservices, HTTP & messaging**,
-   **Utilities**. The `What it is` column carries the canonical ≤120-char one-liner
-   (one of the three metadata surfaces kept consistent across GitHub
-   description, pyproject `description`, and this blurb).
+4. **Four category tables**, in order: **Project templates**, **Dependency
+   injection**, **Microservices, HTTP & messaging**, **Utilities**. The
+   `What it is` column carries the canonical ≤120-char one-liner (one of the
+   three metadata surfaces kept consistent across GitHub description,
+   pyproject `description`, and this blurb). The three published-library
+   tables (DI, microservices, utilities) share the shape
+   `Project | What it is | Stars | Downloads`; the templates table is
+   `Project | What it is | Stars | Badges`.
 
 ## Badge rules
 
-- **Published libraries** get a four-badge strip: GitHub stars → stargazers,
-  PyPI version, monthly downloads (`static.pepy.tech/badge/<pkg>/month`), and a
-  Context7 docs badge → `context7.com/modern-python/<repo>`.
-- **Templates** (`*-sqlalchemy-template`, not on PyPI) get stars + Context7 + a
-  static `type: template` chip — no version/downloads columns, so no empty cells.
+- **Published libraries** get a Stars shield → stargazers, and a monthly
+  Downloads shield (`static.pepy.tech/badge/<pkg>/month`) → the pepy project
+  page.
+- **Templates** (`*-sqlalchemy-template`, not on PyPI) get a Stars shield and,
+  in their Badges cell, only a static `type: template` chip — templates have
+  no Downloads column, hence that column keeps the generic "Badges" header
+  instead of "Downloads".
 - All badges use flat (default) style so row heights align. Downloads use the
   pepy baked SVG, not the flaky shields `pypi/dm` endpoint. Every number is a
   live shield (no hand-typed stats that could go stale).
