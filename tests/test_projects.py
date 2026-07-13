@@ -175,31 +175,6 @@ def test_render_projects_writes_cards_for_docs_repos_only(tmp_path: Path) -> Non
 # every other guard in this file) so a repo added later is covered
 # automatically instead of needing to be opted in.
 #
-# db-retry and faststream-outbox carry a faint standalone-cream hairline from
-# _cyl's 0.8-wide rim stroke straddling an ellipse edge — the same class of bug,
-# pre-existing and out of scope for this change. strict=True means the day _cyl
-# is fixed, these turn red and force this exclusion to be removed.
-KNOWN_CREAM_ON_TRANSPARENT = {"db-retry", "faststream-outbox"}
-
-
-def _cream_guard_params() -> list[object]:
-    return [
-        pytest.param(
-            repo,
-            marks=pytest.mark.xfail(
-                strict=True,
-                reason=(
-                    "known pre-existing _cyl rim-stroke cream hairline; "
-                    "see KNOWN_CREAM_ON_TRANSPARENT"
-                ),
-            ),
-        )
-        if repo in KNOWN_CREAM_ON_TRANSPARENT
-        else repo
-        for repo in sorted(EXPECTED_REPOS)
-    ]
-
-
 def _cream_pixels_without_gold_beneath(
     repo: str, tmp_path: Path, size: int = 256
 ) -> list[tuple[int, int]]:
@@ -252,8 +227,8 @@ def _cream_pixels_without_gold_beneath(
 @pytest.mark.skipif(
     shutil.which("rsvg-convert") is None, reason="rsvg-convert not installed"
 )
-@pytest.mark.parametrize("repo", _cream_guard_params())
-def test_new_marks_have_no_cream_on_transparent(repo: str, tmp_path: Path) -> None:
+@pytest.mark.parametrize("repo", sorted(EXPECTED_REPOS))
+def test_no_cream_on_transparent(repo: str, tmp_path: Path) -> None:
     bad = _cream_pixels_without_gold_beneath(repo, tmp_path)
     assert not bad, (
         f"{repo}: {len(bad)} cream pixel(s) with no gold beneath, e.g. {bad[:5]} "

@@ -23,12 +23,20 @@ def _cyl(
 ) -> str:
     """Database cylinder centred on (cx,cy)."""
     rx = 0.5 * r * w
+    ry = 0.16 * r
+    top = cy - h / 2 * r
+    # The top cap's upper arc IS the cylinder's silhouette, so a rim stroke
+    # centred on that ellipse would put half its width outside the gold —
+    # invisible on cream, but white ink on dark. Shrink the rim's radii by half
+    # the stroke width (plus a hair of margin) so the whole stroke lands inside.
+    rim_w = 0.8
+    inset = rim_w / 2 + 0.1
     return (
-        f'<ellipse cx="{cx}" cy="{cy - h / 2 * r:.1f}" rx="{rx:.1f}" ry="{0.16 * r:.1f}" fill="{fill}"/>'
-        f'<rect x="{cx - rx:.1f}" y="{cy - h / 2 * r:.1f}" width="{2 * rx:.1f}" height="{h * r:.1f}" fill="{fill}"/>'
-        f'<ellipse cx="{cx}" cy="{cy + h / 2 * r:.1f}" rx="{rx:.1f}" ry="{0.16 * r:.1f}" fill="{fill}"/>'
-        f'<ellipse cx="{cx}" cy="{cy - h / 2 * r:.1f}" rx="{rx:.1f}" ry="{0.16 * r:.1f}" '
-        f'fill="none" stroke="{CREAM}" stroke-width="0.8"/>'
+        f'<ellipse cx="{cx}" cy="{top:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{fill}"/>'
+        f'<rect x="{cx - rx:.1f}" y="{top:.1f}" width="{2 * rx:.1f}" height="{h * r:.1f}" fill="{fill}"/>'
+        f'<ellipse cx="{cx}" cy="{cy + h / 2 * r:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" fill="{fill}"/>'
+        f'<ellipse cx="{cx}" cy="{top:.1f}" rx="{rx - inset:.1f}" ry="{ry - inset:.1f}" '
+        f'fill="none" stroke="{CREAM}" stroke-width="{rim_w}"/>'
     )
 
 
