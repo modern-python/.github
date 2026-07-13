@@ -103,6 +103,7 @@ catalog below.
     the resolve path itself stays synchronous, and resources that need to `await` are
     constructed in the framework lifespan
     ([recipe](https://modern-di.modern-python.org/recipes/async-lifespan/)).
+
     [`that-depends`](https://github.com/modern-python/that-depends) is the async-first
     sibling and stays maintained; it ships a migration guide to `modern-di`.
 
