@@ -1,4 +1,5 @@
 import re
+import shutil
 from pathlib import Path
 from xml.dom import minidom
 import pytest
@@ -170,23 +171,33 @@ def test_render_projects_writes_cards_for_docs_repos_only(tmp_path: Path) -> Non
 # background. Violate that and the mark looks fine on a cream/light page
 # (cream-on-cream is invisible) but shows stray bright-white ink once the
 # same mark.svg is placed on a dark surface (e.g. lockup-dark.svg's README
-# banner half). Only the seven marks introduced on this branch are checked
-# here — see NEW_MARKS below.
+# banner half). Parametrized over EXPECTED_REPOS (the full manifest, like
+# every other guard in this file) so a repo added later is covered
+# automatically instead of needing to be opted in.
 #
-# Known, pre-existing, OUT OF SCOPE exclusions: `db-retry` and
-# `faststream-outbox` both use the `_cyl` helper, whose 0.8-wide CREAM rim
-# stroke straddles an ellipse edge and leaves a faint cream hairline outside
-# the gold — the same class of bug, shipped before this branch. Fixing
-# `_cyl` is a separate follow-up; it is deliberately not touched here.
-NEW_MARKS = {
-    "modern-di-aiogram",
-    "modern-di-arq",
-    "modern-di-celery",
-    "modern-di-flask",
-    "modern-di-grpc",
-    "modern-di-taskiq",
-    "compose2pod",
-}
+# db-retry and faststream-outbox carry a faint standalone-cream hairline from
+# _cyl's 0.8-wide rim stroke straddling an ellipse edge — the same class of bug,
+# pre-existing and out of scope for this change. strict=True means the day _cyl
+# is fixed, these turn red and force this exclusion to be removed.
+KNOWN_CREAM_ON_TRANSPARENT = {"db-retry", "faststream-outbox"}
+
+
+def _cream_guard_params() -> list[object]:
+    return [
+        pytest.param(
+            repo,
+            marks=pytest.mark.xfail(
+                strict=True,
+                reason=(
+                    "known pre-existing _cyl rim-stroke cream hairline; "
+                    "see KNOWN_CREAM_ON_TRANSPARENT"
+                ),
+            ),
+        )
+        if repo in KNOWN_CREAM_ON_TRANSPARENT
+        else repo
+        for repo in sorted(EXPECTED_REPOS)
+    ]
 
 
 def _cream_pixels_without_gold_beneath(
@@ -203,8 +214,18 @@ def _cream_pixels_without_gold_beneath(
     normal_png = tmp_path / f"{repo}-normal.png"
     assert export_png(normal_svg, normal_png, width=size, height=size)
 
+    stripped = svg.replace(t.CREAM, "none")
+    # A literal, case-sensitive replace silently no-ops if cream were ever
+    # written in a different form (e.g. uppercase hex, rgb()) — make that
+    # loud instead of letting the guard pass vacuously against an unchanged
+    # (still-opaque) render.
+    if t.CREAM in svg:
+        assert stripped != svg, (
+            f"{repo}: stripping {t.CREAM} left the SVG unchanged — "
+            "the guard would compare a render against itself"
+        )
     stripped_svg = tmp_path / f"{repo}-stripped.svg"
-    stripped_svg.write_text(svg.replace(t.CREAM, "none"), encoding="utf-8")
+    stripped_svg.write_text(stripped, encoding="utf-8")
     stripped_png = tmp_path / f"{repo}-stripped.png"
     assert export_png(stripped_svg, stripped_png, width=size, height=size)
 
@@ -228,7 +249,10 @@ def _cream_pixels_without_gold_beneath(
     return bad
 
 
-@pytest.mark.parametrize("repo", sorted(NEW_MARKS))
+@pytest.mark.skipif(
+    shutil.which("rsvg-convert") is None, reason="rsvg-convert not installed"
+)
+@pytest.mark.parametrize("repo", _cream_guard_params())
 def test_new_marks_have_no_cream_on_transparent(repo: str, tmp_path: Path) -> None:
     bad = _cream_pixels_without_gold_beneath(repo, tmp_path)
     assert not bad, (

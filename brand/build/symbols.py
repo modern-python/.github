@@ -416,16 +416,27 @@ def plane(cx: float, cy: float, r: float) -> str:
     hull = ((-0.95, 0.02), (0.95, -0.78), (0.30, 0.86), (0.02, 0.28))
     body = " ".join(f"{cx + dx * r:.1f},{cy + dy * r:.1f}" for dx, dy in hull)
     # Crease runs fold-point -> nose (hull[3] -> hull[1]), a chord that meets
-    # the hull exactly at those two vertices. Inset both ends off the
-    # vertices (and use a butt cap, not round) so the stroke's own width
-    # can't spill past the polygon at the nose's sharp point.
+    # the hull exactly at those two vertices. Use a butt cap, not round, so
+    # the stroke's own width can't spill past the polygon.
+    #
+    # The two ends need different insets. hull[1] (nose) is a sharp,
+    # non-reflex vertex — a butt cap placed at the vertex itself pokes the
+    # 0.11*r-wide stroke past both adjoining edges, so it needs a real inset
+    # (~0.154*r is the minimum for this vertex's angle; 0.20*r keeps margin).
+    # hull[3] (fold) is the polygon's REFLEX vertex (interior angle ~229deg),
+    # and the crease direction sits ~23deg clear of the nearest edge, so a
+    # butt cap placed essentially at the fold vertex already stays inside the
+    # gold (~0.021*r of margin) — only a token inset is needed there. Insetting
+    # it as much as the nose end made the crease read as a floating stripe
+    # instead of a fold running notch-to-nose.
     fold, nose = hull[3], hull[1]
     ex, ey = nose[0] - fold[0], nose[1] - fold[1]
     elen = math.hypot(ex, ey)
     ux, uy = ex / elen, ey / elen
-    inset = 0.20 * r
-    x0, y0 = cx + fold[0] * r + ux * inset, cy + fold[1] * r + uy * inset
-    x1, y1 = cx + nose[0] * r - ux * inset, cy + nose[1] * r - uy * inset
+    inset_fold = 0.05 * r
+    inset_nose = 0.20 * r
+    x0, y0 = cx + fold[0] * r + ux * inset_fold, cy + fold[1] * r + uy * inset_fold
+    x1, y1 = cx + nose[0] * r - ux * inset_nose, cy + nose[1] * r - uy * inset_nose
     crease = (
         f'<path d="M{x0:.1f} {y0:.1f} L{x1:.1f} {y1:.1f}" fill="none" stroke="{CREAM}" '
         f'stroke-width="{r * 0.11:.1f}" stroke-linecap="butt"/>'

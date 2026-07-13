@@ -20,7 +20,15 @@ dimensions in `render.py`.
 One large-format logo per repo: the constant green+gold snake-frame
 (`geometry.py::project_frame`, margin 9 / arm 53 / stroke 11) with a single
 gold inner symbol (`symbols.py`) chosen per repo in `projects.py::MANIFEST`.
-Two-colour (green + gold); repos differ by symbol shape, not colour. The two
+Two-colour (green + gold); repos differ by symbol shape, not colour. Every mark
+renders on a transparent background, so `CREAM` is only ever a knockout painted
+ON TOP OF a `GOLD` shape, never standalone ink directly on the background:
+standalone cream is invisible on light surfaces (cream-on-cream) but shows as
+stray bright-white ink once the same `mark.svg` sits on a dark one, e.g.
+`lockup-dark.svg`'s README banner half. Enforced by
+`tests/test_projects.py::test_new_marks_have_no_cream_on_transparent`, which
+rasters every manifest repo's mark with its cream knockouts stripped and fails
+on any pixel that turns transparent instead of staying gold-backed. The two
 project templates reuse the org chevron. Two marks are built from a partner's
 literal logo path, recoloured: `modern-di-faststream` (FastStream's) and
 `modern-di-flask` (Flask's horn — the Flask Artwork License permits the logo
