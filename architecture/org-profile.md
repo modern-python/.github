@@ -22,11 +22,23 @@ frontmatter; dated by git.
    `Project | What it is | Stars | Downloads`; the templates table is
    `Project | What it is | Stars`.
 
+## Row ordering
+
+Within the **Dependency injection** table, integrations sort **alphabetically**,
+with two fixed anchors: `modern-di` (the core) stays first and `that-depends`
+(the earlier framework) stays last. The same order holds across the docs-site DI
+list and `projects.py::MANIFEST`. A new integration therefore slots into its
+alphabetical position with no insertion-point decision to make.
+
 ## Badge rules
 
 - **Published libraries** get a Stars shield → stargazers, and a monthly
   Downloads shield (`static.pepy.tech/badge/<pkg>/month`) → the pepy project
   page.
+- A repo may be listed **before its package reaches PyPI**. Its Downloads badge
+  404s until the package is published and pepy indexes it; the Stars badge and
+  repo link resolve meanwhile. This lag is self-healing — note it, don't block
+  the listing on it.
 - **Templates** (`*-sqlalchemy-template`, not on PyPI) get a Stars shield only —
   they have no Downloads column, and their table stops after Stars rather than
   carrying a filler chip.
