@@ -20,17 +20,16 @@ frontmatter; dated by git.
    pyproject `description`, and this blurb). The three published-library
    tables (DI, microservices, utilities) share the shape
    `Project | What it is | Stars | Downloads`; the templates table is
-   `Project | What it is | Stars | Badges`.
+   `Project | What it is | Stars`.
 
 ## Badge rules
 
 - **Published libraries** get a Stars shield → stargazers, and a monthly
   Downloads shield (`static.pepy.tech/badge/<pkg>/month`) → the pepy project
   page.
-- **Templates** (`*-sqlalchemy-template`, not on PyPI) get a Stars shield and,
-  in their Badges cell, only a static `type: template` chip — templates have
-  no Downloads column, hence that column keeps the generic "Badges" header
-  instead of "Downloads".
+- **Templates** (`*-sqlalchemy-template`, not on PyPI) get a Stars shield only —
+  they have no Downloads column, and their table stops after Stars rather than
+  carrying a filler chip.
 - All badges use flat (default) style so row heights align. Downloads use the
   pepy baked SVG, not the flaky shields `pypi/dm` endpoint. Every number is a
   live shield (no hand-typed stats that could go stale).
