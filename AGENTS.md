@@ -73,10 +73,6 @@ if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
 
 ## Workflow
 
-**The spec for a change is its PR body**, not a committed file: why, design,
-non-goals, verification, reviewed with the diff. A trivial PR (typo, dep bump,
-formatter, CI tweak) ships a conventional-commit title with no body ceremony.
-
 Two things outlive the PR: an alternative **rejected** with reasoning becomes an ADR
 in [`docs/adr/`](docs/adr/), with a revisit trigger, and real work **not scheduled**
 becomes a GitHub issue. Numbering, formats and `gh` usage are in
