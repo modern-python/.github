@@ -1,0 +1,42 @@
+name: Links
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Check links
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # Checks github.com through the API instead of scraping it, which is what
+          # keeps 55 repo links off the anonymous rate limit.
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # /stargazers is login-walled — it 404s for anonymous clients on every
+          # repo, ours and psf/requests alike. pepy download badges 404 by design
+          # until a listed package reaches PyPI (AGENTS.md), and test_profile.py
+          # already pins each badge to its repo name.
+          args: >-
+            --cache
+            --max-cache-age 1d
+            --no-progress
+            --exclude 'github\.com/.*/stargazers'
+            --exclude 'static\.pepy\.tech'
+            '**/*.md'
+          fail: false
+      - name: Open an issue on failure
+        if: steps.lychee.outputs.exit_code != 0
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: Broken links found
+          content-filepath: ./lychee/out.md
+          labels: documentation
