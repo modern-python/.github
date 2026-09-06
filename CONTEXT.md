@@ -49,3 +49,15 @@ on a transparent background it is invisible on light surfaces and stray white on
 `profile/README.md`, the landing page GitHub renders at github.com/modern-python. Distinct from the
 **org site**, `modern-python.org`, built from `docs/` — the two carry different content and drift
 apart if the names are used loosely.
+
+**Owned channel**:
+A community surface the org runs, moderates, and is accountable for. GitHub Discussions is the only
+one today, per `docs/adr/0002-discussions-is-the-only-owned-channel.md`.
+_Avoid_: channel, bare. On its own it reads as either kind, and both kinds are linked from the
+profile and the site.
+
+**Borrowed audience**:
+A venue someone else runs, where the org participates as a guest and never moderates: the Python
+Discord, the framework community channels, Stack Overflow, the newsletters.
+_Avoid_: channel — a borrowed audience is never one of ours, and calling it one invites the
+assumption that we moderate it.
