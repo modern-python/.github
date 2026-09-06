@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 from xml.dom import minidom
 
@@ -28,6 +29,7 @@ def test_render_writes_three_lockup_assets(tmp_path: Path) -> None:
     d = tmp_path / "modern-di"
     assert (d / "lockup-light.svg").is_file()
     assert (d / "lockup-dark.svg").is_file()
-    png = d / "lockup.png"
-    assert png.is_file()
-    assert Image.open(png).mode == "P"  # quantized via export_png
+    if shutil.which("rsvg-convert"):
+        png = d / "lockup.png"
+        assert png.is_file()
+        assert Image.open(png).mode == "P"  # quantized via export_png

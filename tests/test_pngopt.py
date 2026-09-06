@@ -1,8 +1,14 @@
+import shutil
 from pathlib import Path
 
+import pytest
 from PIL import Image
 
 from brand.build import projects as p
+
+pytestmark = pytest.mark.skipif(
+    shutil.which("rsvg-convert") is None, reason="rsvg-convert not installed"
+)
 
 
 def _render(tmp: Path) -> None:

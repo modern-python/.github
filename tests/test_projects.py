@@ -107,7 +107,8 @@ def test_render_projects_writes_lockup(tmp_path: Path) -> None:
     repo_dir = tmp_path / "modern-di"
     assert (repo_dir / "lockup-light.svg").is_file()
     assert (repo_dir / "lockup-dark.svg").is_file()
-    assert (repo_dir / "lockup.png").is_file()
+    if shutil.which("rsvg-convert"):
+        assert (repo_dir / "lockup.png").is_file()
 
 
 def test_fit_text_shrinks_only_when_needed() -> None:
