@@ -40,10 +40,7 @@ the project doesn't use (reconsider) or there's a real gap (note it for `/domain
 
 ## Where a new fact goes
 
-Run the admission check in `AGENTS.md` before writing anything down. In short: derivable from the
-source → don't write it; enforceable → a named test with an `INVARIANT:` docstring; a user needs it
-→ `docs/` or `profile/README.md`; a rejected alternative → an ADR; real work you are not doing now →
-a GitHub issue. Nothing else gets written.
+Run the admission check in `AGENTS.md` before writing anything down.
 
 ## Link style inside `docs/`
 
