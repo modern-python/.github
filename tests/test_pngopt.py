@@ -19,6 +19,12 @@ def test_social_card_png_is_quantized_and_small(tmp_path: Path) -> None:
 
 
 def test_transparent_mark_png_keeps_alpha_and_is_small(tmp_path: Path) -> None:
+    """INVARIANT: palette quantization preserves the transparent marks' alpha.
+
+    Every generated PNG is indexed-colour so the committed binaries stay small, and a
+    quantizer chosen for the opaque social cards can flatten alpha to a matte without
+    erroring — the mark then ships with a white box behind it on every dark surface.
+    """
     _render(tmp_path)
     mark = tmp_path / "modern-di" / "mark-1024.png"
     im = Image.open(mark)

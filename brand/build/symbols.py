@@ -529,7 +529,10 @@ def task_q(cx: float, cy: float, r: float) -> str:
 
 def flask_horn(cx: float, cy: float, r: float) -> str:
     """Flask cue: Flask's own drinking horn (a rhyton — not a lab flask),
-    recoloured gold. The bands are negative space in the source artwork."""
+    recoloured gold. The bands are negative space in the source artwork.
+
+    Uses Flask's literal logo path under a grant Pallets has since withdrawn; see
+    docs/adr/0004-flask-horn-historical-artwork-grant.md."""
     sc = (2.04 * r) / 500.0
     body = "".join(f'<path d="{d}" fill="{GOLD}"/>' for d in FLASK_PATHS)
     return (
