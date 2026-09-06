@@ -33,10 +33,32 @@ jobs:
             --exclude 'static\.pepy\.tech'
             '**/*.md'
           fail: false
-      - name: Open an issue on failure
+      # create-issue-from-file does not deduplicate — it calls issues.create
+      # unconditionally, so six weeks of one dead link is six identical issues. This is
+      # the same find-or-comment shape every repo's report-scheduled-failure.sh uses.
+      - name: Open or update the tracking issue
         if: steps.lychee.outputs.exit_code != 0
-        uses: peter-evans/create-issue-from-file@v5
-        with:
-          title: Broken links found
-          content-filepath: ./lychee/out.md
-          labels: documentation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          LABEL="broken-links"
+          gh label create "$LABEL" \
+            --color "D93F0B" \
+            --description "Weekly external link check failures" \
+            --force
+          # The report is what changes week to week, so each comment carries the current
+          # one; 30k keeps a long report inside GitHub's comment limit.
+          report=$(head -c 30000 lychee/out.md 2>/dev/null || echo "(no report file produced)")
+          existing=$(gh issue list --label "$LABEL" --state open --json number --jq '.[0].number // empty')
+          if [ -z "$existing" ]; then
+            gh issue create --title "Broken links found" --label "$LABEL" --body "$(printf '%s\n\n%s\n\n%s' \
+              "The weekly external link check failed. Close this issue once the links are fixed; the next failure opens a fresh one." \
+              "First failing run: ${RUN_URL}" \
+              "$report")"
+          else
+            gh issue comment "$existing" --body "$(printf '%s\n\n%s' \
+              "Still failing: ${RUN_URL}" \
+              "$report")"
+          fi
