@@ -5,7 +5,8 @@
     htmltitle would then render "<title>Modern Python - Modern Python</title>";
     collapse that to just the site name on the homepage. -#}
 {% block htmltitle %}
-  {%- if page.is_homepage %}
+  {%- set is_home = nav.homepage and page.url == nav.homepage.url %}
+  {%- if is_home %}
     <title>{{ config.site_name }}</title>
   {%- elif page.meta and page.meta.title %}
     <title>{{ page.meta.title }} - {{ config.site_name }}</title>
@@ -20,9 +21,10 @@
 {% block extrahead %}
   {{ super() }}
   {% set card = config.site_url ~ "assets/social-card-green.png" %}
+  {%- set is_home = nav.homepage and page.url == nav.homepage.url %}
   {%- if page.meta and page.meta.title %}
     {%- set title = page.meta.title %}
-  {%- elif page.is_homepage %}
+  {%- elif is_home %}
     {%- set title = config.site_name %}
   {%- elif page.title %}
     {%- set title = page.title ~ " · " ~ config.site_name %}
