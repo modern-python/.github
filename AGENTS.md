@@ -74,15 +74,13 @@ if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
 ## Workflow
 
 **The spec for a change is its PR body**, not a committed file: why, design,
-non-goals, verification, reviewed with the diff. There is no change file, no lane to
-choose, and no `planning/` tree. A trivial PR (typo, dep bump, formatter, CI tweak)
-ships a conventional-commit title with no body ceremony.
+non-goals, verification, reviewed with the diff. A trivial PR (typo, dep bump,
+formatter, CI tweak) ships a conventional-commit title with no body ceremony.
 
-Two things outlive the PR, and there are exactly two places to put them: an
-alternative **rejected** with reasoning becomes an ADR in [`docs/adr/`](docs/adr/)
-(`NNNN-slug.md`, sequential, with a revisit trigger), and real work **not scheduled**
-becomes a GitHub issue. There is no third state and no truth-home directory — a
-change to a mark, a badge, or a page is reviewed with the diff, not promoted to a page.
+Two things outlive the PR: an alternative **rejected** with reasoning becomes an ADR
+in [`docs/adr/`](docs/adr/), with a revisit trigger, and real work **not scheduled**
+becomes a GitHub issue. Numbering, formats and `gh` usage are in
+[`docs/agents/`](docs/agents/).
 
 ## Where a fact goes
 
