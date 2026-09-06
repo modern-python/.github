@@ -22,6 +22,14 @@ If rooms ever open, the scope is one org-wide room per platform, never per-repo.
 shares one community, and the only rationale that keeps two rooms coherent rather than fragmenting a
 small one is a language/geo split (Russian-speaking Telegram, English/global Discord).
 
+**Borrowing in practice:** a link back to our own pages is conditional, not standing. Link only
+where the linked page actually answers the question at hand (a docs page, or an existing Discussion),
+and never as a bare repo drop. The rejected alternative was a mandatory backlink on every reply: that
+turns participation into the drive-by self-promotion HN, Lobsters and r/Python each punish, and costs
+more standing than the referrals are worth. The obligation that *is* standing runs the other way,
+when a question answered in someone else's venue exposes a gap in our docs, that gap becomes an issue
+here.
+
 **Revisit trigger:** launch week (the work is tracked in modern-python/.github#58). Rooms open *during* it, not before — launch traffic is what seeds
 them past the empty-room threshold. If a room is still inactive 30 days post-launch, fold it back
 into Discussions rather than keeping a dead room linked.
