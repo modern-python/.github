@@ -5,9 +5,6 @@ site at **modern-python.org** from `docs/` (MkDocs Material), and hosts the org
 profile shown on the GitHub org page (`profile/README.md`) plus the community
 health files every other repo inherits.
 
-The conventions in [`AGENTS.md`](AGENTS.md) apply across **all** repos in the org,
-not just this one.
-
 ## Language
 
 A term is listed only when there is a synonym to reject, or a meaning subtle enough that code, the
