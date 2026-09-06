@@ -8,9 +8,6 @@ repo_name: modern-python
 exclude_docs: |
   DEPLOYMENT.md
   /agents/
-
-# ADRs are built (so their outgoing links are validated) but stay out of the site menu.
-not_in_nav: |
   /adr/
 
 theme:
