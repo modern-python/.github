@@ -61,6 +61,14 @@ def test_project_mark_is_valid_svg(repo: str) -> None:
 
 @pytest.mark.parametrize("repo", sorted(EXPECTED_REPOS))
 def test_only_allowed_colours(repo: str) -> None:
+    """INVARIANT: a project mark carries no ink outside the brand palette, and no
+    per-project accent hue.
+
+    Projects are told apart by the shape of the inner symbol, never by colour
+    (`docs/adr/0001-project-marks-single-gold-inner.md`). A new symbol drawn from a
+    partner's brand colour breaks it, and the drift is invisible until the marks are
+    seen side by side.
+    """
     hexes = {h.lower() for h in re.findall(r"#[0-9a-fA-F]{6}", p.project_mark(repo))}
     assert hexes <= p.ALLOWED_COLORS, (
         f"{repo} stray colours: {hexes - p.ALLOWED_COLORS}"
@@ -68,7 +76,13 @@ def test_only_allowed_colours(repo: str) -> None:
 
 
 def test_templates_use_chevron() -> None:
-    # both templates share the org chevron (a polyline), not a bespoke symbol
+    """INVARIANT: the two project templates reuse the org chevron rather than getting
+    an inner symbol of their own.
+
+    They are not published packages, and giving each one a bespoke symbol is the
+    natural thing to do when adding the next template — it dilutes the rule that an
+    inner symbol marks a library.
+    """
     for repo in ("fastapi-sqlalchemy-template", "litestar-sqlalchemy-template"):
         assert "<polyline" in p.project_mark(repo)
 
@@ -229,6 +243,16 @@ def _cream_pixels_without_gold_beneath(
 )
 @pytest.mark.parametrize("repo", sorted(EXPECTED_REPOS))
 def test_no_cream_on_transparent(repo: str, tmp_path: Path) -> None:
+    """INVARIANT: cream is only ever a knockout painted on top of gold, never ink
+    directly on the transparent background.
+
+    Marks render on dark surfaces too — `lockup-dark.svg` is the dark half of every
+    README `<picture>` banner — so standalone cream is invisible on a light page and
+    stray bright-white ink on a dark one. Any new or edited inner symbol breaks this
+    the moment a cream shape pokes past the gold beneath it: a round cap spilling past
+    a hull, a band past a capsule, an eye in a hollow counter. Applies to every
+    manifest repo with no exemptions.
+    """
     bad = _cream_pixels_without_gold_beneath(repo, tmp_path)
     assert not bad, (
         f"{repo}: {len(bad)} cream pixel(s) with no gold beneath, e.g. {bad[:5]} "

@@ -1,9 +1,8 @@
 # modern-python org conventions
 
-This repo (`modern-python/.github`) builds the org site at **modern-python.org**
-(MkDocs Material, in `docs/`) and hosts the org profile shown on the GitHub org page
-(`profile/README.md`). The conventions below apply across **all** repos in the
-`modern-python` org, not just this one.
+The conventions below apply across **all** repos in the `modern-python` org, not
+just this one. [`CONTEXT.md`](CONTEXT.md) says what this repo is and owns the
+vocabulary — read it before naming a mark, a colourway, or a surface.
 
 ## Naming & branding
 
@@ -41,6 +40,25 @@ the **GitHub description**, the pyproject **`description`**, and the repo's blur
   `Homepage`, `Documentation` (only if a docs site exists), `Repository`,
   `Issues` (`…/issues`), `Changelog` (`…/releases`).
 
+The PyPI distribution name equals the repo name, for every package. The org
+profile's `coverage 100%` badge is static and deliberately unlinked — the claim holds
+because every repo's CI enforces a 100%-coverage guard, and there is no org-level
+coverage URL to point at.
+
+A repo may be listed on the org profile **before** its package reaches PyPI. Its
+Downloads badge 404s until pepy indexes it; the Stars badge and repo link resolve
+meanwhile. That lag is self-healing — note it, never block the listing on it.
+
+## Brand surfaces
+
+A repo's brand assets are generated here, in `brand/projects/<repo>/`. Which of them a
+repo hotlinks and which it vendors is settled in
+[`docs/adr/0003-docs-vendor-assets-readmes-hotlink.md`](docs/adr/0003-docs-vendor-assets-readmes-hotlink.md).
+
+A docs site's `docs/index.md` replaces its `# <Title>` heading with a `.mp-hero` block
+holding both lockup variants. Add no `title:` front matter there: Material titles the
+home page from `site_name`, so `title:` renders as `<repo> - <repo>`.
+
 ## Tooling
 
 Projects use **uv** (packaging), **ruff** (lint/format), **ty** (type check), and
@@ -56,27 +74,56 @@ if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
 
 ## Workflow
 
-Planning follows the convention in [`planning/README.md`](planning/README.md) —
-its **Quick path** is authoritative. Pick a lane (Full = a change file from the
-design template, Lightweight = a change file from the change template, Tiny =
-conventional commit), create the change file at
-`planning/changes/YYYY-MM-DD.NN-<slug>.md` from `planning/_templates/`, keep the
-executor's plan in git-ignored scratch (`.superpowers/`), and run
-`just check-planning` before pushing. The applied convention version is in
-`planning/.convention-version`; update it via the canonical repo's `APPLY.md`.
+**The spec for a change is its PR body**, not a committed file: why, design,
+non-goals, verification, reviewed with the diff. There is no change file, no lane to
+choose, and no `planning/` tree. A trivial PR (typo, dep bump, formatter, CI tweak)
+ships a conventional-commit title with no body ceremony.
 
-## Architecture
+> This repo's `.github/PULL_REQUEST_TEMPLATE.md` is the **org default**, inherited by
+> every repo without a local one, and most of them still run the older `planning/`
+> convention — so it still carries the generic form. Replacing it is tracked
+> separately; write PR bodies in the shape above regardless.
 
-`architecture/` (repo root) is the living truth about what this repo does now —
-one file per capability plus `glossary.md`, no frontmatter, authored lazily.
-**When a change alters a capability's behavior, update the matching
-`architecture/<capability>.md` in the same PR.** The change file in
-`planning/changes/` stays as the *why*.
+Two things outlive the PR, and there are exactly two places to put them: an
+alternative **rejected** with reasoning becomes an ADR in [`docs/adr/`](docs/adr/)
+(`NNNN-slug.md`, sequential, with a revisit trigger), and real work **not scheduled**
+becomes a GitHub issue. There is no third state and no truth-home directory — a
+change to a mark, a badge, or a page is reviewed with the diff, not promoted to a page.
+
+## Where a fact goes
+
+Four homes, one owner each:
+
+| Home | Holds |
+|---|---|
+| `brand/`, `profile/`, `mkdocs.yml` | anything readable from the source — the default |
+| a named test | an **invariant**: must stay true, and a change could silently break it |
+| `docs/adr/` | a rejected alternative, with the reasoning that would otherwise be re-litigated |
+| `docs/`, `profile/README.md` | anything a user needs |
+
+Before writing a line anywhere:
+
+> Can an agent get this by reading the source? → **don't write it.**
+> Would a wrong change here fail a test? → it belongs **in the test**, not in prose.
+> Does a user need it? → **`docs/`**.
+> Otherwise it does not get written.
+
+**Prose about mechanism has no home. There is no file to add a paragraph to.** This
+file included: it is always loaded, so a line restating a docstring, a justfile
+comment, or `mkdocs.yml` costs every turn and rots in two places at once.
+
+An invariant is a test whose name is the claim, with a docstring opening `INVARIANT:`
+and a second paragraph naming **what breaks it** — design rationale, not a report of
+what this one test catches. `tests/test_invariant_census.py` enforces that shape, and
+checks that every test name and ADR path cited from the source or from the Markdown
+outside `docs/` resolves. Both ADRs and
+`INVARIANT:` docstrings ratchet: nothing prunes a record once its call is settled.
+Keeping them lean is a standing habit.
 
 ## Agent skills
 
 - **Issues and specs** — GitHub Issues on `modern-python/.github`, via `gh`:
   [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md)
 - **Triage labels** — the five canonical roles: [`docs/agents/triage-labels.md`](docs/agents/triage-labels.md)
-- **Domain docs** — single-context, `architecture/` + `planning/`:
+- **Domain docs** — single-context, `CONTEXT.md` + `docs/adr/`:
   [`docs/agents/domain.md`](docs/agents/domain.md)

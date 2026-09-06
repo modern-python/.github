@@ -64,7 +64,7 @@ Repos with a docs site also get a `social-card.svg` + `social-card.png`
 and docs URL on cream. The docs-site repos are listed in
 `brand/build/projects.py::DOCS_REPOS`. These repos also use the lockup as a
 centered hero on their `docs/index.md`, vendored into the repo's `docs/assets/`
-(see `architecture/brand-marks.md`).
+(see `docs/adr/0003-docs-vendor-assets-readmes-hotlink.md`).
 
 PNGs are palette-quantized at build time (`brand/build/raster.py`, Pillow
 FASTOCTREE) — indexed-colour, with no visible change (the art is flat-colour).
