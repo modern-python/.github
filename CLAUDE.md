@@ -72,3 +72,11 @@ one file per capability plus `glossary.md`, no frontmatter, authored lazily.
 **When a change alters a capability's behavior, update the matching
 `architecture/<capability>.md` in the same PR.** The change file in
 `planning/changes/` stays as the *why*.
+
+## Agent skills
+
+- **Issues and specs** — GitHub Issues on `modern-python/.github`, via `gh`:
+  [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md)
+- **Triage labels** — the five canonical roles: [`docs/agents/triage-labels.md`](docs/agents/triage-labels.md)
+- **Domain docs** — single-context, `architecture/` + `planning/`:
+  [`docs/agents/domain.md`](docs/agents/domain.md)
