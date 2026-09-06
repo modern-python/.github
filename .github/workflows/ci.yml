@@ -15,6 +15,21 @@ jobs:
       - name: Build site
         run: uv run mkdocs build --strict
 
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      # --offline blocks network requests and excludes every external URL, so this
+      # gate is deterministic: it fails only on a relative link or file path that a
+      # diff actually broke. External rot is the weekly links.yml run's job.
+      - name: Check local links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --offline
+            --no-progress
+            '**/*.md'
+
   test:
     runs-on: ubuntu-latest
     steps:
