@@ -85,7 +85,7 @@ def mark(*, struct: str, gold: str) -> str:
 
 def apparel_back(*, struct: str, gold: str) -> str:
     """Back-of-shirt lockup: the MODERN/PYTHON wordmark with the full domain
-    outlined beneath it, transparent, for the cream+gold-dark colorway. Extends
+    outlined beneath it, transparent, for the cream+gold-dark colourway. Extends
     the `wordmark` viewBox downward to seat the URL centered on the same axis."""
     url, _ = outline_text(
         "modern-python.org",

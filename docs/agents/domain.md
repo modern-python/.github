@@ -33,7 +33,7 @@ whose docstring opens `INVARIANT:`.
 
 When your output names a domain concept (in an issue title, a proposal, a hypothesis, a test name),
 use the term as defined in `CONTEXT.md`. Don't drift to synonyms the glossary explicitly avoids:
-write `mark` and not `logo`, `colourway` and not `theme`, `inner symbol` and not `glyph`.
+write `mark` and not `logo`, `colourway` and not `colorway`, `inner symbol` and not `glyph`.
 
 If the concept you need isn't in the glossary yet, that's a signal: either you're inventing language
 the project doesn't use (reconsider) or there's a real gap (note it for `/domain-modeling`).

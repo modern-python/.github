@@ -114,11 +114,10 @@ comment, or `mkdocs.yml` costs every turn and rots in two places at once.
 
 An invariant is a test whose name is the claim, with a docstring opening `INVARIANT:`
 and a second paragraph naming **what breaks it** — design rationale, not a report of
-what this one test catches. `tests/test_invariant_census.py` enforces that shape, and
-checks that every test name and ADR path cited from the source or from the Markdown
-outside `docs/` resolves. Both ADRs and
-`INVARIANT:` docstrings ratchet: nothing prunes a record once its call is settled.
-Keeping them lean is a standing habit.
+what this one test catches. Nothing enforces that shape, and nothing checks that an ADR
+path cited from code or from this file still resolves; both are read at review time.
+Both ADRs and `INVARIANT:` docstrings ratchet: nothing prunes a record once its call is
+settled. Keeping them lean is a standing habit.
 
 ## Agent skills
 
