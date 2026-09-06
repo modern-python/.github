@@ -1,8 +1,7 @@
-# modern-python org conventions
+# modern-python/.github
 
-The conventions below apply across **all** repos in the `modern-python` org, not
-just this one. [`CONTEXT.md`](CONTEXT.md) says what this repo is and owns the
-vocabulary — read it before naming a mark, a colourway, or a surface.
+[`CONTEXT.md`](CONTEXT.md) says what this repo is and owns the vocabulary — read it
+before naming a mark, a colourway, or a surface.
 
 ## Naming & branding
 
@@ -78,11 +77,6 @@ if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
 non-goals, verification, reviewed with the diff. There is no change file, no lane to
 choose, and no `planning/` tree. A trivial PR (typo, dep bump, formatter, CI tweak)
 ships a conventional-commit title with no body ceremony.
-
-> This repo's `.github/PULL_REQUEST_TEMPLATE.md` is the **org default**, inherited by
-> every repo without a local one, and most of them still run the older `planning/`
-> convention — so it still carries the generic form. Replacing it is tracked
-> separately; write PR bodies in the shape above regardless.
 
 Two things outlive the PR, and there are exactly two places to put them: an
 alternative **rejected** with reasoning becomes an ADR in [`docs/adr/`](docs/adr/)
