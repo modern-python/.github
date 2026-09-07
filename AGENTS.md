@@ -71,36 +71,10 @@ if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
 
 ## Workflow
 
-Two things outlive the PR: an alternative **rejected** with reasoning becomes an ADR
-in [`docs/adr/`](docs/adr/), with a revisit trigger, and real work **not scheduled**
-becomes a GitHub issue. Numbering, formats and `gh` usage are in
-[`docs/agents/`](docs/agents/).
+Real work **not scheduled** becomes a GitHub issue.
 
-## Where a fact goes
-
-Four homes, one owner each:
-
-| Home | Holds |
-|---|---|
-| `brand/`, `profile/`, `mkdocs.yml` | anything readable from the source — the default |
-| a named test | an **invariant**: must stay true, and a change could silently break it |
-| `docs/adr/` | a rejected alternative, with the reasoning that would otherwise be re-litigated |
-| `docs/`, `profile/README.md` | anything a user needs |
-
-Before writing a line anywhere:
-
-> Can an agent get this by reading the source? → **don't write it.**
-> Would a wrong change here fail a test? → it belongs **in the test**, not in prose.
-> Does a user need it? → **`docs/`**.
-> Otherwise it does not get written.
-
-**Prose about mechanism has no home. There is no file to add a paragraph to.** This
-file included: it is always loaded, so a line restating a docstring, a justfile
-comment, or `mkdocs.yml` costs every turn and rots in two places at once.
-
-An invariant is a test whose name is the claim, with a docstring opening `INVARIANT:`
-and a second paragraph naming **what breaks it** — design rationale, not a report of
-what this one test catches.
+An invariant is a test whose name is the claim, with a docstring opening `INVARIANT:` and a second
+paragraph naming **what breaks it** — design rationale, not a report of what this one test catches.
 
 ## Agent skills
 
