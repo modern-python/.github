@@ -13,10 +13,10 @@ unless a repository overrides them with its own `CONTRIBUTING.md`.
 
 ## Development setup
 
-Projects use [`uv`](https://github.com/astral-sh/uv) for packaging,
-[`ruff`](https://github.com/astral-sh/ruff) for lint/format,
-[`ty`](https://github.com/astral-sh/ty) for type checking, and `uv_build` as the
-build backend. Most repos expose tasks behind a `justfile`.
+Every repo follows [the modern-python standard](https://modern-python.org/standard/):
+[`uv`](https://github.com/astral-sh/uv) for packaging, [`ruff`](https://github.com/astral-sh/ruff)
+for lint/format, [`ty`](https://github.com/astral-sh/ty) for type checking, `uv_build` as the
+build backend, and a `justfile` with fixed recipe names as the only task entry point.
 
 ```bash
 # Clone your fork, then from the repo root:

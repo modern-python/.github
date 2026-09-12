@@ -58,3 +58,22 @@ A venue someone else runs, where the org participates as a guest and never moder
 Discord, the framework community channels, Stack Overflow, the newsletters.
 _Avoid_: channel — a borrowed audience is never one of ours, and calling it one invites the
 assumption that we moderate it.
+
+**Standard**:
+The written, normative description of what makes a repo a modern-python repo, owned by this repo
+and published on the org site. A repo either meets it, or carries an exemption.
+_Avoid_: guidelines, conventions, rules — each reads as advisory, and the standard is not.
+
+**Core**:
+The subset of the standard a repo must meet. Everything the standard describes outside the core is
+free.
+_Avoid_: baseline, required set
+
+**Exemption**:
+A recorded, reasoned deviation of one repo from one part of the core.
+_Avoid_: exception, override — both already mean something in the DI repos; deviation, drift — a
+deviation nobody recorded is drift, not an exemption.
+
+**Census**:
+A test in this repo that reads every org repo and asserts the core, honouring exemptions.
+_Avoid_: audit, drift check

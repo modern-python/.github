@@ -1,0 +1,275 @@
+# The standard
+
+What makes a repository a modern-python repository. It is normative: a repo either meets the
+**core** below, or carries an **exemption** listed at the end of this page. Everything the page
+describes outside the core is a recommendation.
+
+The audience is the maintainer, contributors, and the coding agents that work across the org's
+repositories. It is not a guide to writing Python; it is the shape every repo shares so that
+tooling, CI, and agents can rely on it.
+
+## Scope
+
+**Core repositories** are the libraries: every repo that publishes a package to PyPI under the
+org. The core applies to them in full.
+
+**Templates and applications** (`fastapi-sqlalchemy-template`, `litestar-sqlalchemy-template`,
+`chat-app`) run their tests through Docker Compose and are not published. They follow sections
+1, 2 (without `publish`), 3, 4, 9 and the README rule in section 10; sections 5 through 8 and 11 do
+not apply.
+
+`that-depends` is exempt from the core as a whole; see [Exemptions](#exemptions).
+
+## 1. Toolchain
+
+| Tool | Role |
+|---|---|
+| [uv](https://github.com/astral-sh/uv) | Python versions, dependencies, lockfile, build (`uv_build` backend), publish |
+| [ruff](https://github.com/astral-sh/ruff) | lint and format, `select = ["ALL"]` |
+| [ty](https://github.com/astral-sh/ty) | type checking |
+| [eof-fixer](https://github.com/modern-python/eof-fixer) | every text file ends with exactly one newline |
+| [just](https://github.com/casey/just) | task runner; the `justfile` is the only entry point CI and contributors use |
+
+Dependency groups: `dev` holds test dependencies, `lint` holds `ruff`, `ty`, `eof-fixer` and any
+typing stubs. CI installs both; a library's runtime dependencies never include either.
+
+## 2. The justfile
+
+Recipe names and their semantics are fixed. CI calls only these names, so a repo may add recipes
+freely but may not rename or repurpose these.
+
+```just
+default: install lint test
+
+install:
+    uv lock --upgrade
+    uv sync --all-extras --frozen --group lint
+
+lint:
+    uv run eof-fixer .
+    uv run ruff format
+    uv run ruff check --fix
+    uv run ty check
+
+lint-ci:
+    uv run eof-fixer . --check
+    uv run ruff format --check
+    uv run ruff check --no-fix
+    uv run ty check
+
+test *args:
+    uv run --no-sync pytest {{ args }}
+
+test-ci:
+    uv run --no-sync pytest --cov=. --cov-report term-missing --cov-report xml --cov-fail-under=100
+
+publish:
+    rm -rf dist
+    uv version $GITHUB_REF_NAME
+    uv build
+    uv publish
+```
+
+| Recipe | Contract |
+|---|---|
+| `install` | Upgrades the lockfile and syncs every extra plus the `lint` group. The only recipe that touches `uv.lock`. |
+| `lint` | **Rewrites files.** Autofix, then type-check. |
+| `lint-ci` | The read-only twin of `lint`, same checks. What CI runs. Use it locally when you want an answer, not a mutation. |
+| `test` | pytest with arguments passed through and **no coverage gate**, so a targeted run never fails on coverage. |
+| `test-ci` | The gated full run: 100 % line coverage. What CI runs. |
+| `publish` | Version comes from the git tag (`$GITHUB_REF_NAME`); `pyproject.toml` keeps `version = "0"` and is never bumped. Auth is PyPI Trusted Publishing; there is no token. |
+
+A repo whose tests need a service (PostgreSQL, Redis, a broker) may run `test` through Docker
+Compose; the recipe name and the pass-through of arguments stay the same.
+
+## 3. Ruff
+
+The canonical block. Add per-file ignores below it for what a repo genuinely needs; do not edit the
+`ignore` list itself.
+
+```toml
+[tool.ruff]
+fix = true
+unsafe-fixes = true
+line-length = 120
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D1",     # docstrings are not forced; a docstring exists when it says something
+    "D203",   # conflicts with D211
+    "D213",   # conflicts with D212
+    "COM812", # conflicts with the formatter
+    "ISC001", # conflicts with the formatter
+    "CPY001", # no per-file copyright header
+    "FBT",    # boolean positional arguments are fine
+    "TCH",    # imports stay real; TYPE_CHECKING-only imports break runtime introspection
+]
+isort.lines-after-imports = 2
+isort.no-lines-before = ["standard-library", "local-folder"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]  # assert is the test idiom; in library code it is a finding
+```
+
+`target-version` is omitted: ruff derives it from `requires-python`.
+
+Three ignores that appear in older copies of this block are **not** part of it, because measured
+across the org they suppress nothing: `G004`, `TRY003`, `EM102`. Remove them when you touch a
+repo.
+
+## 4. Type checking
+
+`ty check` runs in `lint` and `lint-ci`, over the whole repo, with no `[tool.ty]` configuration
+beyond `src.exclude` for directories that are not the package (benchmarks with their own
+environment, generated code).
+
+## 5. Tests and coverage
+
+- pytest, `testpaths = ["tests"]`, `asyncio_mode = "auto"` where asyncio is involved.
+- **100 % line coverage**, gated in `test-ci` and nowhere else. Branch coverage is diagnostic
+  (`test-branch`, where present), never the gate.
+- `[tool.coverage.report] exclude_also = ["if typing.TYPE_CHECKING:"]` is the one standing
+  exclusion. Do not exclude a file to reach the number; delete or test it.
+
+## 6. Python versions
+
+There is no floor policy. A repo sets `requires-python` to what its code needs and may raise it
+without a recorded reason.
+
+The obligation is at the other end: **the test matrix always includes the newest stable CPython
+minor and that minor's free-threaded build** (`3.14` and `3.14t` today). The matrix is every minor
+from the repo's floor to the newest, plus the free-threaded newest. The `Programming Language ::
+Python :: 3.X` classifiers list every minor in the matrix.
+
+In the shared checks workflow (section 7) the matrix is derived at run time from `requires-python`
+and the newest released cycle, so no repo edits a matrix when a Python ships; a repo still on its
+own `_checks.yml` maintains the list by hand.
+
+## 7. CI
+
+Two workflows per repo, both thin:
+
+- `ci.yml` on `push` to `main` and on `pull_request`, with `concurrency` cancelling superseded runs.
+- `scheduled.yml` weekly and on `workflow_dispatch`, running the same checks and, on a scheduled
+  failure, opening or updating a tracking issue in the repo. This is how a dependency release or a
+  new Python that breaks the build becomes a ticket without anyone watching.
+
+Both call one reusable `checks.yml` with these jobs:
+
+| Job | What it does |
+|---|---|
+| `lint` | `just install lint-ci` on the repo's floor Python |
+| `pytest` | `just install` then `just test-ci` on every matrix entry, `fail-fast: false` |
+| `links` | [lychee](https://github.com/lycheeverse/lychee-action) with `--offline`, remapping this repo's `blob/main` URLs to the checkout, so it fails only on a relative link or file path the diff broke |
+| `docs` | `just docs-build` (`mkdocs build --strict`), only for repos with a docs site |
+
+The shared `checks.yml` will live in `modern-python/.github` and be referenced at `main`, so a
+change to it reaches every repo on merge; such a change is first exercised from a branch ref in
+one repo. Until it exists, each repo carries the same jobs in a local `_checks.yml`. A repo whose
+tests need a service container keeps a local `pytest` job and calls the shared workflow for the
+rest.
+
+## 8. Release
+
+Tag-driven. A maintainer pushes a tag off green `main`:
+
+```bash
+git tag -m "<repo> 3.4.0" 3.4.0 && git push origin 3.4.0
+```
+
+- The tag **name** is bare semver (`3.4.0`) or a PEP 440 pre-release (`2.0.0rc1`, `4.0.0a2`); the
+  tag object may be annotated or signed.
+- `release.yml` matches those two patterns, runs `just publish` first (PyPI is irreversible, so a
+  failed publish creates no Release), then creates the GitHub Release with generated notes; a tag
+  containing a letter is flagged pre-release.
+- Auth is PyPI Trusted Publishing through the `pypi` environment. Nothing is registered but the
+  workflow filename and the environment; there is no CI gate in the workflow because the tag is the
+  commitment point.
+- The Release body is GitHub's generated notes from squashed PR titles, so a conventional-commit
+  PR title is the changelog entry. Prose goes in afterwards with `gh release edit`.
+
+`release.yml` stays a per-repo file: PyPI does not accept a reusable workflow as a Trusted
+Publisher. It is identical across repos apart from the comment naming the PyPI project.
+
+## 9. Repository files
+
+| File | Rule |
+|---|---|
+| `CLAUDE.md` | Exactly one line: `@AGENTS.md`. |
+| `AGENTS.md` | Agent guidance for this repo. Contains the two canonical paragraphs below verbatim, then only what an agent cannot infer from the tree. |
+| `CONTEXT.md` | The glossary: what the repo is in one or two sentences, then terms that have a synonym to reject. No implementation details. |
+| `docs/adr/` | Decision records, `NNNN-slug.md`, one paragraph each, only for decisions that are hard to reverse, surprising later, and the result of a real trade-off. |
+| `LICENSE` | MIT. |
+| `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `SUPPORT.md` | Inherited from `modern-python/.github`; a repo adds its own only to override. |
+
+The two canonical `AGENTS.md` paragraphs. They are the facts an agent gets wrong on first contact
+and cannot learn from the tree; a repo may append sentences after each, but the text itself is
+kept word for word (line wrapping is free):
+
+```markdown
+`just` (task runner) and `uv` (package manager). The [`justfile`](justfile) is the source of truth —
+`just --list`, or read it.
+```
+
+```markdown
+Every link in `README.md` must be absolute: `https://github.com/modern-python/<repo>/blob/main/<path>`,
+or `.../tree/main/<path>` for a directory. Never a relative path: `README.md` is also the PyPI long
+description, and PyPI does not rewrite relative links, so a relative one 404s on the package page.
+```
+
+## 10. README
+
+`README.md` is the PyPI long description. Every link in it is absolute, per the paragraph above.
+It opens with the repo's one-line description (section 11), then what the package does, then a
+minimal example.
+
+## 11. Metadata
+
+A repo's summary appears in three places and they say the same thing: the GitHub description, the
+pyproject `description`, and the repo's row in the org profile. One canonical one-liner per repo,
+purpose-first, about 120 characters at most, no trailing period.
+
+- **GitHub topics**: lowercase, hyphenated, at most 12, drawn from the shared vocabulary (`python`,
+  `dependency-injection`, `di`, `ioc-container`, `modern-di`, `fastapi`, `litestar`, `faststream`,
+  `sqlalchemy`, `postgresql`, `asyncio`, `docker`, `cli`, `messaging`). The website field is the
+  docs site, or `modern-python.org`.
+- **`keywords`** mirror the topics.
+- **`classifiers`**: `Development Status`, `Intended Audience :: Developers`, one
+  `Programming Language :: Python :: 3.X` per tested minor, `Typing :: Typed`, a `Topic` where apt.
+  **No `License ::` classifier**: the SPDX `license = "MIT"` key is the declaration, and PEP 639
+  deprecates pairing it with a classifier.
+- **`[project.urls]`** uses the PyPI labels `Homepage`, `Documentation` (only if a docs site
+  exists), `Repository`, `Issues`, `Changelog` (the Releases page).
+- The PyPI distribution name equals the repo name.
+
+## Exemptions
+
+| Repo | Exempt from | Why |
+|---|---|---|
+| `that-depends` | the core as a whole (mypy strict and pyrefly instead of ty; Read the Docs instead of GitHub Pages; `publish.yml` on release-published; own justfile recipes) | The org's most-used package, the only repo with steady external contributor traffic, and its own agent guidance forbids carrying conventions across from `modern-di`. It does adopt the 100 % coverage gate. |
+| `faststream-outbox`, `faststream-redis-timers` | `ANN401` | `typing.Any` is the honest annotation at the broker boundary; 49 and 19 sites respectively. Narrowed from a blanket `ANN` ignore. |
+| `fastapi-sqlalchemy-template`, `litestar-sqlalchemy-template`, `chat-app` | sections 5–8, 11 | Not packages; tests run through Docker Compose; see Scope. They additionally ignore `INP`, `B008` and `S105` for framework idioms and test fixtures. |
+| `db-retry`, `faststream-redis-timers`, `faststream-concurrent-aiokafka`, `modern-di-arq` | the shared `pytest` job | Tests need a service container (PostgreSQL, Redis, Redpanda); the `pytest` job stays local, the rest is shared. |
+
+An exemption is granted by a pull request to this repo that adds the row. Drift that nobody
+recorded is not an exemption.
+
+## Changing the standard
+
+A change to the core lands as one pull request to `modern-python/.github` that updates this page,
+the census, and the exemptions table together. Repos then converge; the weekly census run tracks
+which have not. The standard carries no version number: the page on `main` is the standard.
+
+## Enforcement
+
+The **census** is a test suite in `modern-python/.github` that reads every org repo through the
+GitHub API and asserts the core, honouring the exemptions table. Its rules live in the `census`
+package there, one function per core item; `just census` runs it locally, and `just census-report`
+prints the findings as Markdown.
+
+It runs on every pull request there that touches the standard, the census, or the org profile,
+where its findings are informational (the job summary shows them; only a broken census fails the
+check), and every Monday, where a failure opens one issue labelled `census` in
+`modern-python/.github` whose body is the current report, refreshed on each later failure and
+closed by hand once a run is clean. A repo that meets the core appears nowhere in it.

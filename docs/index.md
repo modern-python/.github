@@ -86,8 +86,8 @@ production Python services. Use one piece or all of them — each is independent
 
 Every project is built with the same tooling
 ([`uv`](https://github.com/astral-sh/uv), [`ruff`](https://github.com/astral-sh/ruff),
-[`ty`](https://github.com/astral-sh/ty)) under the MIT license. Browse the full
-catalog below.
+[`ty`](https://github.com/astral-sh/ty)) under the MIT license, to one shared
+[standard](standard.md). Browse the full catalog below.
 
 ## Project templates { #templates }
 
