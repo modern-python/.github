@@ -39,8 +39,8 @@ freely but may not rename or repurpose these.
 | `install` | Upgrades the lockfile and syncs every extra plus the `lint` group. The only recipe that touches `uv.lock`. |
 | `lint` | **Rewrites files.** Autofix, then type-check. |
 | `lint-ci` | The read-only twin of `lint`, same checks. What CI runs. Use it locally when you want an answer, not a mutation. |
-| `test` | pytest with arguments passed through and **no coverage gate**, so a targeted run never fails on coverage. |
-| `test-ci` | The gated full run: 100 % line coverage. What CI runs. |
+| `test` | pytest with arguments passed through and **no coverage measured**, so a targeted run never meets the gate. |
+| `test-ci` | The full run with coverage measured and the XML report written; the gate in `[tool.coverage.report]` applies here. What CI runs. |
 | `publish` | Version comes from the git tag (`$GITHUB_REF_NAME`); `pyproject.toml` keeps `version = "0"` and is never bumped. Auth is PyPI Trusted Publishing; there is no token. |
 
 A repo whose tests need a service (PostgreSQL, Redis, a broker) may run `test` through Docker
@@ -90,8 +90,11 @@ environment, generated code).
 ## 5. Tests and coverage
 
 - pytest, `testpaths = ["tests"]`, `asyncio_mode = "auto"` where asyncio is involved.
-- **100 % line coverage**, gated in `test-ci` and nowhere else. Branch coverage is diagnostic
-  (`test-branch`, where present), never the gate.
+- **100 % line coverage**, declared once as `[tool.coverage.report] fail_under = 100`. pytest-cov
+  reads it whenever coverage is measured, so the gate applies exactly where `--cov` is passed:
+  `test-ci` (and `test-branch`, where present), never `test`. `--cov` never appears in pytest
+  `addopts`; measuring on every run would gate every run. Branch coverage is diagnostic, never the
+  gate.
 - `[tool.coverage.report] exclude_also = ["if typing.TYPE_CHECKING:"]` is the one standing
   exclusion. Do not exclude a file to reach the number; delete or test it.
 
