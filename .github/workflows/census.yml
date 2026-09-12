@@ -27,20 +27,26 @@ jobs:
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: "3.11"
+      # Exit 0: clean. Exit 2: findings (the report). Anything else: the census itself broke.
       - name: Run the census
         id: census
-        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: uv run python -m census --markdown | tee census-report.md
+        run: |
+          set +e
+          uv run python -m census --markdown | tee census-report.md
+          code=${PIPESTATUS[0]}
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          [ "$code" = 0 ] || [ "$code" = 2 ]
       - name: Show the report
+        if: always()
         run: cat census-report.md >> "$GITHUB_STEP_SUMMARY"
       - name: File the tracking issue (scheduled runs only)
-        if: steps.census.outcome == 'failure' && github.event_name == 'schedule'
+        if: steps.census.outputs.code == '2' && github.event_name == 'schedule'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: bash .github/scripts/report-census-failure.sh census-report.md
       - name: Fail on findings (scheduled and manual runs; informational on pull requests)
-        if: steps.census.outcome == 'failure' && github.event_name != 'pull_request'
+        if: steps.census.outputs.code == '2' && github.event_name != 'pull_request'
         run: exit 1

@@ -6,6 +6,9 @@ import sys
 from census import python_releases, report, rules, snapshot
 
 
+EXIT_FINDINGS = 2
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Check every modern-python repo against the standard's core.")
     parser.add_argument(
@@ -27,7 +30,7 @@ def main() -> int:
         for finding in findings:
             sys.stdout.write(f"{finding.repo}\t{finding.item}\t{finding.message}\n")
         sys.stdout.write(f"{len(findings)} findings across {len(snapshots)} repos\n")
-    return 1 if findings else 0
+    return EXIT_FINDINGS if findings else 0
 
 
 if __name__ == "__main__":

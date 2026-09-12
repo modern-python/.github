@@ -14,6 +14,6 @@ sync-assets:
 census:
     uv run pytest -m census -p no:cacheprovider
 
-# Same census as a Markdown report, exit 1 on findings; the weekly workflow files it as an issue.
+# Same census as a Markdown report; exit 2 on findings (1 means the census itself broke). The weekly workflow files it as an issue.
 census-report:
     uv run python -m census --markdown
