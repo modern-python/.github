@@ -18,8 +18,11 @@ dev = [
     "fonttools>=4.63.0",
     "pillow>=11.0.0",
     "pytest>=9.1.1",
+    "pyyaml>=6.0",
 ]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+addopts = "-m 'not census'"
+markers = ["census: reads every org repo over the network; run with `just census`"]

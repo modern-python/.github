@@ -1,0 +1,46 @@
+name: census
+on:
+  pull_request:
+    paths:
+      - "census/**"
+      - "tests/test_census*.py"
+      - "docs/standard.md"
+      - "profile/README.md"
+      - ".github/workflows/census.yml"
+  schedule:
+    - cron: "0 7 * * 1"        # Mondays 07:00 UTC, after the libraries' 06:00 dependency checks
+  workflow_dispatch: {}
+
+concurrency:
+  group: census-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.11"
+      - name: Run the census
+        id: census
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run python -m census --markdown | tee census-report.md
+      - name: Show the report
+        run: cat census-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: File the tracking issue (scheduled runs only)
+        if: steps.census.outcome == 'failure' && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: bash .github/scripts/report-census-failure.sh census-report.md
+      - name: Fail on findings (scheduled and manual runs; informational on pull requests)
+        if: steps.census.outcome == 'failure' && github.event_name != 'pull_request'
+        run: exit 1

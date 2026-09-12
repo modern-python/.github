@@ -409,6 +409,7 @@ dev = [
     { name = "fonttools" },
     { name = "pillow" },
     { name = "pytest" },
+    { name = "pyyaml" },
 ]
 
 [package.metadata]
@@ -422,6 +423,7 @@ dev = [
     { name = "fonttools", specifier = ">=4.63.0" },
     { name = "pillow", specifier = ">=11.0.0" },
     { name = "pytest", specifier = ">=9.1.1" },
+    { name = "pyyaml", specifier = ">=6.0" },
 ]
 
 [[package]]
