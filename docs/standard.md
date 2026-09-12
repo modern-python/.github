@@ -13,11 +13,6 @@ tooling, CI, and agents can rely on it.
 **Core repositories** are the libraries: every repo that publishes a package to PyPI under the
 org. The core applies to them in full.
 
-**Templates and applications** (`fastapi-sqlalchemy-template`, `litestar-sqlalchemy-template`,
-`chat-app`) run their tests through Docker Compose and are not published. They follow sections
-1, 2 (without `publish`), 3, 4, 9 and the README rule in section 10; sections 5 through 8 and 11 do
-not apply.
-
 `that-depends` is exempt from the core as a whole; see [Exemptions](#exemptions).
 
 ## 1. Toolchain
@@ -35,40 +30,9 @@ typing stubs. CI installs both; a library's runtime dependencies never include e
 
 ## 2. The justfile
 
-Recipe names and their semantics are fixed. CI calls only these names, so a repo may add recipes
+Recipe names and their contracts are fixed. CI calls only these names, so a repo may add recipes
 freely but may not rename or repurpose these.
 
-```just
-default: install lint test
-
-install:
-    uv lock --upgrade
-    uv sync --all-extras --frozen --group lint
-
-lint:
-    uv run eof-fixer .
-    uv run ruff format
-    uv run ruff check --fix
-    uv run ty check
-
-lint-ci:
-    uv run eof-fixer . --check
-    uv run ruff format --check
-    uv run ruff check --no-fix
-    uv run ty check
-
-test *args:
-    uv run --no-sync pytest {{ args }}
-
-test-ci:
-    uv run --no-sync pytest --cov=. --cov-report term-missing --cov-report xml --cov-fail-under=100
-
-publish:
-    rm -rf dist
-    uv version $GITHUB_REF_NAME
-    uv build
-    uv publish
-```
 
 | Recipe | Contract |
 |---|---|
@@ -84,8 +48,8 @@ Compose; the recipe name and the pass-through of arguments stay the same.
 
 ## 3. Ruff
 
-The canonical block. Add per-file ignores below it for what a repo genuinely needs; do not edit the
-`ignore` list itself.
+The canonical block. Its `ignore` list is the minimum: a repo may add ignores it needs, each with
+a one-line reason, and may not remove one.
 
 ```toml
 [tool.ruff]
@@ -114,9 +78,8 @@ isort.no-lines-before = ["standard-library", "local-folder"]
 
 `target-version` is omitted: ruff derives it from `requires-python`.
 
-Three ignores that appear in older copies of this block are **not** part of it, because measured
-across the org they suppress nothing: `G004`, `TRY003`, `EM102`. Remove them when you touch a
-repo.
+Three ignores that appear in older copies of this block suppress nothing measured across the org:
+`G004`, `TRY003`, `EM102`. Drop them when you touch a repo.
 
 ## 4. Type checking
 
@@ -166,9 +129,7 @@ Both call one reusable `checks.yml` with these jobs:
 
 The shared `checks.yml` will live in `modern-python/.github` and be referenced at `main`, so a
 change to it reaches every repo on merge; such a change is first exercised from a branch ref in
-one repo. Until it exists, each repo carries the same jobs in a local `_checks.yml`. A repo whose
-tests need a service container keeps a local `pytest` job and calls the shared workflow for the
-rest.
+one repo. Until it exists, each repo carries the same jobs in a local `_checks.yml`.
 
 ## 8. Release
 
@@ -247,10 +208,7 @@ purpose-first, about 120 characters at most, no trailing period.
 
 | Repo | Exempt from | Why |
 |---|---|---|
-| `that-depends` | the core as a whole (mypy strict and pyrefly instead of ty; Read the Docs instead of GitHub Pages; `publish.yml` on release-published; own justfile recipes) | The org's most-used package, the only repo with steady external contributor traffic, and its own agent guidance forbids carrying conventions across from `modern-di`. It does adopt the 100 % coverage gate. |
-| `faststream-outbox`, `faststream-redis-timers` | `ANN401` | `typing.Any` is the honest annotation at the broker boundary; 49 and 19 sites respectively. Narrowed from a blanket `ANN` ignore. |
-| `fastapi-sqlalchemy-template`, `litestar-sqlalchemy-template`, `chat-app` | sections 5–8, 11 | Not packages; tests run through Docker Compose; see Scope. They additionally ignore `INP`, `B008` and `S105` for framework idioms and test fixtures. |
-| `db-retry`, `faststream-redis-timers`, `faststream-concurrent-aiokafka`, `modern-di-arq` | the shared `pytest` job | Tests need a service container (PostgreSQL, Redis, Redpanda); the `pytest` job stays local, the rest is shared. |
+| `that-depends` | the core as a whole | The org's most-used package and the only repo with steady external contributor traffic; it keeps its own tooling rather than converging. It does adopt the 100 % coverage gate. |
 
 An exemption is granted by a pull request to this repo that adds the row. Drift that nobody
 recorded is not an exemption.

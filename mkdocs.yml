@@ -9,7 +9,6 @@ exclude_docs: |
   DEPLOYMENT.md
   /agents/
   /adr/
-  /research/
 
 theme:
   name: material
