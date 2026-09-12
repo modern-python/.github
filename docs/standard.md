@@ -200,7 +200,10 @@ purpose-first, about 120 characters at most, no trailing period.
   docs site, or `modern-python.org`.
 - **`keywords`** mirror the topics.
 - **`classifiers`**: `Development Status`, `Intended Audience :: Developers`, one
-  `Programming Language :: Python :: 3.X` per tested minor, `Typing :: Typed`, a `Topic` where apt.
+  `Programming Language :: Python :: 3.X` per tested minor,
+  `Programming Language :: Python :: Free Threading :: 2 - Beta` when the matrix's free-threaded
+  entry is green (section 6; a repo exempt from that entry omits it), `Typing :: Typed`, a `Topic`
+  where apt.
   **No `License ::` classifier**: the SPDX `license = "MIT"` key is the declaration, and PEP 639
   deprecates pairing it with a classifier.
 - **`[project.urls]`** uses the PyPI labels `Homepage`, `Documentation` (only if a docs site
