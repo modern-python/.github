@@ -212,6 +212,8 @@ purpose-first, about 120 characters at most, no trailing period.
 | Repo | Exempt from | Why |
 |---|---|---|
 | `that-depends` | the core as a whole | The org's most-used package and the only repo with steady external contributor traffic; it keeps its own tooling rather than converging. It does adopt the 100 % coverage gate. |
+| `modern-di-arq` | section 6, the `3.14t` matrix entry | Every `arq` release requires `redis[hiredis]<6`, and importing `hiredis` re-enables the GIL ([hiredis-py#229](https://github.com/redis/hiredis-py/issues/229)). Lift when a `hiredis` release declares free-threading support. |
+| `modern-di-grpc` | section 6, the `3.14t` matrix entry | `grpcio` ships no free-threaded wheel and importing `cygrpc` re-enables the GIL ([grpc/grpc#38762](https://github.com/grpc/grpc/issues/38762)). Lift when a `grpcio` release declares free-threading support. |
 
 An exemption is granted by a pull request to this repo that adds the row. Drift that nobody
 recorded is not an exemption.
