@@ -215,19 +215,6 @@ recorded is not an exemption.
 
 ## Changing the standard
 
-A change to the core lands as one pull request to `modern-python/.github` that updates this page,
-the census, and the exemptions table together. Repos then converge; the weekly census run tracks
-which have not. The standard carries no version number: the page on `main` is the standard.
-
-## Enforcement
-
-The **census** is a test suite in `modern-python/.github` that reads every org repo through the
-GitHub API and asserts the core, honouring the exemptions table. Its rules live in the `census`
-package there, one function per core item; `just census` runs it locally, and `just census-report`
-prints the findings as Markdown.
-
-It runs on every pull request there that touches the standard, the census, or the org profile,
-where its findings are informational (the job summary shows them; only a broken census fails the
-check), and every Monday, where a failure opens one issue labelled `census` in
-`modern-python/.github` whose body is the current report, refreshed on each later failure and
-closed by hand once a run is clean. A repo that meets the core appears nowhere in it.
+A change to the core lands as one pull request to `modern-python/.github` that updates this page
+and the exemptions table together. Repos then converge. The standard carries no version number:
+the page on `main` is the standard.

@@ -73,7 +73,3 @@ _Avoid_: baseline, required set
 A recorded, reasoned deviation of one repo from one part of the core.
 _Avoid_: exception, override — both already mean something in the DI repos; deviation, drift — a
 deviation nobody recorded is drift, not an exemption.
-
-**Census**:
-A test in this repo that reads every org repo and asserts the core, honouring exemptions.
-_Avoid_: audit, drift check
