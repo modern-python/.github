@@ -9,40 +9,14 @@ before naming a mark, a colourway, or a surface.
   (not "LiteStar"), `FastStream`, `FastAPI`, `Typer`, `SQLAlchemy`, `PostgreSQL`.
 - Per-project docs sites live at `<name>.modern-python.org` (only some repos have one).
 
-## Repository metadata (three surfaces kept consistent)
+## Repository metadata
 
-Every repo's summary appears in up to three places — keep them saying the same thing:
-the **GitHub description**, the pyproject **`description`**, and the repo's blurb in
-`profile/README.md`. Write one canonical one-liner per repo: purpose-first,
-≤ ~120 chars, **no trailing period** (GitHub convention).
+A repo's description, topics, keywords, classifiers and `[project.urls]` follow
+[section 11 of the standard](https://modern-python.org/standard/#11-metadata).
 
-### GitHub topics
-- Lowercase letters/numbers/hyphens only, ≤50 chars each, ≤12 per repo.
-- Draw from the shared org vocabulary so `/topics/*` pages cluster: `python`,
-  `dependency-injection`, `di`, `ioc-container`, `modern-di`, `fastapi`, `litestar`,
-  `faststream`, `sqlalchemy`, `postgresql`, `asyncio`, `docker`, `cli`, `messaging`.
-- `modern-di-*` integrations share a base set
-  (`python, dependency-injection, di, ioc-container, modern-di`) plus their framework.
-- Also set the repo **website field** to its docs site, or `modern-python.org` if none.
-
-### pyproject `[project]`
-- **`keywords`** mirror the GitHub topics (lowercase/hyphenated). Never use
-  `"dependency injector"` — that is another package's name (`dependency-injector`).
-- **`classifiers`**: include `Development Status :: <level>`,
-  `Intended Audience :: Developers`, the relevant `Programming Language :: Python ::`
-  versions, `Typing :: Typed`, and a `Topic ::` where apt. Validate every string
-  against <https://pypi.org/classifiers/> before committing.
-- **Do NOT add a `License :: OSI Approved :: ...` classifier.** All repos are MIT and
-  declare the SPDX `license = "MIT"` key; PEP 639 deprecates pairing that with a
-  License classifier, and `uv_build` warns on it.
-- **`[project.urls]`** uses PyPI well-known labels (capitalized):
-  `Homepage`, `Documentation` (only if a docs site exists), `Repository`,
-  `Issues` (`…/issues`), `Changelog` (`…/releases`).
-
-The PyPI distribution name equals the repo name, for every package. The org
-profile's `coverage 100%` badge is static and deliberately unlinked — the claim holds
-because every repo's CI enforces a 100%-coverage guard, and there is no org-level
-coverage URL to point at.
+The org profile's `coverage 100%` badge is static and deliberately unlinked: there is no
+org-level coverage URL to point at, and the gate in section 5 of the standard is what
+makes the claim true.
 
 A repo may be listed on the org profile **before** its package reaches PyPI. Its
 Downloads badge 404s until pepy indexes it; the Stars badge and repo link resolve
@@ -55,12 +29,6 @@ A repo's brand assets are generated here, in `brand/projects/<repo>/`.
 A docs site's `docs/index.md` replaces its `# <Title>` heading with a `.mp-hero` block
 holding both lockup variants. Add no `title:` front matter there: Material titles the
 home page from `site_name`, so `title:` renders as `<repo> - <repo>`.
-
-## Tooling
-
-Projects use **uv** (packaging), **ruff** (lint/format), **ty** (type check), and
-the build backend is **uv_build**. `that-depends` additionally runs `mypy` and
-`pyrefly` in its `lint-ci` recipe. Lint/test live behind a `justfile` in most repos.
 
 ## CI gotcha
 
