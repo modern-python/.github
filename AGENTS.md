@@ -69,13 +69,6 @@ PR can show an old lint/test failure that no longer matches the branch. Confirm 
 running the failing check locally at the branch HEAD (with the pinned tool version);
 if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
 
-## Workflow
-
-Real work **not scheduled** becomes a GitHub issue.
-
-An invariant is a test whose name is the claim, with a docstring opening `INVARIANT:` and a second
-paragraph naming **what breaks it** — design rationale, not a report of what this one test catches.
-
 ## Agent skills
 
 - **Issues and specs** — GitHub Issues on `modern-python/.github`, via `gh`:
