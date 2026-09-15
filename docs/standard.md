@@ -152,7 +152,7 @@ input, all optional:
 |---|---|
 | `docs` | Run the `docs` job. Only for a repo with a docs site. |
 | `free-threaded` | Test the free-threaded build. `false` only for a repo with a section 6 exemption. |
-| `service-image`, `service-port`, `service-health-cmd` | The one service container the tests need: its image, `host:container` port mapping, and the readiness command Docker polls. No image, no service. |
+| `service-image`, `service-port`, `service-options` | The one service container the tests need: its image, `host:container` port mapping, and its `docker create` options, which is where the health command and any `-e` the image needs go. No image, no service. |
 | `test-env` | `KEY=VALUE` lines exported before `just test-ci`, e.g. the DSN pointing at the service. |
 | `free-threaded-env` | The same, applied on the free-threaded entry only, e.g. a switch that keeps a dependency's C extension from re-enabling the GIL. |
 

@@ -18,8 +18,8 @@ on:
         description: The service's `host:container` port mapping, e.g. `5432:5432`.
         type: string
         default: ""
-      service-health-cmd:
-        description: Command Docker polls until the service is ready, e.g. `pg_isready`.
+      service-options:
+        description: "`docker create` options for the service: its health command and any `-e` it needs, e.g. `--health-cmd pg_isready -e POSTGRES_PASSWORD=password`."
         type: string
         default: ""
       test-env:
@@ -76,13 +76,10 @@ jobs:
     services:
       service:
         image: ${{ inputs.service-image }}
-        env:
-          # postgres refuses to start without a password; other images ignore the variable.
-          POSTGRES_PASSWORD: password
         ports:
           - ${{ inputs.service-port }}
         options: >-
-          --health-cmd "${{ inputs.service-health-cmd }}"
+          ${{ inputs.service-options }}
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
