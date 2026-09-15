@@ -108,9 +108,8 @@ minor and that minor's free-threaded build** (`3.14` and `3.14t` today). The mat
 from the repo's floor to the newest, plus the free-threaded newest. The `Programming Language ::
 Python :: 3.X` classifiers list every minor in the matrix.
 
-In the shared checks workflow (section 7) the matrix is derived at run time from `requires-python`
-and the newest released cycle, so no repo edits a matrix when a Python ships; a repo still on its
-own `_checks.yml` maintains the list by hand.
+The matrix is a hand-maintained list in each repo's `_checks.yml` (section 7), so a new Python is
+a one-line change in every repo, made in one sweep.
 
 ## 7. CI
 
@@ -121,7 +120,7 @@ Two workflows per repo, both thin:
   failure, opening or updating a tracking issue in the repo. This is how a dependency release or a
   new Python that breaks the build becomes a ticket without anyone watching.
 
-Both call one reusable `checks.yml` with these jobs:
+Both call the repo's own reusable `_checks.yml`, which has these jobs:
 
 | Job | What it does |
 |---|---|
@@ -130,9 +129,12 @@ Both call one reusable `checks.yml` with these jobs:
 | `links` | [lychee](https://github.com/lycheeverse/lychee-action) with `--offline`, remapping this repo's `blob/main` URLs to the checkout, so it fails only on a relative link or file path the diff broke |
 | `docs` | `just docs-build` (`mkdocs build --strict`), only for repos with a docs site |
 
-The shared `checks.yml` will live in `modern-python/.github` and be referenced at `main`, so a
-change to it reaches every repo on merge; such a change is first exercised from a branch ref in
-one repo. Until it exists, each repo carries the same jobs in a local `_checks.yml`.
+`_checks.yml` is per repo by decision, not by omission. A shared workflow in `modern-python/.github`
+was built and proven
+([#95](https://github.com/modern-python/.github/issues/95)), and rejected on its interface: a
+`workflow_call` input is a scalar, so a service container or an env map has to be flattened into
+a string, and image knowledge ends up in the org repo. A change to the jobs is a sweep across the
+repos instead, which is how the rest of this standard already lands.
 
 ## 8. Release
 
@@ -153,8 +155,9 @@ git tag -m "<repo> 3.4.0" 3.4.0 && git push origin 3.4.0
 - The Release body is GitHub's generated notes from squashed PR titles, so a conventional-commit
   PR title is the changelog entry. Prose goes in afterwards with `gh release edit`.
 
-`release.yml` stays a per-repo file: PyPI does not accept a reusable workflow as a Trusted
-Publisher. It is identical across repos apart from the comment naming the PyPI project.
+`release.yml` could not be shared even if the checks were: PyPI does not accept a reusable
+workflow as a Trusted Publisher. It is identical across repos apart from the comment naming the
+PyPI project.
 
 ## 9. Repository files
 
