@@ -198,12 +198,13 @@ purpose-first, about 120 characters at most, no trailing period.
   `dependency-injection`, `di`, `ioc-container`, `modern-di`, `fastapi`, `litestar`, `faststream`,
   `sqlalchemy`, `postgresql`, `asyncio`, `docker`, `cli`, `messaging`). The website field is the
   docs site, or `modern-python.org`.
-- **`keywords`** mirror the topics.
+- **`keywords`** mirror the topics. Never `dependency injector`: that is another package's name
+  (`dependency-injector`).
 - **`classifiers`**: `Development Status`, `Intended Audience :: Developers`, one
   `Programming Language :: Python :: 3.X` per tested minor,
   `Programming Language :: Python :: Free Threading :: 2 - Beta` when the matrix's free-threaded
   entry is green (section 6; a repo exempt from that entry omits it), `Typing :: Typed`, a `Topic`
-  where apt.
+  where apt. Validate each string against <https://pypi.org/classifiers/>.
   **No `License ::` classifier**: the SPDX `license = "MIT"` key is the declaration, and PEP 639
   deprecates pairing it with a classifier.
 - **`[project.urls]`** uses the PyPI labels `Homepage`, `Documentation` (only if a docs site
