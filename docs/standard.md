@@ -130,9 +130,31 @@ Both call one reusable `checks.yml` with these jobs:
 | `links` | [lychee](https://github.com/lycheeverse/lychee-action) with `--offline`, remapping this repo's `blob/main` URLs to the checkout, so it fails only on a relative link or file path the diff broke |
 | `docs` | `just docs-build` (`mkdocs build --strict`), only for repos with a docs site |
 
-The shared `checks.yml` will live in `modern-python/.github` and be referenced at `main`, so a
-change to it reaches every repo on merge; such a change is first exercised from a branch ref in
-one repo. Until it exists, each repo carries the same jobs in a local `_checks.yml`.
+The shared `checks.yml` lives in
+[`modern-python/.github`](https://github.com/modern-python/.github/blob/main/.github/workflows/checks.yml)
+and is referenced at `main`, so a change to it reaches every repo on merge; such a change is first
+exercised from a branch ref in one repo. A repo not yet calling it carries the same jobs in a local
+`_checks.yml`. A caller is one job:
+
+```yaml
+jobs:
+  checks:
+    uses: modern-python/.github/.github/workflows/checks.yml@main
+    secrets: inherit
+```
+
+The matrix is derived at run time (section 6): the floor is the `>=` bound of `requires-python`,
+the ceiling is the newest cycle [endoflife.date](https://endoflife.date/api/python.json) lists as
+released, and the free-threaded entry is the ceiling's `t` build. Everything a repo may vary is an
+input, all optional:
+
+| Input | Meaning |
+|---|---|
+| `docs` | Run the `docs` job. Only for a repo with a docs site. |
+| `free-threaded` | Test the free-threaded build. `false` only for a repo with a section 6 exemption. |
+| `service-image`, `service-port`, `service-health-cmd` | The one service container the tests need: its image, `host:container` port mapping, and the readiness command Docker polls. No image, no service. |
+| `test-env` | `KEY=VALUE` lines exported before `just test-ci`, e.g. the DSN pointing at the service. |
+| `free-threaded-env` | The same, applied on the free-threaded entry only, e.g. a switch that keeps a dependency's C extension from re-enabling the GIL. |
 
 ## 8. Release
 

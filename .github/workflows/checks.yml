@@ -1,0 +1,137 @@
+name: checks
+on:
+  workflow_call:
+    inputs:
+      docs:
+        description: Run `just docs-build`. Only for a repo with a docs site.
+        type: boolean
+        default: false
+      free-threaded:
+        description: Test the newest cycle's free-threaded build. Off only for a repo with a section 6 exemption.
+        type: boolean
+        default: true
+      service-image:
+        description: Image of the one service container the tests need, e.g. `postgres:17`. Empty means none.
+        type: string
+        default: ""
+      service-port:
+        description: The service's `host:container` port mapping, e.g. `5432:5432`.
+        type: string
+        default: ""
+      service-health-cmd:
+        description: Command Docker polls until the service is ready, e.g. `pg_isready`.
+        type: string
+        default: ""
+      test-env:
+        description: "`KEY=VALUE` lines exported before `just test-ci`."
+        type: string
+        default: ""
+      free-threaded-env:
+        description: "`KEY=VALUE` lines exported before `just test-ci` on the free-threaded entry only."
+        type: string
+        default: ""
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      floor: ${{ steps.derive.outputs.floor }}
+      versions: ${{ steps.derive.outputs.versions }}
+      package: ${{ steps.derive.outputs.package }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+        with:
+          repository: ${{ job.workflow_repository }}
+          ref: ${{ job.workflow_sha }}
+          path: .modern-python
+      - run: curl --fail --silent --show-error --retry 3 --output cycles.json https://endoflife.date/api/python.json
+      - id: derive
+        shell: bash
+        run: python3 .modern-python/scripts/python_matrix.py --pyproject pyproject.toml --cycles cycles.json --free-threaded "$FREE_THREADED" | tee -a "$GITHUB_OUTPUT"
+        env:
+          FREE_THREADED: ${{ inputs.free-threaded }}
+
+  lint:
+    needs: matrix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: extractions/setup-just@v4
+      - uses: astral-sh/setup-uv@v8.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "**/pyproject.toml"
+      - run: uv python install ${{ needs.matrix.outputs.floor }}
+      - run: uv python pin ${{ needs.matrix.outputs.floor }}
+      - run: just install lint-ci
+
+  pytest:
+    needs: matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ${{ fromJSON(needs.matrix.outputs.versions) }}
+    services:
+      service:
+        image: ${{ inputs.service-image }}
+        env:
+          # postgres refuses to start without a password; other images ignore the variable.
+          POSTGRES_PASSWORD: password
+        ports:
+          - ${{ inputs.service-port }}
+        options: >-
+          --health-cmd "${{ inputs.service-health-cmd }}"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: extractions/setup-just@v4
+      - uses: astral-sh/setup-uv@v8.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: "**/pyproject.toml"
+      - run: uv python install ${{ matrix.python-version }}
+      - run: uv python pin ${{ matrix.python-version }}
+      - run: just install
+      - if: inputs.test-env != ''
+        run: printf '%s\n' "$TEST_ENV" >> "$GITHUB_ENV"
+        env:
+          TEST_ENV: ${{ inputs.test-env }}
+      - if: inputs.free-threaded-env != '' && endsWith(matrix.python-version, 't')
+        run: printf '%s\n' "$FREE_THREADED_ENV" >> "$GITHUB_ENV"
+        env:
+          FREE_THREADED_ENV: ${{ inputs.free-threaded-env }}
+      - name: Confirm the interpreter is free-threaded
+        if: endsWith(matrix.python-version, 't')
+        run: uv run --no-sync python -c "import sys, ${{ needs.matrix.outputs.package }}; assert not sys._is_gil_enabled(), 'GIL is enabled on a t-build'"
+      - run: just test-ci
+
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      # --offline blocks network requests and excludes every external URL, so this gate
+      # is deterministic: it fails only on a relative link or file path a diff broke.
+      # Tag-pinned and cross-repo URLs do not match the --remap pattern and stay
+      # excluded: they point at trees this checkout does not have.
+      - name: Check local links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --offline
+            --no-progress
+            --remap
+            'https://github\.com/${{ github.repository }}/(?:blob|tree)/main/(.*) file://${{ github.workspace }}/$1'
+            '**/*.md'
+
+  docs:
+    if: inputs.docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: extractions/setup-just@v4
+      - uses: astral-sh/setup-uv@v8.2.0
+      - run: just docs-build
