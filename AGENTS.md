@@ -39,8 +39,14 @@ if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
 
 ## Agent skills
 
-- **Issues and specs** — GitHub Issues on `modern-python/.github`, via `gh`:
-  [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md)
-- **Triage labels** — the five canonical roles: [`docs/agents/triage-labels.md`](docs/agents/triage-labels.md)
-- **Domain docs** — single-context, `CONTEXT.md` + `docs/adr/`:
-  [`docs/agents/domain.md`](docs/agents/domain.md)
+### Issue tracker
+
+GitHub issues on `modern-python/.github`, via `gh`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical roles, each label string equal to its name. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
