@@ -100,8 +100,9 @@ environment, generated code).
 
 ## 6. Python versions
 
-There is no floor policy. A repo sets `requires-python` to what its code needs and may raise it
-without a recorded reason.
+There is no floor policy for Python itself. A repo sets `requires-python` to what its code needs
+and may raise it without a recorded reason. A dependency floor is a separate obligation, carried by
+section 7.
 
 The obligation is at the other end: **the test matrix always includes the newest stable CPython
 minor and that minor's free-threaded build** (`3.14` and `3.14t` today). The matrix is every minor
@@ -126,8 +127,32 @@ Both call the repo's own reusable `_checks.yml`, which has these jobs:
 |---|---|
 | `lint` | `just install lint-ci` on the repo's floor Python |
 | `pytest` | `just install` then `just test-ci` on every matrix entry, `fail-fast: false` |
+| `floors` | every direct dependency resolved at its declared floor, wheel-only, on every matrix entry, then the suite or an import |
 | `links` | [lychee](https://github.com/lycheeverse/lychee-action) with `--offline`, remapping this repo's `blob/main` URLs to the checkout, so it fails only on a relative link or file path the diff broke |
 | `docs` | `just docs-build` (`mkdocs build --strict`), only for repos with a docs site |
+
+A declared dependency floor is a claim that the package installs and works against that version,
+and `floors` is the only job that tests it: `pytest` resolves every dependency at its newest, so
+the bottom of each declared range otherwise ships unexercised. It rots there. `compose2pod` shipped
+a PyYAML floor that could not install on 3.14
+([compose2pod#126](https://github.com/modern-python/compose2pod/issues/126)), and
+`faststream-outbox` shipped a `pydantic>=2` floor that no `cp313` wheel satisfies below pydantic
+2.8.1 ([faststream-outbox#190](https://github.com/modern-python/faststream-outbox/pull/190)).
+
+Two properties of the job are not optional. **Wheel-only** (`--no-build`, or `--only-binary` naming
+the dependency that needs it): a floor reachable only by compiling an sdist is not a floor a user
+installing a wheel can reach, and without the flag the resolver builds one and reports success.
+**Every matrix entry**: wheel coverage is per interpreter, so two interpreters that resolve the
+same versions can still disagree on whether those versions install, which is what a marked floor
+(`python_version == '3.13'`) exists to say.
+
+The rest is the repo's call. Run the full suite at the floors where they can carry it and an import
+smoke test where they cannot; drop a matrix entry no upstream wheel covers, as `compose2pod` drops
+`3.14t` for PyYAML. Like every other job, `floors` runs from both `ci.yml` and `scheduled.yml`.
+Resolving direct dependencies low and transitive ones high does expose it to an upstream release
+that no pull request caused, but that is not a difference in kind: `install` upgrades the lockfile
+(section 2), so `pytest` resolves fresh on every run too, and the org already accepts that exposure
+on a pull request.
 
 `_checks.yml` is per repo by decision, not by omission. A shared workflow in `modern-python/.github`
 was built and proven
