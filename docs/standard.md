@@ -146,6 +146,18 @@ installing a wheel can reach, and without the flag the resolver builds one and r
 same versions can still disagree on whether those versions install, which is what a marked floor
 (`python_version == '3.13'`) exists to say.
 
+Three rules follow from what that job can and cannot see. **Wheel-only proves the declared range,
+not the declared floor**: a version with no wheel is ineligible, so the resolver returns the lowest
+one that has a wheel, which may sit above the floor. Declare a marked floor for each interpreter
+whose wheel coverage differs, so the version resolved is the version declared
+([compose2pod#135](https://github.com/modern-python/compose2pod/pull/135)). **Nothing in
+`[dependency-groups]` may bound a dependency the package publishes**: uv resolves every group
+together, so a bound there moves the floor under test, in either direction
+([modern-di-faststream#63](https://github.com/modern-python/modern-di-faststream/pull/63)). **A
+src-layout repo sets `PYTHONPATH` to its source root** on the step that runs the suite, because
+`--no-install-project` leaves no installed copy and `pythonpath` does not reach a subprocess
+([httpware#134](https://github.com/modern-python/httpware/pull/134)).
+
 The rest is the repo's call. Run the full suite at the floors where they can carry it and an import
 smoke test where they cannot; drop a matrix entry no upstream wheel covers, as `compose2pod` drops
 `3.14t` for PyYAML. Like every other job, `floors` runs from both `ci.yml` and `scheduled.yml`.
@@ -246,6 +258,7 @@ purpose-first, about 120 characters at most, no trailing period.
 | `that-depends` | the core as a whole | The org's most-used package and the only repo with steady external contributor traffic; it keeps its own tooling rather than converging. It does adopt the 100 % coverage gate. |
 | `modern-di-arq` | section 6, the `3.14t` matrix entry | Every `arq` release requires `redis[hiredis]<6`, and importing `hiredis` re-enables the GIL ([hiredis-py#229](https://github.com/redis/hiredis-py/issues/229)). Lift when a `hiredis` release declares free-threading support. |
 | `modern-di-grpc` | section 6, the `3.14t` matrix entry | `grpcio` ships no free-threaded wheel and importing `cygrpc` re-enables the GIL ([grpc/grpc#38762](https://github.com/grpc/grpc/issues/38762)). Lift when a `grpcio` release declares free-threading support. |
+| `faststream-concurrent-aiokafka` | section 7, the `3.14t` matrix entry | No `aiokafka` release ships a `cp314t` wheel, so the entry cannot resolve wheel-only ([faststream-concurrent-aiokafka#85](https://github.com/modern-python/faststream-concurrent-aiokafka/pull/85)). Lift when one does. |
 
 An exemption is granted by a pull request to this repo that adds the row. Drift that nobody
 recorded is not an exemption.
