@@ -168,8 +168,9 @@ superseded runs.
 
 ### CI2 · `scheduled.yml` { #CI2 }
 
-`scheduled.yml` MUST run weekly and on `workflow_dispatch`, running the same checks as `ci.yml`. On
-a scheduled failure it MUST open or update a tracking issue in the repo.
+`scheduled.yml` MUST run daily and on `workflow_dispatch`, running the same checks as `ci.yml`
+except `floors` ([CI6](#CI6)). On a scheduled failure it MUST open or update a tracking issue in the
+repo.
 
 *Why:* a dependency release or a new Python that breaks the build becomes a ticket without anyone
 watching.
@@ -197,7 +198,9 @@ The `pytest` job MUST run `just install` then `just test-ci` on every matrix ent
 
 The `floors` job MUST resolve every direct dependency at its declared floor, wheel-only
 (`--no-build`, or `--only-binary` naming the dependency that needs it), on every matrix entry, then
-run the suite or an import.
+run the suite or an import. It MUST gate every pull request and MUST be skipped on the schedule,
+with `if: github.event_name != 'schedule'` on the job (a called workflow sees its caller's `github`
+context).
 
 A repo MAY run an import smoke test instead of the suite where the floors cannot carry it, and MAY
 drop a matrix entry that no upstream wheel covers at the floor (`compose2pod` drops `3.14t` for
@@ -209,7 +212,14 @@ declared range ships untested. It has rotted there before
 [faststream-outbox#190](https://github.com/modern-python/faststream-outbox/pull/190)).
 Wheel-only, because a floor reachable only by compiling an sdist is not one a user installing a
 wheel can reach, and without the flag the resolver builds one and reports success. Every matrix
-entry, because wheel coverage is per interpreter.
+entry, because wheel coverage is per interpreter. On the pull request, because that is where a floor
+breaks: a diff starts using an API newer than the declared floor. `lite-bootstrap` ran its floors
+only on the schedule and shipped such a break to PyPI
+([lite-bootstrap#245](https://github.com/modern-python/lite-bootstrap/issues/245)). A scheduled
+run adds nothing: the direct dependencies sit at their floors, which do not change, and the
+scheduled `pytest` already catches the newest releases, which are what users install. Resolving
+transitive dependencies at their newest exposes a pull request to an upstream release it did not
+cause, but `install` upgrades the lockfile ([JF1](#JF1)), so `pytest` carries the same exposure.
 
 ### CI7 · `links` job { #CI7 }
 
