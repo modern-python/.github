@@ -12,11 +12,11 @@ before naming a mark, a colourway, or a surface.
 ## Repository metadata
 
 A repo's description, topics, keywords, classifiers and `[project.urls]` follow
-[section 11 of the standard](https://modern-python.org/standard/#11-metadata).
+[the standard's metadata requirements](https://modern-python.org/standard/#metadata) (MD1 to MD6).
 
 The org profile's `coverage 100%` badge is static and deliberately unlinked: there is no
-org-level coverage URL to point at, and the gate in section 5 of the standard is what
-makes the claim true.
+org-level coverage URL to point at, and the gate in
+[TS2](https://modern-python.org/standard/#TS2) is what makes the claim true.
 
 A repo may be listed on the org profile **before** its package reaches PyPI. Its
 Downloads badge 404s until pepy indexes it; the Stars badge and repo link resolve
