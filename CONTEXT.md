@@ -64,12 +64,17 @@ The written, normative description of what makes a repo a modern-python repo, ow
 and published on the org site. A repo either meets it, or carries an exemption.
 _Avoid_: guidelines, conventions, rules — each reads as advisory, and the standard is not.
 
+**Requirement**:
+One numbered statement of the standard, cited by its stable ID (`CI6`). A MUST or MUST NOT
+requirement is core; a SHOULD is a recommendation; a MAY is a permission.
+_Avoid_: rule, check — a check is what verifies a requirement, not the requirement.
+
 **Core**:
-The subset of the standard a repo must meet. Everything the standard describes outside the core is
-free.
+The standard's MUST and MUST NOT requirements, which a repo must meet. Everything outside the core
+is a recommendation or a permission.
 _Avoid_: baseline, required set
 
 **Exemption**:
-A recorded, reasoned deviation of one repo from one part of the core.
+A recorded, reasoned deviation of one repo from one or more core requirements.
 _Avoid_: exception, override — both already mean something in the DI repos; deviation, drift — a
 deviation nobody recorded is drift, not an exemption.
