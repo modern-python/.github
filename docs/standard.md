@@ -117,9 +117,10 @@ a one-line change in every repo, made in one sweep.
 Two workflows per repo, both thin:
 
 - `ci.yml` on `push` to `main` and on `pull_request`, with `concurrency` cancelling superseded runs.
-- `scheduled.yml` weekly and on `workflow_dispatch`, running the same checks and, on a scheduled
-  failure, opening or updating a tracking issue in the repo. This is how a dependency release or a
-  new Python that breaks the build becomes a ticket without anyone watching.
+- `scheduled.yml` daily and on `workflow_dispatch`, running the same checks except `floors` and,
+  on a scheduled failure, opening or updating a tracking issue in the repo. This is how a
+  dependency release or a new Python that breaks the build becomes a ticket without anyone
+  watching.
 
 Both call the repo's own reusable `_checks.yml`, which has these jobs:
 
@@ -148,11 +149,20 @@ same versions can still disagree on whether those versions install, which is wha
 
 The rest is the repo's call. Run the full suite at the floors where they can carry it and an import
 smoke test where they cannot; drop a matrix entry no upstream wheel covers, as `compose2pod` drops
-`3.14t` for PyYAML. Like every other job, `floors` runs from both `ci.yml` and `scheduled.yml`.
-Resolving direct dependencies low and transitive ones high does expose it to an upstream release
-that no pull request caused, but that is not a difference in kind: `install` upgrades the lockfile
-(section 2), so `pytest` resolves fresh on every run too, and the org already accepts that exposure
-on a pull request.
+`3.14t` for PyYAML.
+
+`floors` gates every pull request and is skipped on the schedule, with
+`if: github.event_name != 'schedule'` on the job (a called workflow sees its caller's `github`
+context). The gate belongs on the pull request because that is where a floor breaks: a diff starts
+using an API newer than the declared floor. `lite-bootstrap` ran its floors only on the schedule
+and shipped such a break to PyPI
+([lite-bootstrap#245](https://github.com/modern-python/lite-bootstrap/issues/245)). A scheduled run
+adds nothing a pull request did not already check. The direct dependencies sit at their floors,
+which do not change, so all a cron run could newly catch is a transitive release breaking an old
+floor, while the scheduled `pytest` already catches the newest releases, which are what users
+install. Resolving transitive dependencies at their newest does expose a pull request to an
+upstream release it did not cause, but `install` upgrades the lockfile (section 2), so `pytest`
+carries the same exposure and the org already accepts it.
 
 `_checks.yml` is per repo by decision, not by omission. A shared workflow in `modern-python/.github`
 was built and proven
