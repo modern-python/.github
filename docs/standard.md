@@ -138,7 +138,18 @@ A repo MAY measure branch coverage. Branch coverage MUST NOT be the gate.
 ### TS5 · Exclusions { #TS5 }
 
 `[tool.coverage.report] exclude_also` MUST be `["if typing.TYPE_CHECKING:"]`. A repo MUST NOT
-exclude a file to reach the number; it deletes or tests the code instead.
+exclude a file of the package to reach the number; it deletes or tests the code instead.
+`[tool.coverage.run] omit` MAY list directories that are not the package (benchmarks with their own
+environment, generated code), the same carve-out [TY2](#TY2) grants.
+
+### TS6 · `pragma: no cover` { #TS6 }
+
+A repo MAY exclude a line or block with `# pragma: no cover`. Each pragma SHOULD carry its reason on
+the same line (`# pragma: no cover - never invoked; the test only exercises start()`); this becomes
+MUST on 2026-11-01.
+
+*Why:* a pragma is an exclusion no configuration lists, so the line itself is the only place a
+reviewer can see why the code is not tested.
 
 ## Python versions
 
@@ -324,8 +335,8 @@ a relative one 404s on the package page.
 
 ### RM2 · Opening { #RM2 }
 
-`README.md` MUST open with the repo's one-liner ([MD1](#MD1)), then what the package does, then a
-minimal example.
+`README.md` MUST open with a sentence that states the repo's one-liner ([MD1](#MD1)), then what
+the package does, then a minimal example. The sentence MAY reword the one-liner and add links.
 
 ## Metadata
 
@@ -336,10 +347,14 @@ the same one-liner: purpose-first, about 120 characters at most, no trailing per
 
 ### MD2 · GitHub topics and website { #MD2 }
 
-GitHub topics MUST be lowercase and hyphenated, at most 12, drawn from the shared vocabulary:
-`python`, `dependency-injection`, `di`, `ioc-container`, `modern-di`, `fastapi`, `litestar`,
-`faststream`, `sqlalchemy`, `postgresql`, `asyncio`, `docker`, `cli`, `messaging`. The website
-field MUST be the docs site, or `modern-python.org`.
+GitHub topics MUST be lowercase and hyphenated, at most 12. A topic for a concept in the shared
+vocabulary MUST use its spelling there: `python`, `dependency-injection`, `di`, `ioc-container`,
+`modern-di`, `fastapi`, `litestar`, `faststream`, `sqlalchemy`, `postgresql`, `asyncio`, `docker`,
+`cli`, `messaging`. Other topics, such as the framework a repo integrates with, are the repo's
+call. The website field MUST be the docs site, or `modern-python.org`.
+
+*Why:* the vocabulary keeps the org's shared concepts findable under one spelling; it cannot list
+every framework and protocol a repo touches.
 
 ### MD3 · Keywords { #MD3 }
 
@@ -375,6 +390,7 @@ The PyPI distribution name MUST equal the repo name.
 | `that-depends` | the core as a whole, except [TS2](#TS2) | The org's most-used package and the only repo with steady external contributor traffic; it keeps its own tooling rather than converging. |
 | `modern-di-arq` | [PV1](#PV1), the `3.14t` entry | Every `arq` release requires `redis[hiredis]<6`, and importing `hiredis` re-enables the GIL ([hiredis-py#229](https://github.com/redis/hiredis-py/issues/229)). Lift when a `hiredis` release declares free-threading support. |
 | `modern-di-grpc` | [PV1](#PV1), the `3.14t` entry | `grpcio` ships no free-threaded wheel and importing `cygrpc` re-enables the GIL ([grpc/grpc#38762](https://github.com/grpc/grpc/issues/38762)). Lift when a `grpcio` release declares free-threading support. |
+| `semvertag` | [RL5](#RL5) | It is also a GitHub Action (`uses: modern-python/semvertag@v0`), so its `release.yml` moves the floating major tag after each stable release. Permanent while the Action is published. |
 
 An exemption is granted by a pull request to this repo that adds the row. Drift that nobody
 recorded is not an exemption.
