@@ -118,8 +118,9 @@ Two workflows per repo, both thin:
 
 - `ci.yml` on `push` to `main` and on `pull_request`, with `concurrency` cancelling superseded runs.
 - `scheduled.yml` daily and on `workflow_dispatch`, running the same checks except `floors` and,
-  on a scheduled failure, opening or updating a tracking issue in the repo. This is how a dependency release or a
-  new Python that breaks the build becomes a ticket without anyone watching.
+  on a scheduled failure, opening or updating a tracking issue in the repo. This is how a
+  dependency release or a new Python that breaks the build becomes a ticket without anyone
+  watching.
 
 Both call the repo's own reusable `_checks.yml`, which has these jobs:
 
