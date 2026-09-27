@@ -1,0 +1,56 @@
+name: Conformance
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          python-version: "3.11"
+      - name: Check the core repos against the standard
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run python -m conformance --workdir "$RUNNER_TEMP/repos" --out conformance-report
+      - name: Publish the summary
+        run: cat conformance-report/summary.md >> "$GITHUB_STEP_SUMMARY"
+      # One issue per failing repo, in this repo: the workflow token cannot write issues elsewhere.
+      - name: Open, update or close the tracking issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          LABEL="conformance"
+          gh label create "$LABEL" --color "5319E7" --description "A core repo fails the standard" --force
+          while read -r repo; do
+            title="Conformance: $repo"
+            existing=$(gh issue list --label "$LABEL" --state open --json number,title \
+              --jq ".[] | select(.title == \"$title\") | .number")
+            if [ -z "$existing" ]; then
+              gh issue create --title "$title" --label "$LABEL" --body "$(printf '%s\n\n%s\n\n%s' \
+                "\`$repo\` fails the [standard](https://modern-python.org/standard/). This issue closes itself once a weekly run finds it passing." \
+                "First failing run: ${RUN_URL}" \
+                "$(cat "conformance-report/$repo.md")")"
+            else
+              gh issue comment "$existing" --body "$(printf '%s\n\n%s' "Still failing: ${RUN_URL}" \
+                "$(cat "conformance-report/$repo.md")")"
+            fi
+          done < conformance-report/failing.txt
+          gh issue list --label "$LABEL" --state open --json number,title --jq '.[] | "\(.number) \(.title)"' |
+            while read -r number title; do
+              repo="${title#Conformance: }"
+              if ! grep -qx "$repo" conformance-report/failing.txt; then
+                gh issue close "$number" --comment "Passing as of ${RUN_URL}"
+              fi
+            done

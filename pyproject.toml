@@ -18,6 +18,8 @@ dev = [
     "fonttools>=4.63.0",
     "pillow>=11.0.0",
     "pytest>=9.1.1",
+    "pyyaml>=6.0.3",
+    "trove-classifiers>=2026.9.21.13",
 ]
 
 [tool.pytest.ini_options]

@@ -22,6 +22,14 @@ A repo may be listed on the org profile **before** its package reaches PyPI. Its
 Downloads badge 404s until pepy indexes it; the Stars badge and repo link resolve
 meanwhile. That lag is self-healing — note it, never block the listing on it.
 
+## Conformance
+
+`conformance/` checks every core repo against [the standard](docs/standard.md) each Monday
+(`.github/workflows/conformance.yml`) and keeps one `conformance`-labelled issue per failing repo.
+A check is named by its requirement ID and reads exemptions from the standard's table, so a new
+requirement or exemption lands here with a matching check or test. Run it locally with
+`uv run python -m conformance --workdir <dir> --out <dir>`.
+
 ## Brand surfaces
 
 A repo's brand assets are generated here, in `brand/projects/<repo>/`.
