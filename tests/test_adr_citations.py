@@ -4,8 +4,9 @@ import pathlib
 import re
 import typing
 
+import pytest
 
-_REPO_ROOT: typing.Final = pathlib.Path(__file__).resolve().parent.parent
+
 _ADR_DIR: typing.Final = "docs/adr/"
 _CITATION: typing.Final = re.compile(r"docs/adr/\d{4}(?:-[a-z0-9-]+\.md)?")
 _UNWALKED_DIR: typing.Final = "node_modules"
@@ -38,7 +39,7 @@ def unresolved_citations(root: pathlib.Path) -> list[tuple[str, str]]:
     )
 
 
-def test_every_adr_path_cited_from_python_resolves() -> None:
+def test_every_adr_path_cited_from_python_resolves(pytestconfig: pytest.Config) -> None:
     """INVARIANT: a `docs/adr/NNNN-<slug>.md` path named anywhere in this repo's Python exists.
 
     Broken by renaming, renumbering or pruning an ADR without following its citations. The
@@ -48,7 +49,7 @@ def test_every_adr_path_cited_from_python_resolves() -> None:
     A bare `docs/adr/NNNN` is reported as well: it names no file, so it would survive the same
     rename or drop unnoticed and point at whatever record holds that number next.
     """
-    unresolved = unresolved_citations(_REPO_ROOT)
+    unresolved = unresolved_citations(pytestconfig.rootpath)
 
     assert unresolved == [], "\n".join(f"{file} cites {cited}" for file, cited in unresolved)
 
