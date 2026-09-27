@@ -257,6 +257,37 @@ remapping this repo's `blob/main` URLs to the checkout.
 
 A repo with a docs site MUST have a `docs` job running `just docs-build` (`mkdocs build --strict`).
 
+### CI9 · Shared ADR check { #CI9 }
+
+The `lint` job MUST run `just adr-check` after `just install lint-ci`. The recipe MUST be this,
+byte for byte, and a repo MUST NOT keep a copy of `tests/test_adr_citations.py`:
+
+```just
+adr_check_source := "https://raw.githubusercontent.com/modern-python/.github/main/tests/test_adr_citations.py"
+
+# Tracks main on purpose: the shared check is unpinned.
+adr-check:
+    #!/usr/bin/env sh
+    set -eu
+    dir="$(mktemp -d .adr-check.XXXXXX)"
+    trap 'rm -rf "$dir"' EXIT
+    curl -fsSL "{{ adr_check_source }}" -o "$dir/test_adr_citations.py"
+    uv run --no-sync pytest --rootdir=. --noconftest -o addopts= "$dir/test_adr_citations.py"
+```
+
+The check asserts that every ADR cited anywhere in the repo, by `docs/adr/NNNN-slug.md` path or by
+bare `ADR-NNNN` number, exists in `docs/adr/` ([FL4](#FL4)).
+
+*Why:* one rule, one file. Twenty-five byte-identical copies of this test drifted within a month
+of being written. The recipe tracks `main` unpinned on purpose: a change to the rule lands once,
+with no release and no bump across the org. The trade is that it reaches every repo's next run at
+once, so a change to the file in this repo is run against every repo's `main` before it merges,
+and a repo's own pull request sees the fix only once its branch carries it. `--rootdir=.` makes
+the repo the scanned root; `--noconftest` and `-o addopts=` keep the repo's conftests and
+coverage gate out of a one-file run; the temporary directory sits inside the repo because
+plugins such as `pytest-alembic` reject collected files outside the root. `adr_check_source` can
+be pointed at a `file://` path to run an unmerged version of the check.
+
 ## Release
 
 ### RL1 · Tags { #RL1 }

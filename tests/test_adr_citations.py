@@ -58,6 +58,9 @@ def unresolved_citations(root: pathlib.Path) -> list[tuple[str, str]]:
 def test_every_adr_citation_in_the_repo_resolves(pytestconfig: pytest.Config) -> None:
     """INVARIANT: every ADR named in this repo resolves, by full path or by bare `ADR-NNNN` number.
 
+    Every org repo fetches this file from `main` and runs it against its own tree (CI9), so a change
+    here reaches all of them on their next run.
+
     Broken by renaming, renumbering or pruning an ADR without following its citations. The offline
     link gate reads Markdown links only, so a path in a docstring, a comment, a guard message or a
     `pyproject.toml` dependency rationale is otherwise checked by nothing, and neither is the bare
