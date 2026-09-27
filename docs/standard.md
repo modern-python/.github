@@ -207,9 +207,16 @@ The `pytest` job MUST run `just install` then `just test-ci` on every matrix ent
 
 ### CI6 · `floors` job { #CI6 }
 
-The `floors` job MUST resolve every direct dependency at its declared floor, wheel-only
-(`--no-build`, or `--only-binary` naming the dependency that needs it), on every matrix entry, then
-run the suite or an import. It MUST gate every pull request and MUST be skipped on the schedule,
+The `floors` job MUST install every direct dependency at its declared floor, wheel-only, on every
+matrix entry, then run the suite or an import. It MUST do so in two steps, pinning the floors with
+builds allowed and then installing the pins with builds disabled:
+
+```yaml
+- run: uv pip compile pyproject.toml --all-extras --no-deps --resolution lowest-direct -o floors.txt
+- run: uv pip install -r pyproject.toml --all-extras --constraints floors.txt --no-build
+```
+
+A repo that runs the suite adds `--group dev` to the install. It MUST gate every pull request and MUST be skipped on the schedule,
 with `if: github.event_name != 'schedule'` on the job (a called workflow sees its caller's `github`
 context).
 
@@ -222,7 +229,13 @@ declared range ships untested. It has rotted there before
 ([compose2pod#126](https://github.com/modern-python/compose2pod/issues/126),
 [faststream-outbox#190](https://github.com/modern-python/faststream-outbox/pull/190)).
 Wheel-only, because a floor reachable only by compiling an sdist is not one a user installing a
-wheel can reach, and without the flag the resolver builds one and reports success. Every matrix
+wheel can reach, and without the flag the resolver builds one and reports success. Two steps,
+because the flag alone does not fail on such a floor: it makes the wheel-less version ineligible,
+and `lowest-direct` climbs to the lowest version that has a wheel, so the job passes on a version
+the repo never declared
+([compose2pod#135](https://github.com/modern-python/compose2pod/pull/135)). Pinning with builds
+allowed fixes the declared floor first, and the wheel-only install then fails on it
+([compose2pod#139](https://github.com/modern-python/compose2pod/pull/139)). Every matrix
 entry, because wheel coverage is per interpreter. On the pull request, because that is where a floor
 breaks: a diff starts using an API newer than the declared floor. `lite-bootstrap` ran its floors
 only on the schedule and shipped such a break to PyPI
