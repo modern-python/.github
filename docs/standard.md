@@ -404,6 +404,7 @@ The PyPI distribution name MUST equal the repo name.
 | `that-depends` | the core as a whole, except [TS2](#TS2) | The org's most-used package and the only repo with steady external contributor traffic; it keeps its own tooling rather than converging. |
 | `modern-di-arq` | [PV1](#PV1), the `3.14t` entry | Every `arq` release requires `redis[hiredis]<6`, and importing `hiredis` re-enables the GIL ([hiredis-py#229](https://github.com/redis/hiredis-py/issues/229)). Lift when a `hiredis` release declares free-threading support. |
 | `modern-di-grpc` | [PV1](#PV1), the `3.14t` entry | `grpcio` ships no free-threaded wheel and importing `cygrpc` re-enables the GIL ([grpc/grpc#38762](https://github.com/grpc/grpc/issues/38762)). Lift when a `grpcio` release declares free-threading support. |
+| `lite-bootstrap` | [PV1](#PV1) and [PV2](#PV2), the free-threaded entries | The suite cannot run on a free-threaded build: `tests/conftest.py` needs the `otl` extra, and its `grpcio`, like `orjson`, `pyroscope` and the `fastmcp` stack, ships no free-threaded wheel. A separate job smoke-tests the extras that do install, on `3.13t` and `3.14t`. Lift when every extra the suite needs installs on the newest free-threaded build. |
 | `semvertag` | [RL5](#RL5) | It is also a GitHub Action (`uses: modern-python/semvertag@v0`), so its `release.yml` moves the floating major tag after each stable release. Permanent while the Action is published. |
 
 An exemption is granted by a pull request to this repo that adds the row. Drift that nobody
