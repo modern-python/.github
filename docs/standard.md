@@ -222,7 +222,8 @@ context).
 
 A repo MAY run an import smoke test instead of the suite where the floors cannot carry it, and MAY
 drop a matrix entry that no upstream wheel covers at the floor (`compose2pod` drops `3.14t` for
-PyYAML).
+PyYAML). A repo with no runtime dependencies and no extras has no floors to test and MAY omit the
+job (`modern-di`).
 
 *Why:* `pytest` resolves every dependency at its newest, so without this job the bottom of each
 declared range ships untested. It has rotted there before
