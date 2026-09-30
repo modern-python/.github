@@ -562,3 +562,32 @@ def rpc_arrow(cx: float, cy: float, r: float) -> str:
             f'stroke-width="{w:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
         )
     return out
+
+
+def key(cx: float, cy: float, r: float) -> str:
+    """jwks-client: a key, the signing key a JWKS publishes."""
+    sw = r * 0.2
+    bow_x = cx - 0.45 * r
+    shaft_x = bow_x + 0.32 * r
+    return (
+        f'<circle cx="{bow_x:.1f}" cy="{cy:.1f}" r="{0.32 * r:.1f}" fill="none" stroke="{GOLD}" stroke-width="{sw:.1f}"/>'
+        f'<rect x="{shaft_x:.1f}" y="{cy - 0.1 * r:.1f}" width="{0.95 * r:.1f}" height="{0.2 * r:.1f}" fill="{GOLD}"/>'
+        f'<rect x="{cx + 0.44 * r:.1f}" y="{cy + 0.1 * r:.1f}" width="{0.14 * r:.1f}" height="{0.3 * r:.1f}" fill="{GOLD}"/>'
+        f'<rect x="{cx + 0.68 * r:.1f}" y="{cy + 0.1 * r:.1f}" width="{0.14 * r:.1f}" height="{0.2 * r:.1f}" fill="{GOLD}"/>'
+    )
+
+
+def scope(cx: float, cy: float, r: float) -> str:
+    """release-scope: a magnifier over a list of pending changes."""
+    lx, ly, lr = cx - 0.15 * r, cy - 0.15 * r, 0.55 * r
+    edge = lr / math.sqrt(2)
+    lines = "".join(
+        f'<rect x="{lx - 0.3 * r:.1f}" y="{ly + dy * r - 0.05 * r:.1f}" width="{w * r:.1f}" height="{0.1 * r:.1f}" '
+        f'rx="{0.05 * r:.1f}" fill="{GOLD}"/>'
+        for dy, w in ((-0.2, 0.6), (0.0, 0.46), (0.2, 0.32))
+    )
+    return (
+        f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="{lr:.1f}" fill="none" stroke="{GOLD}" stroke-width="{r * 0.16:.1f}"/>'
+        f'<line x1="{lx + edge:.1f}" y1="{ly + edge:.1f}" x2="{cx + 0.8 * r:.1f}" y2="{cy + 0.8 * r:.1f}" '
+        f'stroke="{GOLD}" stroke-width="{r * 0.24:.1f}" stroke-linecap="round"/>' + lines
+    )

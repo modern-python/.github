@@ -9,9 +9,9 @@ REPOS=(
   fastapi-sqlalchemy-template litestar-sqlalchemy-template
   modern-di modern-di-fastapi modern-di-litestar modern-di-faststream
   modern-di-typer modern-di-pytest that-depends
-  lite-bootstrap httpware faststream-redis-timers
+  lite-bootstrap httpware jwks-client faststream-redis-timers
   faststream-concurrent-aiokafka faststream-outbox
-  db-retry eof-fixer semvertag
+  db-retry eof-fixer release-scope semvertag
 )
 
 missing=0

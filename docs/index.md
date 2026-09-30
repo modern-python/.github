@@ -127,6 +127,7 @@ Every project is built with the same tooling
 
 - [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap) — lightweight package for bootstrapping new microservices.
 - [`httpware`](https://github.com/modern-python/httpware) — HTTP client framework with sync/async clients, middleware chain, and built-in resilience (retry, bulkhead).
+- [`jwks-client`](https://github.com/modern-python/jwks-client) — async JWKS client for verifying JWTs, with key caching, resilient fetching, and Litestar and FastAPI integrations.
 - [`faststream-redis-timers`](https://github.com/modern-python/faststream-redis-timers) — FastStream broker integration for Redis-backed distributed timer scheduling.
 - [`faststream-concurrent-aiokafka`](https://github.com/modern-python/faststream-concurrent-aiokafka) — concurrent message processing middleware for FastStream with `aiokafka`.
 - [`faststream-outbox`](https://github.com/modern-python/faststream-outbox) — FastStream broker integration for the transactional outbox pattern with Postgres.
@@ -136,6 +137,7 @@ Every project is built with the same tooling
 - [`compose2pod`](https://github.com/modern-python/compose2pod) — convert a Docker Compose file into a script that runs its services as a single Podman pod.
 - [`db-retry`](https://github.com/modern-python/db-retry) — retry helpers for database operations.
 - [`eof-fixer`](https://github.com/modern-python/eof-fixer) — automatically fix newlines at the end of files.
+- [`release-scope`](https://github.com/modern-python/release-scope) — collect what sits between production and the default branch across GitLab services: tags, MRs, Jira keys, failed jobs.
 - [`semvertag`](https://github.com/modern-python/semvertag) — auto-tag your GitHub/GitLab repo with semantic version tags from CI.
 
 <p class="mp-tagline">Built with <a href="https://github.com/astral-sh/uv">uv</a>,

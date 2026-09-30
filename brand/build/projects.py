@@ -40,11 +40,13 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "faststream-redis-timers": lambda: sym.stopwatch(_CX, _CY, R),
     "faststream-concurrent-aiokafka": lambda: sym.lanes(_CX, _CY, R),
     "faststream-outbox": lambda: sym.outbox(_CX, _CY, R),
+    "jwks-client": lambda: sym.key(_CX, _CY, R),
     # utilities
     "db-retry": lambda: sym.db_retry(_CX, _CY, R),
     "eof-fixer": lambda: sym.eof_fixer(_CX, _CY, R),
     "semvertag": lambda: sym.tag(_CX, _CY, R),
     "compose2pod": lambda: sym.pod(_CX, _CY, R),
+    "release-scope": lambda: sym.scope(_CX, _CY, R),
 }
 
 
