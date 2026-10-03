@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from html import escape
 from pathlib import Path
 
 from brand.build import geometry as g
@@ -165,13 +166,13 @@ def wrap_text(text: str, size: float, max_w: float) -> list[str]:
 
 
 DOCS_REPOS: dict[str, str] = {
-    "modern-di": "powerful DI framework with scopes",
-    "that-depends": "predecessor DI framework, still actively maintained",
-    "lite-bootstrap": "lightweight package for bootstrapping new microservices",
-    "httpware": "HTTP client framework with sync/async clients, middleware chain, and built-in resilience (retry, bulkhead)",
-    "faststream-redis-timers": "FastStream broker integration for Redis-backed distributed timer scheduling",
-    "faststream-outbox": "FastStream broker integration for the transactional outbox pattern with Postgres",
-    "semvertag": "auto-tag your GitHub/GitLab repo with semantic version tags from CI",
+    "modern-di": "Powerful dependency-injection framework with IoC container and scopes",
+    "that-depends": "Simple, typed dependency-injection framework for Python",
+    "lite-bootstrap": "Lightweight bootstrap for production-ready Python microservices",
+    "httpware": "Typed, resilient HTTP clients for Python, sync and async",
+    "faststream-redis-timers": "FastStream integration for Redis-backed distributed timer scheduling",
+    "faststream-outbox": "FastStream transactional-outbox integration backed by a Postgres table",
+    "semvertag": "Auto-tag GitHub & GitLab repos with semantic version tags from CI",
 }
 
 _CARD_W = 1280
@@ -228,6 +229,6 @@ def project_social_card(repo: str, *, tagline: str) -> str:
     )
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_CARD_W} {_CARD_H}" '
-        f'role="img" aria-label="{repo} — {tagline}">'
+        f'role="img" aria-label="{repo}: {escape(tagline)}">'
         f"{panels}{mark}{name_svg}{tag_svg}{url_svg}</svg>"
     )

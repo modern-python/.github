@@ -80,3 +80,16 @@ def test_every_download_badge_is_pepy_and_names_its_repo() -> None:
     )
     assert len(rows) == len(badges)
     assert [repo for repo, package in rows if repo != package] == []
+
+
+def test_every_social_card_tagline_is_its_profile_description() -> None:
+    """INVARIANT: a docs repo's social-card tagline is the description in its profile row.
+
+    The profile row already mirrors the GitHub description and the pyproject
+    `description`. The card tagline is a fourth copy that lives in Python, so a
+    description rewrite updates the other three and leaves the card telling link
+    previews something the repo no longer says.
+    """
+    text = _PROFILE.read_text(encoding="utf-8")
+    descriptions = dict(re.findall(r"^\| \[`([^`]+)`\]\([^)]*\) \| ([^|]+?) \|", text, flags=re.M))
+    assert p.DOCS_REPOS == {repo: descriptions[repo] for repo in p.DOCS_REPOS}

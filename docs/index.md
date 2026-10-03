@@ -118,7 +118,7 @@ Every project is built with the same tooling
 - [`modern-di-flask`](https://github.com/modern-python/modern-di-flask): modern-di integration for Flask
 - [`modern-di-grpc`](https://github.com/modern-python/modern-di-grpc): modern-di integration for gRPC
 - [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar): modern-di integration for Litestar
-- [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest): Pytest integration for modern-di — turn DI dependencies into fixtures
+- [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest): Pytest integration for modern-di that turns DI dependencies into fixtures
 - [`modern-di-starlette`](https://github.com/modern-python/modern-di-starlette): modern-di integration for Starlette
 - [`modern-di-taskiq`](https://github.com/modern-python/modern-di-taskiq): modern-di integration for taskiq
 - [`modern-di-typer`](https://github.com/modern-python/modern-di-typer): modern-di integration for Typer
