@@ -22,8 +22,9 @@ Without it the SVGs are still written and PNGs are skipped.
 
 ## Mark
 
-Two interlocked "snakes" (corner brackets with square heads) as a pinwheel. The
-**icon** wraps them around a gold core dot (favicon + avatar). The **wordmark
+Two "snakes" (corner brackets with square heads and diagonal-cut tails), one
+ink and one gold, in opposite corners. The **icon** frames a gold chevron
+between them (favicon, avatar, and the site header logo). The **wordmark
 lockup** pulls them into crop marks framing `MODERN` / `PYTHON` set in **Jost**
 (SIL OFL, outlined to paths at build time — see `brand/build/fonts/Jost-OFL.txt`).
 
@@ -70,7 +71,3 @@ FASTOCTREE) — indexed-colour, with no visible change (the art is flat-colour).
 The large assets (social cards, 1024px marks) shrink ~70–80% vs raw
 `rsvg-convert` output; the tiny favicons less. Regenerate with
 `uv run python -m brand.build.render`.
-
-## Deferred (not in this kit)
-
-The header nav logo redesign is a follow-up.

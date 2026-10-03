@@ -69,8 +69,8 @@ production Python services. Use one piece or all of them — each is independent
   dependency injection with one wiring shared across web frameworks (FastAPI,
   Litestar, Starlette, Flask, aiohttp), task queues (Celery, arq, taskiq), RPC
   and messaging (gRPC, FastStream, aiogram), and CLIs (Typer).
-  ([`that-depends`](https://github.com/modern-python/that-depends), its
-  production-proven predecessor, is still maintained.)
+  ([`that-depends`](https://github.com/modern-python/that-depends), the older
+  DI framework, is still maintained.)
 - **Call other services reliably** with
   [`httpware`](https://github.com/modern-python/httpware) — an httpx-based client
   with typed errors, typed response bodies, and a composable resilience chain
@@ -91,8 +91,9 @@ Every project is built with the same tooling
 
 ## Project templates { #templates }
 
-- [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template) — dockerized web application with DI on FastAPI, SQLAlchemy 2, PostgreSQL.
-- [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template) — dockerized web application on Litestar, SQLAlchemy 2, PostgreSQL.
+- [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template): Dockerized FastAPI + SQLAlchemy 2 + PostgreSQL app template with DI
+- [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template): Dockerized Litestar + SQLAlchemy 2 + PostgreSQL app template with DI
+- [`chat-app`](https://github.com/modern-python/chat-app): Reference chat application for the modern-python organisation
 
 ## Dependency injection { #di }
 
@@ -102,43 +103,43 @@ Every project is built with the same tooling
     — a minimal core plus the integrations listed below.
 
     [`that-depends`](https://github.com/modern-python/that-depends) is the earlier,
-    async-first sibling and stays maintained. Coming from it? `modern-di` ships a
-    [migration guide](https://modern-di.modern-python.org/migration/from-that-depends/)
-    — and one
+    async-first sibling and stays maintained. `modern-di` has migration guides
+    [from `that-depends`](https://modern-di.modern-python.org/migration/from-that-depends/)
+    and
     [from `dependency-injector`](https://modern-di.modern-python.org/migration/from-dependency-injector/).
 
-- [`modern-di`](https://github.com/modern-python/modern-di) — powerful DI framework with scopes.
-- [`modern-di-aiogram`](https://github.com/modern-python/modern-di-aiogram) — `modern-di` integration for aiogram.
-- [`modern-di-aiohttp`](https://github.com/modern-python/modern-di-aiohttp) — `modern-di` integration for aiohttp.
-- [`modern-di-arq`](https://github.com/modern-python/modern-di-arq) — `modern-di` integration for arq.
-- [`modern-di-celery`](https://github.com/modern-python/modern-di-celery) — `modern-di` integration for Celery.
-- [`modern-di-fastapi`](https://github.com/modern-python/modern-di-fastapi) — `modern-di` integration for FastAPI.
-- [`modern-di-faststream`](https://github.com/modern-python/modern-di-faststream) — `modern-di` integration for FastStream.
-- [`modern-di-flask`](https://github.com/modern-python/modern-di-flask) — `modern-di` integration for Flask.
-- [`modern-di-grpc`](https://github.com/modern-python/modern-di-grpc) — `modern-di` integration for gRPC.
-- [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar) — `modern-di` integration for Litestar.
-- [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest) — `modern-di` integration for pytest.
-- [`modern-di-starlette`](https://github.com/modern-python/modern-di-starlette) — `modern-di` integration for Starlette.
-- [`modern-di-taskiq`](https://github.com/modern-python/modern-di-taskiq) — `modern-di` integration for taskiq.
-- [`modern-di-typer`](https://github.com/modern-python/modern-di-typer) — `modern-di` integration for Typer.
-- [`that-depends`](https://github.com/modern-python/that-depends) — predecessor DI framework, still actively maintained.
+- [`modern-di`](https://github.com/modern-python/modern-di): Powerful dependency-injection framework with IoC container and scopes
+- [`modern-di-aiogram`](https://github.com/modern-python/modern-di-aiogram): modern-di integration for aiogram
+- [`modern-di-aiohttp`](https://github.com/modern-python/modern-di-aiohttp): modern-di integration for aiohttp
+- [`modern-di-arq`](https://github.com/modern-python/modern-di-arq): modern-di integration for arq
+- [`modern-di-celery`](https://github.com/modern-python/modern-di-celery): modern-di integration for Celery
+- [`modern-di-fastapi`](https://github.com/modern-python/modern-di-fastapi): modern-di integration for FastAPI
+- [`modern-di-faststream`](https://github.com/modern-python/modern-di-faststream): modern-di integration for FastStream
+- [`modern-di-flask`](https://github.com/modern-python/modern-di-flask): modern-di integration for Flask
+- [`modern-di-grpc`](https://github.com/modern-python/modern-di-grpc): modern-di integration for gRPC
+- [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar): modern-di integration for Litestar
+- [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest): Pytest integration for modern-di — turn DI dependencies into fixtures
+- [`modern-di-starlette`](https://github.com/modern-python/modern-di-starlette): modern-di integration for Starlette
+- [`modern-di-taskiq`](https://github.com/modern-python/modern-di-taskiq): modern-di integration for taskiq
+- [`modern-di-typer`](https://github.com/modern-python/modern-di-typer): modern-di integration for Typer
+- [`that-depends`](https://github.com/modern-python/that-depends): Simple, typed dependency-injection framework for Python
 
 ## Microservices, HTTP & messaging { #services }
 
-- [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap) — lightweight package for bootstrapping new microservices.
-- [`httpware`](https://github.com/modern-python/httpware) — HTTP client framework with sync/async clients, middleware chain, and built-in resilience (retry, bulkhead).
-- [`jwks-client`](https://github.com/modern-python/jwks-client) — async JWKS client for verifying JWTs, with key caching, resilient fetching, and Litestar and FastAPI integrations.
-- [`faststream-redis-timers`](https://github.com/modern-python/faststream-redis-timers) — FastStream broker integration for Redis-backed distributed timer scheduling.
-- [`faststream-concurrent-aiokafka`](https://github.com/modern-python/faststream-concurrent-aiokafka) — concurrent message processing middleware for FastStream with `aiokafka`.
-- [`faststream-outbox`](https://github.com/modern-python/faststream-outbox) — FastStream broker integration for the transactional outbox pattern with Postgres.
+- [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap): Lightweight bootstrap for production-ready Python microservices
+- [`httpware`](https://github.com/modern-python/httpware): Typed, resilient HTTP clients for Python, sync and async
+- [`jwks-client`](https://github.com/modern-python/jwks-client): Async JWKS client for verifying JWTs, with key caching, resilient fetching, and Litestar and FastAPI integrations
+- [`faststream-redis-timers`](https://github.com/modern-python/faststream-redis-timers): FastStream integration for Redis-backed distributed timer scheduling
+- [`faststream-concurrent-aiokafka`](https://github.com/modern-python/faststream-concurrent-aiokafka): Concurrent message-processing middleware for FastStream + aiokafka
+- [`faststream-outbox`](https://github.com/modern-python/faststream-outbox): FastStream transactional-outbox integration backed by a Postgres table
 
 ## Utilities { #utilities }
 
-- [`compose2pod`](https://github.com/modern-python/compose2pod) — convert a Docker Compose file into a script that runs its services as a single Podman pod.
-- [`db-retry`](https://github.com/modern-python/db-retry) — retry helpers for database operations.
-- [`eof-fixer`](https://github.com/modern-python/eof-fixer) — automatically fix newlines at the end of files.
-- [`release-scope`](https://github.com/modern-python/release-scope) — collect what sits between production and the default branch across GitLab services: tags, MRs, Jira keys, failed jobs.
-- [`semvertag`](https://github.com/modern-python/semvertag) — auto-tag your GitHub/GitLab repo with semantic version tags from CI.
+- [`compose2pod`](https://github.com/modern-python/compose2pod): Convert a Docker Compose file into a script that runs its services as a single Podman pod
+- [`db-retry`](https://github.com/modern-python/db-retry): Retry helpers for PostgreSQL / SQLAlchemy database operations
+- [`eof-fixer`](https://github.com/modern-python/eof-fixer): CLI tool that ensures text files end with exactly one newline
+- [`release-scope`](https://github.com/modern-python/release-scope): Collect what sits between production and the default branch across GitLab services: tags, MRs, Jira keys, failed jobs
+- [`semvertag`](https://github.com/modern-python/semvertag): Auto-tag GitHub & GitLab repos with semantic version tags from CI
 
 <p class="mp-tagline">Built with <a href="https://github.com/astral-sh/uv">uv</a>,
 <a href="https://github.com/astral-sh/ruff">ruff</a>, and

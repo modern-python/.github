@@ -31,9 +31,10 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "modern-di-starlette": lambda: sym.sparkle_cluster(_CX, _CY, R),
     "modern-di-taskiq": lambda: sym.task_q(_CX, _CY, R),
     "modern-di-typer": lambda: sym.terminal(_CX, _CY, R),
-    # templates — reuse the org chevron
+    # templates and the reference app reuse the org chevron
     "fastapi-sqlalchemy-template": lambda: sym.chevron(_CX, _CY, R - 1),
     "litestar-sqlalchemy-template": lambda: sym.chevron(_CX, _CY, R - 1),
+    "chat-app": lambda: sym.chevron(_CX, _CY, R - 1),
     # microservices, http & messaging
     "lite-bootstrap": lambda: sym.rocket(_CX, _CY, R),
     "httpware": lambda: sym.chain(_CX, _CY, R),

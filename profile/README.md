@@ -18,12 +18,13 @@ Open-source templates and libraries for building production-ready Python applica
 |---|---|---|
 | [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template) | Dockerized FastAPI + SQLAlchemy 2 + PostgreSQL app template with DI | [![Stars](https://img.shields.io/github/stars/modern-python/fastapi-sqlalchemy-template)](https://github.com/modern-python/fastapi-sqlalchemy-template/stargazers) |
 | [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template) | Dockerized Litestar + SQLAlchemy 2 + PostgreSQL app template with DI | [![Stars](https://img.shields.io/github/stars/modern-python/litestar-sqlalchemy-template)](https://github.com/modern-python/litestar-sqlalchemy-template/stargazers) |
+| [`chat-app`](https://github.com/modern-python/chat-app) | Reference chat application for the modern-python organisation | [![Stars](https://img.shields.io/github/stars/modern-python/chat-app)](https://github.com/modern-python/chat-app/stargazers) |
 
 ### Dependency injection
 
 **Which one?** Start new projects on [`modern-di`](https://github.com/modern-python/modern-di) — a minimal core plus the integrations below.
 
-[`that-depends`](https://github.com/modern-python/that-depends) is the earlier, async-first sibling and stays maintained. Coming from it? `modern-di` ships a [migration guide](https://modern-di.modern-python.org/migration/from-that-depends/) — and one [from `dependency-injector`](https://modern-di.modern-python.org/migration/from-dependency-injector/).
+[`that-depends`](https://github.com/modern-python/that-depends) is the earlier, async-first sibling and stays maintained. `modern-di` has migration guides [from `that-depends`](https://modern-di.modern-python.org/migration/from-that-depends/) and [from `dependency-injector`](https://modern-di.modern-python.org/migration/from-dependency-injector/).
 
 | Project | What it is | Stars | Downloads |
 |---|---|---|---|
@@ -48,7 +49,7 @@ Open-source templates and libraries for building production-ready Python applica
 | Project | What it is | Stars | Downloads |
 |---|---|---|---|
 | [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap) | Lightweight bootstrap for production-ready Python microservices | [![Stars](https://img.shields.io/github/stars/modern-python/lite-bootstrap)](https://github.com/modern-python/lite-bootstrap/stargazers) | [![Downloads](https://static.pepy.tech/badge/lite-bootstrap/month)](https://pepy.tech/projects/lite-bootstrap) |
-| [`httpware`](https://github.com/modern-python/httpware) | Python HTTP client framework with sync & async clients and built-in resilience | [![Stars](https://img.shields.io/github/stars/modern-python/httpware)](https://github.com/modern-python/httpware/stargazers) | [![Downloads](https://static.pepy.tech/badge/httpware/month)](https://pepy.tech/projects/httpware) |
+| [`httpware`](https://github.com/modern-python/httpware) | Typed, resilient HTTP clients for Python, sync and async | [![Stars](https://img.shields.io/github/stars/modern-python/httpware)](https://github.com/modern-python/httpware/stargazers) | [![Downloads](https://static.pepy.tech/badge/httpware/month)](https://pepy.tech/projects/httpware) |
 | [`jwks-client`](https://github.com/modern-python/jwks-client) | Async JWKS client for verifying JWTs, with key caching, resilient fetching, and Litestar and FastAPI integrations | [![Stars](https://img.shields.io/github/stars/modern-python/jwks-client)](https://github.com/modern-python/jwks-client/stargazers) | [![Downloads](https://static.pepy.tech/badge/jwks-client/month)](https://pepy.tech/projects/jwks-client) |
 | [`faststream-redis-timers`](https://github.com/modern-python/faststream-redis-timers) | FastStream integration for Redis-backed distributed timer scheduling | [![Stars](https://img.shields.io/github/stars/modern-python/faststream-redis-timers)](https://github.com/modern-python/faststream-redis-timers/stargazers) | [![Downloads](https://static.pepy.tech/badge/faststream-redis-timers/month)](https://pepy.tech/projects/faststream-redis-timers) |
 | [`faststream-concurrent-aiokafka`](https://github.com/modern-python/faststream-concurrent-aiokafka) | Concurrent message-processing middleware for FastStream + aiokafka | [![Stars](https://img.shields.io/github/stars/modern-python/faststream-concurrent-aiokafka)](https://github.com/modern-python/faststream-concurrent-aiokafka/stargazers) | [![Downloads](https://static.pepy.tech/badge/faststream-concurrent-aiokafka/month)](https://pepy.tech/projects/faststream-concurrent-aiokafka) |
