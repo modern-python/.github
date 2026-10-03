@@ -1,8 +1,8 @@
 # The standard
 
 What makes a repository a modern-python repository. It is written for the maintainer,
-contributors, and the coding agents that work across the org's repositories. It is not a guide to
-writing Python; it is the shape every repo shares so that tooling, CI, and agents can rely on it.
+contributors, and the coding agents that work across the org's repositories. It describes the shape
+every repo shares so tooling, CI, and agents can rely on it.
 
 ## Scope
 

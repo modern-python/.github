@@ -31,6 +31,7 @@ EXPECTED_REPOS = {
     "modern-di-aiogram",
     "fastapi-sqlalchemy-template",
     "litestar-sqlalchemy-template",
+    "chat-app",
     "lite-bootstrap",
     "httpware",
     "faststream-redis-timers",

@@ -21,7 +21,7 @@ build backend, and a `justfile` with fixed recipe names as the only task entry p
 ```bash
 # Clone your fork, then from the repo root:
 uv sync                 # install dependencies into a local venv
-just --list             # see available tasks (lint, test, etc.) where a justfile exists
+just --list             # see available tasks (lint, test, etc.)
 ```
 
 ## Pull request workflow
@@ -30,10 +30,11 @@ just --list             # see available tasks (lint, test, etc.) where a justfil
 2. Make your change. Keep it focused — one logical change per PR.
 3. Run lint, type check, and tests locally before pushing:
    ```bash
-   uv run ruff check . && uv run ruff format --check .
-   uv run ty check        # type check, where ty is configured (some repos also run mypy/pyrefly)
-   # run the project's test command (often `just test` or `uv run pytest`)
+   just lint-ci           # read-only lint, format, and type checks
+   just test
    ```
+   `just lint` runs the same checks and applies fixes. The templates and `chat-app` have
+   only `just lint`. `that-depends` also runs mypy and pyrefly in both recipes.
 4. Update docs if you changed behavior or public API.
 5. Open the PR using the template. Link the issue it resolves.
 
