@@ -1,0 +1,33 @@
+name: report-scheduled-failure
+
+# Called by every repo's scheduled.yml when its scheduled checks fail (standard CI2).
+on:
+  workflow_call: {}
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open or update the tracking issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          LABEL="scheduled-failure"
+          # --force makes this idempotent: it creates the label, or updates it in place.
+          gh label create "$LABEL" \
+            --color "FBCA04" \
+            --description "Scheduled dependency check failures" \
+            --force
+          existing=$(gh issue list --label "$LABEL" --state open --json number --jq '.[0].number // empty')
+          if [ -z "$existing" ]; then
+            gh issue create --title "Scheduled dependency check failed" --label "$LABEL" --body "$(printf '%s\n\n%s\n\n%s\n\n%s' \
+              "The scheduled dependency check failed." \
+              "First failing run: ${RUN_URL}" \
+              "Likely cause: a new release of a dependency or of Python broke the build; the failing job in the run shows where. Reproduce locally with \`just install\`, then \`just lint\` and \`just test\`." \
+              "Close this issue once fixed. The next scheduled failure will open a fresh issue.")"
+          else
+            gh issue comment "$existing" --body "Failed again: ${RUN_URL}"
+          fi

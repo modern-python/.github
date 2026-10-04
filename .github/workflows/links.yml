@@ -35,7 +35,7 @@ jobs:
           fail: false
       # create-issue-from-file does not deduplicate — it calls issues.create
       # unconditionally, so six weeks of one dead link is six identical issues. This is
-      # the same find-or-comment shape every repo's report-scheduled-failure.sh uses.
+      # the same find-or-comment shape as the shared report-scheduled-failure.yml.
       - name: Open or update the tracking issue
         if: steps.lychee.outputs.exit_code != 0
         env:

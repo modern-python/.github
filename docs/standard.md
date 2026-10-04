@@ -181,10 +181,24 @@ superseded runs.
 
 `scheduled.yml` MUST run daily and on `workflow_dispatch`, running the same checks as `ci.yml`
 except `floors` ([CI6](#CI6)). On a scheduled failure it MUST open or update a tracking issue in the
-repo.
+repo with this job, byte for byte, and a repo MUST NOT keep its own report script:
+
+```yaml
+  report-failure:
+    needs: checks
+    if: failure() && github.event_name == 'schedule'
+    permissions:
+      issues: write
+    uses: modern-python/.github/.github/workflows/report-scheduled-failure.yml@main
+```
 
 *Why:* a dependency release or a new Python that breaks the build becomes a ticket without anyone
-watching.
+watching. The report is shared because the per-repo copies drifted: each named its own list of
+likely culprits, and several listed a dependency the repo does not have. The issue links the failing
+run, which shows the failing job, so the shared text stays generic. It takes no inputs,
+so it does not hit what sank a shared `_checks.yml` ([CI3](#CI3)). Like the ADR check
+([CI9](#CI9)), it tracks `main` unpinned, so a change reaches every repo's next scheduled failure at
+once.
 
 ### CI3 · Per-repo `_checks.yml` { #CI3 }
 
