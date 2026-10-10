@@ -32,7 +32,7 @@ wires them together.
 
     ---
 
-    The `modern-di` family of DI frameworks and integrations.
+    The `modern-di` and `that-depends` DI frameworks.
 
     [:octicons-arrow-right-24: Browse DI](#di)
 
@@ -100,7 +100,8 @@ Every project is built with the same tooling
 !!! tip "Which one should I use?"
 
     Start new projects on [`modern-di`](https://github.com/modern-python/modern-di)
-    — a minimal core plus the integrations listed below.
+    — a minimal core plus framework integrations, listed in
+    [its docs](https://modern-di.modern-python.org/).
 
     [`that-depends`](https://github.com/modern-python/that-depends) is the earlier,
     async-first sibling and stays maintained. `modern-di` has migration guides
@@ -109,19 +110,6 @@ Every project is built with the same tooling
     [from `dependency-injector`](https://modern-di.modern-python.org/migration/from-dependency-injector/).
 
 - [`modern-di`](https://github.com/modern-python/modern-di): Powerful dependency-injection framework with IoC container and scopes
-- [`modern-di-aiogram`](https://github.com/modern-python/modern-di-aiogram): modern-di integration for aiogram
-- [`modern-di-aiohttp`](https://github.com/modern-python/modern-di-aiohttp): modern-di integration for aiohttp
-- [`modern-di-arq`](https://github.com/modern-python/modern-di-arq): modern-di integration for arq
-- [`modern-di-celery`](https://github.com/modern-python/modern-di-celery): modern-di integration for Celery
-- [`modern-di-fastapi`](https://github.com/modern-python/modern-di-fastapi): modern-di integration for FastAPI
-- [`modern-di-faststream`](https://github.com/modern-python/modern-di-faststream): modern-di integration for FastStream
-- [`modern-di-flask`](https://github.com/modern-python/modern-di-flask): modern-di integration for Flask
-- [`modern-di-grpc`](https://github.com/modern-python/modern-di-grpc): modern-di integration for gRPC
-- [`modern-di-litestar`](https://github.com/modern-python/modern-di-litestar): modern-di integration for Litestar
-- [`modern-di-pytest`](https://github.com/modern-python/modern-di-pytest): Pytest integration for modern-di that turns DI dependencies into fixtures
-- [`modern-di-starlette`](https://github.com/modern-python/modern-di-starlette): modern-di integration for Starlette
-- [`modern-di-taskiq`](https://github.com/modern-python/modern-di-taskiq): modern-di integration for taskiq
-- [`modern-di-typer`](https://github.com/modern-python/modern-di-typer): modern-di integration for Typer
 - [`that-depends`](https://github.com/modern-python/that-depends): Simple, typed dependency-injection framework for Python
 
 ## Microservices, HTTP & messaging { #services }

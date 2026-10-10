@@ -4,6 +4,7 @@ from pathlib import Path
 from brand.build import projects as p
 
 _PROFILE = Path(__file__).parent.parent / "profile" / "README.md"
+_INDEX = Path(__file__).parent.parent / "docs" / "index.md"
 
 
 def _sections() -> dict[str, str]:
@@ -15,32 +16,39 @@ def _repos(section: str) -> list[str]:
     return re.findall(r"^\| \[`([^`]+)`\]", section, flags=re.M)
 
 
-def test_every_project_mark_has_a_profile_row() -> None:
-    """INVARIANT: the repos in `projects.py::MANIFEST` and the repos listed in
-    `profile/README.md` are the same set.
+def test_every_listed_project_mark_has_a_profile_row() -> None:
+    """INVARIANT: the repos listed in `profile/README.md` are exactly the repos in
+    `projects.py::MANIFEST` minus the `modern-di-*` integrations.
 
     They are the two halves of one act — a repo joins the org by getting a mark and a
     profile row — but nothing links them, so adding, renaming, or unpublishing a repo
     updates one and silently leaves the other behind. The failure is invisible: a mark
-    nobody links to, or a row whose banner 404s.
+    nobody links to, or a row whose banner 404s. Integrations keep their marks, because
+    their READMEs load the lockups from this repo, but are listed only on the modern-di
+    docs site.
     """
     listed = {repo for section in _sections().values() for repo in _repos(section)}
-    assert listed == set(p.MANIFEST)
+    assert listed == {repo for repo in p.MANIFEST if not repo.startswith("modern-di-")}
 
 
-def test_di_table_lists_core_first_then_alphabetical_then_that_depends() -> None:
-    """INVARIANT: the Dependency injection table opens with `modern-di`, ends with
-    `that-depends`, and sorts every integration between them alphabetically.
+def test_di_table_lists_only_the_two_frameworks() -> None:
+    """INVARIANT: the Dependency injection table lists `modern-di` then `that-depends`.
 
-    The two anchors carry meaning — the core users should start from, and the earlier
-    framework that stays maintained — and alphabetical order in between is what makes a
-    new integration slot in with no insertion-point decision to make. Appending the
-    newest integration to the bottom is the natural move, and it lands past the anchor.
+    The order carries meaning: the core users should start from, then the earlier
+    framework that stays maintained.
     """
-    rows = _repos(_sections()["Dependency injection"])
-    assert rows[0] == "modern-di"
-    assert rows[-1] == "that-depends"
-    assert rows[1:-1] == sorted(rows[1:-1])
+    assert _repos(_sections()["Dependency injection"]) == ["modern-di", "that-depends"]
+
+
+def test_no_modern_di_integration_on_the_org_profile_or_site() -> None:
+    """INVARIANT: neither the org profile nor the org site homepage links a
+    `modern-di-*` integration repo.
+
+    Integrations are listed on the modern-di docs site. Re-adding one here is the
+    natural move when a new integration ships, and it brings the clutter back.
+    """
+    for page in (_PROFILE, _INDEX):
+        assert re.findall(r"github\.com/modern-python/(modern-di-[\w-]+)", page.read_text(encoding="utf-8")) == []
 
 
 def test_templates_carry_stars_only() -> None:
