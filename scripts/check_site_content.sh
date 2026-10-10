@@ -7,8 +7,7 @@ test -f "$HTML" || { echo "MISSING $HTML — run 'uv run mkdocs build' first"; e
 
 REPOS=(
   fastapi-sqlalchemy-template litestar-sqlalchemy-template chat-app
-  modern-di modern-di-fastapi modern-di-litestar modern-di-faststream
-  modern-di-typer modern-di-pytest that-depends
+  modern-di that-depends
   lite-bootstrap httpware jwks-client faststream-redis-timers
   faststream-concurrent-aiokafka faststream-outbox
   db-retry eof-fixer release-scope semvertag
