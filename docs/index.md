@@ -93,7 +93,6 @@ Every project is built with the same tooling
 
 - [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template): Dockerized FastAPI + SQLAlchemy 2 + PostgreSQL app template with DI
 - [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template): Dockerized Litestar + SQLAlchemy 2 + PostgreSQL app template with DI
-- [`chat-app`](https://github.com/modern-python/chat-app): Reference chat application for the modern-python organisation
 
 ## Dependency injection { #di }
 

@@ -18,17 +18,17 @@ def _repos(section: str) -> list[str]:
 
 def test_every_listed_project_mark_has_a_profile_row() -> None:
     """INVARIANT: the repos listed in `profile/README.md` are exactly the repos in
-    `projects.py::MANIFEST` minus the `modern-di-*` integrations.
+    `projects.py::MANIFEST` minus the `modern-di-*` integrations and `chat-app`.
 
     They are the two halves of one act — a repo joins the org by getting a mark and a
     profile row — but nothing links them, so adding, renaming, or unpublishing a repo
     updates one and silently leaves the other behind. The failure is invisible: a mark
     nobody links to, or a row whose banner 404s. Integrations keep their marks, because
     their READMEs load the lockups from this repo, but are listed only on the modern-di
-    docs site.
+    docs site. `chat-app` keeps its mark but is not listed.
     """
     listed = {repo for section in _sections().values() for repo in _repos(section)}
-    assert listed == {repo for repo in p.MANIFEST if not repo.startswith("modern-di-")}
+    assert listed == {repo for repo in p.MANIFEST if not repo.startswith("modern-di-") and repo != "chat-app"}
 
 
 def test_di_table_lists_only_the_two_frameworks() -> None:

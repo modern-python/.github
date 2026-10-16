@@ -19,7 +19,7 @@ def test_home_page_supplies_its_own_h1() -> None:
 
 def test_every_listed_project_mark_has_a_site_entry() -> None:
     """INVARIANT: the repos in the org site's project lists are exactly the repos in
-    `projects.py::MANIFEST` minus the `modern-di-*` integrations.
+    `projects.py::MANIFEST` minus the `modern-di-*` integrations and `chat-app`.
 
     It is the site's half of the profile-row invariant. A hand-kept list of expected
     repos drifts the same way the page does, so a repo added to the org and the profile
@@ -32,4 +32,4 @@ def test_every_listed_project_mark_has_a_site_entry() -> None:
             flags=re.M,
         )
     )
-    assert listed == {repo for repo in p.MANIFEST if not repo.startswith("modern-di-")}
+    assert listed == {repo for repo in p.MANIFEST if not repo.startswith("modern-di-") and repo != "chat-app"}
