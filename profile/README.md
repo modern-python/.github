@@ -18,7 +18,6 @@ Open-source templates and libraries for building production-ready Python applica
 |---|---|---|
 | [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template) | Dockerized FastAPI + SQLAlchemy 2 + PostgreSQL app template with DI | [![Stars](https://img.shields.io/github/stars/modern-python/fastapi-sqlalchemy-template)](https://github.com/modern-python/fastapi-sqlalchemy-template/stargazers) |
 | [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template) | Dockerized Litestar + SQLAlchemy 2 + PostgreSQL app template with DI | [![Stars](https://img.shields.io/github/stars/modern-python/litestar-sqlalchemy-template)](https://github.com/modern-python/litestar-sqlalchemy-template/stargazers) |
-| [`chat-app`](https://github.com/modern-python/chat-app) | Reference chat application for the modern-python organisation | [![Stars](https://img.shields.io/github/stars/modern-python/chat-app)](https://github.com/modern-python/chat-app/stargazers) |
 
 ### Dependency injection
 
