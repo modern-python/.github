@@ -397,6 +397,16 @@ a relative one 404s on the package page.
 `README.md` MUST open with a sentence that states the repo's one-liner ([MD1](#MD1)), then what
 the package does, then a minimal example. The sentence MAY reword the one-liner and add links.
 
+### RM3 · Closing { #RM3 }
+
+`README.md` SHOULD end with a `## Links` section followed by a `` ## Part of `modern-python` ``
+section that links to the org profile. `## Links` is a bulleted list, one link per item: the docs
+site if one exists, then the PyPI page, then the license. It MAY add others, such as the Releases
+page. Headings in `README.md` SHOULD NOT carry emoji.
+
+*Why:* GitHub's README outline and the PyPI page show every heading, so a heading per link reads as
+a run of empty sections.
+
 ## Metadata
 
 ### MD1 · One-liner { #MD1 }
