@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Please **do not** open a public issue for security problems.
+Please do not open a public issue for security problems.
 
 Report vulnerabilities privately using GitHub's built-in private reporting:
 open the affected repository's **Security** tab and choose
@@ -20,6 +20,6 @@ in the release notes unless you prefer to remain anonymous.
 
 ## Supported versions
 
-Unless a repository states otherwise, security fixes target the **latest
-released version** on PyPI. Upgrading to the latest release is the recommended
+Unless a repository states otherwise, security fixes target the latest
+released version on PyPI. Upgrading to the latest release is the recommended
 way to receive fixes.
