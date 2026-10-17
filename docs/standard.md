@@ -302,6 +302,33 @@ coverage gate out of a one-file run; the temporary directory sits inside the rep
 plugins such as `pytest-alembic` reject collected files outside the root. `adr_check_source` can
 be pointed at a `file://` path to run an unmerged version of the check.
 
+### CI10 · Shared prose check { #CI10 }
+
+The `lint` job SHOULD run `just prose-check` after `just install lint-ci`. The recipe SHOULD be
+this, byte for byte, and a repo SHOULD NOT keep a copy of `tests/test_prose.py`:
+
+```just
+prose_check_source := "https://raw.githubusercontent.com/modern-python/.github/main/tests/test_prose.py"
+
+# Tracks main on purpose: the shared check is unpinned.
+prose-check:
+    #!/usr/bin/env sh
+    set -eu
+    dir="$(mktemp -d .prose-check.XXXXXX)"
+    trap 'rm -rf "$dir"' EXIT
+    curl -fsSL "{{ prose_check_source }}" -o "$dir/test_prose.py"
+    uv run --no-sync pytest --rootdir=. --noconftest -o addopts= "$dir/test_prose.py"
+```
+
+The check fails on an em dash (U+2014) or an en dash (U+2013) in the repo's prose Markdown, and on
+emoji in a heading of `README.md` ([RM3](#RM3)). Prose Markdown is the root `README.md`,
+`CONTEXT.md` and `AGENTS.md`, and every `.md` under `docs/` except `docs/agents/`. The check skips
+fenced code, inline code, a table cell that holds only a dash (an empty default), and an en dash
+between two digits, which is a range (`3–5`).
+
+*Why:* every repo's prose was cleared of both, and without this check nothing fails when either
+comes back. The recipe has the shape of [CI9](#CI9)'s, for the reasons given there.
+
 ## Release
 
 ### RL1 · Tags { #RL1 }
@@ -510,7 +537,7 @@ isort.no-lines-before = ["standard-library", "local-folder"]
 The canonical paragraphs for [FL2](#FL2).
 
 ```markdown
-`just` (task runner) and `uv` (package manager). The [`justfile`](justfile) is the source of truth —
+`just` (task runner) and `uv` (package manager). The [`justfile`](justfile) is the source of truth:
 `just --list`, or read it.
 ```
 

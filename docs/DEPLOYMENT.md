@@ -38,5 +38,5 @@ Repo → **Settings → Pages → tick "Enforce HTTPS"**.
 ## Notes
 
 - Only one Pages site per org can claim the apex `modern-python.org`. This
-  `.github` repo owns it — no other repo should set the same custom domain.
+  `.github` repo owns it, so no other repo should set the same custom domain.
 - The published custom domain is held by `docs/CNAME`; do not remove it.
