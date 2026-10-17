@@ -13,7 +13,7 @@ hide:
 </h1>
 
 Open-source templates and libraries for building production-ready Python
-applications — web services, microservices, and the dependency injection that
+applications: web services, microservices, and the dependency injection that
 wires them together.
 
 </div>
@@ -57,31 +57,31 @@ wires them together.
 ## The stack { #stack }
 
 The modern-python projects fit together into one coherent stack for building
-production Python services. Use one piece or all of them — each is independent.
+production Python services. Each project is independent, so use one piece or all of them.
 
-- **Start from a template.**
+- Start from a template.
   [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template)
   and [`litestar-sqlalchemy-template`](https://github.com/modern-python/litestar-sqlalchemy-template)
-  give you a dockerized, batteries-included app — FastAPI or Litestar,
-  SQLAlchemy 2, PostgreSQL, with dependency injection already wired.
-- **Wire your dependencies** with
-  [`modern-di`](https://github.com/modern-python/modern-di) — typed, scoped
+  give you a dockerized, batteries-included app on FastAPI or Litestar,
+  SQLAlchemy 2 and PostgreSQL, with dependency injection already wired.
+- Wire your dependencies with
+  [`modern-di`](https://github.com/modern-python/modern-di): typed, scoped
   dependency injection with one wiring shared across web frameworks (FastAPI,
   Litestar, Starlette, Flask, aiohttp), task queues (Celery, arq, taskiq), RPC
   and messaging (gRPC, FastStream, aiogram), and CLIs (Typer).
   ([`that-depends`](https://github.com/modern-python/that-depends), the older
   DI framework, is still maintained.)
-- **Call other services reliably** with
-  [`httpware`](https://github.com/modern-python/httpware) — an httpx-based client
+- Call other services reliably with
+  [`httpware`](https://github.com/modern-python/httpware), an httpx-based client
   with typed errors, typed response bodies, and a composable resilience chain
   (retry, bulkhead, circuit breaker).
-- **Publish events reliably** with
-  [`faststream-outbox`](https://github.com/modern-python/faststream-outbox) — the
-  transactional outbox pattern for FastStream + PostgreSQL: write your domain row
-  and outbox row in one transaction, relay to any broker with one decorator.
-- **Instrument everything** with
-  [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap) —
-  OpenTelemetry, Prometheus, Sentry, and structlog wired into FastAPI, Litestar,
+- Publish events reliably with
+  [`faststream-outbox`](https://github.com/modern-python/faststream-outbox), the
+  transactional outbox pattern for FastStream + PostgreSQL. You write your domain
+  row and outbox row in one transaction and relay to any broker with one decorator.
+- Instrument everything with
+  [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap), which wires
+  OpenTelemetry, Prometheus, Sentry, and structlog into FastAPI, Litestar,
   or FastStream in a few lines.
 
 Every project is built with the same tooling
@@ -98,8 +98,8 @@ Every project is built with the same tooling
 
 !!! tip "Which one should I use?"
 
-    Start new projects on [`modern-di`](https://github.com/modern-python/modern-di)
-    — a minimal core plus framework integrations, listed in
+    Start new projects on [`modern-di`](https://github.com/modern-python/modern-di).
+    It has a minimal core plus framework integrations, listed in
     [its docs](https://modern-di.modern-python.org/).
 
     [`that-depends`](https://github.com/modern-python/that-depends) is the earlier,

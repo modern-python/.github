@@ -1,11 +1,11 @@
 # modern-python/.github
 
-[`CONTEXT.md`](CONTEXT.md) says what this repo is and owns the vocabulary — read it
+[`CONTEXT.md`](CONTEXT.md) says what this repo is and owns the vocabulary. Read it
 before naming a mark, a colourway, or a surface.
 
 ## Naming & branding
 
-- Brand/framework casing — use exactly: `modern-di`, `that-depends`, `Litestar`
+- Brand/framework casing: use exactly `modern-di`, `that-depends`, `Litestar`
   (not "LiteStar"), `FastStream`, `FastAPI`, `Typer`, `SQLAlchemy`, `PostgreSQL`.
 - Per-project docs sites live at `<name>.modern-python.org` (only some repos have one).
 
@@ -18,9 +18,9 @@ The org profile's `coverage 100%` badge is static and deliberately unlinked: the
 org-level coverage URL to point at, and the gate in
 [TS2](https://modern-python.org/standard/#TS2) is what makes the claim true.
 
-A repo may be listed on the org profile **before** its package reaches PyPI. Its
+A repo may be listed on the org profile before its package reaches PyPI. Its
 Downloads badge 404s until pepy indexes it; the Stars badge and repo link resolve
-meanwhile. That lag is self-healing — note it, never block the listing on it.
+meanwhile. That lag is self-healing: note it, but never block the listing on it.
 
 ## Brand surfaces
 
@@ -32,7 +32,7 @@ home page from `site_name`, so `title:` renders as `<repo> - <repo>`.
 
 ## CI gotcha
 
-GitHub occasionally type-checks a **stale `refs/pull/<n>/merge`** after a push, so a
+GitHub occasionally type-checks a stale `refs/pull/<n>/merge` after a push, so a
 PR can show an old lint/test failure that no longer matches the branch. Confirm by
 running the failing check locally at the branch HEAD (with the pinned tool version);
 if it's clean, push a fresh commit to force GitHub to recompute the merge ref.
