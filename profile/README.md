@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-Open-source templates and libraries for building production-ready Python applications — web services, microservices, and the dependency injection that wires them together.
+Open-source templates and libraries for building production-ready Python applications: web services, microservices, and the dependency injection that wires them together.
 
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -21,7 +21,7 @@ Open-source templates and libraries for building production-ready Python applica
 
 ### Dependency injection
 
-**Which one?** Start new projects on [`modern-di`](https://github.com/modern-python/modern-di) — a minimal core plus framework integrations, listed in [its docs](https://modern-di.modern-python.org/).
+Start new projects on [`modern-di`](https://github.com/modern-python/modern-di). It has a minimal core plus framework integrations, listed in [its docs](https://modern-di.modern-python.org/).
 
 [`that-depends`](https://github.com/modern-python/that-depends) is the earlier, async-first sibling and stays maintained. `modern-di` has migration guides [from `that-depends`](https://modern-di.modern-python.org/migration/from-that-depends/) and [from `dependency-injector`](https://modern-di.modern-python.org/migration/from-dependency-injector/).
 

@@ -1,7 +1,7 @@
 # modern-python/.github
 
 The org's shared repo: it generates the brand kit under `brand/`, builds the org
-site at **modern-python.org** from `docs/` (MkDocs Material), and hosts the org
+site at modern-python.org from `docs/` (MkDocs Material), and hosts the org
 profile shown on the GitHub org page (`profile/README.md`) plus the community
 health files every other repo inherits.
 
@@ -15,36 +15,36 @@ heavily this repo uses it.
 A square logo drawn from vector geometry, with no type. The *org mark* is the interlocked-snakes
 pinwheel with a chevron; a *project mark* is the green+gold snake frame around one repo's inner
 symbol.
-_Avoid_: logo — for our own assets. A third party's logo is a logo (`symbols.py` draws from
+_Avoid_: logo, for our own assets. A third party's logo is a logo (`symbols.py` draws from
 Flask's and FastStream's), and `icon` is the right word for a favicon or the `icon()` full-bleed
 square.
 
 **Inner symbol**:
 The gold shape inside a project mark's frame, one per repo, chosen in `projects.py::MANIFEST`. It
 is the only thing that distinguishes one project mark from another.
-_Avoid_: glyph — which `text.py` needs for its real meaning, an outlined character from the font.
+_Avoid_: glyph, which `text.py` needs for its real meaning: an outlined character from the font.
 
 **Wordmark**:
 The `MODERN`/`PYTHON` crop-mark type, outlined to paths. Type only, no mark.
 
 **Lockup**:
-A mark and a name composed into one fixed arrangement — the org wordmark, or a project's
+A mark and a name composed into one fixed arrangement: the org wordmark, or a project's
 mark-plus-repo-name banner. Named in the files themselves: `lockup-light.svg`, `lockup-dark.svg`.
 
 **Colourway**:
 One named ink pair an asset renders in: *light* is green-ink + gold-light, *dark* is cream +
 gold-dark. Every asset ships both, and which one a surface loads is a `prefers-color-scheme` or
 `data-md-color-scheme` swap, never a separate design.
-_Avoid_: colorway — the repo has spelled it both ways; British spelling wins for this one word,
+_Avoid_: colorway. The repo has spelled it both ways; British spelling wins for this one word,
 because the assets and the docs that describe them already read `colour`.
 
 **Knockout**:
-Cream painted **on top of** a gold shape to cut a hole in it. Cream is never ink in its own right:
+Cream painted on top of a gold shape to cut a hole in it. Cream is never ink in its own right:
 on a transparent background it is invisible on light surfaces and stray white on dark ones.
 
 **Org profile**:
 `profile/README.md`, the landing page GitHub renders at github.com/modern-python. Distinct from the
-**org site**, `modern-python.org`, built from `docs/` — the two carry different content and drift
+org site, `modern-python.org`, built from `docs/`. The two carry different content and drift
 apart if the names are used loosely.
 
 **Owned channel**:
@@ -56,18 +56,18 @@ profile and the site.
 **Borrowed audience**:
 A venue someone else runs, where the org participates as a guest and never moderates: the Python
 Discord, the framework community channels, Stack Overflow, the newsletters.
-_Avoid_: channel — a borrowed audience is never one of ours, and calling it one invites the
+_Avoid_: channel. A borrowed audience is never one of ours, and calling it one invites the
 assumption that we moderate it.
 
 **Standard**:
 The written, normative description of what makes a repo a modern-python repo, owned by this repo
 and published on the org site. A repo either meets it, or carries an exemption.
-_Avoid_: guidelines, conventions, rules — each reads as advisory, and the standard is not.
+_Avoid_: guidelines, conventions, rules. Each reads as advisory, and the standard is not.
 
 **Requirement**:
 One numbered statement of the standard, cited by its stable ID (`CI6`). A MUST or MUST NOT
 requirement is core; a SHOULD is a recommendation; a MAY is a permission.
-_Avoid_: rule, check — a check is what verifies a requirement, not the requirement.
+_Avoid_: rule, check. A check is what verifies a requirement, not the requirement.
 
 **Core**:
 The standard's MUST and MUST NOT requirements, which a repo must meet. Everything outside the core
@@ -76,5 +76,5 @@ _Avoid_: baseline, required set
 
 **Exemption**:
 A recorded, reasoned deviation of one repo from one or more core requirements.
-_Avoid_: exception, override — both already mean something in the DI repos; deviation, drift — a
-deviation nobody recorded is drift, not an exemption.
+_Avoid_: exception, override (both already mean something in the DI repos); deviation, drift (a
+deviation nobody recorded is drift, not an exemption).

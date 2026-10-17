@@ -1,6 +1,6 @@
 # modern-python brand kit
 
-Source of truth for the org's **favicon** and **social card**. Generated assets
+Source of truth for the org's favicon and social card. Generated assets
 live in `brand/org/`. Regenerate with:
 
 ```bash
@@ -23,10 +23,10 @@ Without it the SVGs are still written and PNGs are skipped.
 ## Mark
 
 Two "snakes" (corner brackets with square heads and diagonal-cut tails), one
-ink and one gold, in opposite corners. The **icon** frames a gold chevron
-between them (favicon, avatar, and the site header logo). The **wordmark
-lockup** pulls them into crop marks framing `MODERN` / `PYTHON` set in **Jost**
-(SIL OFL, outlined to paths at build time — see `brand/build/fonts/Jost-OFL.txt`).
+ink and one gold, in opposite corners. The icon frames a gold chevron
+between them (favicon, avatar, and the site header logo). The wordmark
+lockup pulls them into crop marks framing `MODERN` / `PYTHON` set in Jost
+(SIL OFL, outlined to paths at build time; see `brand/build/fonts/Jost-OFL.txt`).
 
 ## Outputs (`brand/org/`)
 
@@ -45,7 +45,7 @@ Each repo gets a large-format mark: the constant green+gold snake-frame with
 one gold inner symbol (see `brand/build/projects.py::MANIFEST`). Regenerate
 with `uv run python -m brand.build.render`; outputs land in
 `brand/projects/<repo>/` as `mark.svg`, three lockup files (see below), and
-PNGs. These are large-format only — every repo's favicon/avatar stays the org mark.
+PNGs. These are large-format only; every repo's favicon/avatar stays the org mark.
 
 ### Lockup outputs
 
@@ -67,7 +67,7 @@ and docs URL on cream. The docs-site repos are listed in
 centered hero on their `docs/index.md`, vendored into the repo's `docs/assets/`.
 
 PNGs are palette-quantized at build time (`brand/build/raster.py`, Pillow
-FASTOCTREE) — indexed-colour, with no visible change (the art is flat-colour).
+FASTOCTREE) to indexed colour, with no visible change because the art is flat-colour.
 The large assets (social cards, 1024px marks) shrink ~70–80% vs raw
 `rsvg-convert` output; the tiny favicons less. Regenerate with
 `uv run python -m brand.build.render`.

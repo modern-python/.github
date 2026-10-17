@@ -6,10 +6,10 @@ unless a repository overrides them with its own `CONTRIBUTING.md`.
 
 ## Ways to contribute
 
-- **Report bugs** and **request features** via the issue templates.
-- **Ask questions** in [GitHub Discussions](https://github.com/orgs/modern-python/discussions).
-- **Improve docs** — typo fixes and clarifications are very welcome.
-- **Send pull requests** — see the workflow below.
+- Report bugs and request features via the issue templates.
+- Ask questions in [GitHub Discussions](https://github.com/orgs/modern-python/discussions).
+- Improve the docs. Typo fixes and clarifications are very welcome.
+- Send pull requests, following the workflow below.
 
 ## Development setup
 
@@ -27,7 +27,7 @@ just --list             # see available tasks (lint, test, etc.)
 ## Pull request workflow
 
 1. Fork the repository and create a topic branch from `main`.
-2. Make your change. Keep it focused — one logical change per PR.
+2. Make your change. Keep it focused: one logical change per PR.
 3. Run lint, type check, and tests locally before pushing:
    ```bash
    just lint-ci           # read-only lint, format, and type checks
