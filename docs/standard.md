@@ -510,7 +510,7 @@ isort.no-lines-before = ["standard-library", "local-folder"]
 The canonical paragraphs for [FL2](#FL2).
 
 ```markdown
-`just` (task runner) and `uv` (package manager). The [`justfile`](justfile) is the source of truth —
+`just` (task runner) and `uv` (package manager). The [`justfile`](justfile) is the source of truth:
 `just --list`, or read it.
 ```
 
