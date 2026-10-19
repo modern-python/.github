@@ -265,10 +265,8 @@ the floor Python and the newest. If the new floor needs a newer version of anoth
 than the repo declares, the compile step fails to resolve. Raise that dependency's floor to the
 version required.
 
-*Why:* both modern-di 4 bumps failed this way. `modern-di-typer` 4 requires `typer>=0.26`, and
-`typer` 0.26 requires `rich>=13.8`. Both repos declared a lower `typer` floor, and `semvertag` a
-lower `rich` one ([semvertag#104](https://github.com/modern-python/semvertag/pull/104),
-[release-scope#45](https://github.com/modern-python/release-scope/pull/45)).
+*Why:* a new floor's own requirements can sit above another direct floor. `pytest` resolves every
+dependency at its newest and never meets the conflict, so only this job catches it.
 
 ### CI7 · `links` job { #CI7 }
 
