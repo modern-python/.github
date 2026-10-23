@@ -89,6 +89,8 @@ Every project is built with the same tooling
 [`ty`](https://github.com/astral-sh/ty)) under the MIT license, to one shared
 [standard](standard.md). Browse the full catalog below.
 
+If you'd like help applying this stack to your own services, see [services](services.md).
+
 ## Project templates { #templates }
 
 - [`fastapi-sqlalchemy-template`](https://github.com/modern-python/fastapi-sqlalchemy-template): Dockerized FastAPI + SQLAlchemy 2 + PostgreSQL app template with DI
