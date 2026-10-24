@@ -56,3 +56,5 @@ Start new projects on [`modern-di`](https://github.com/modern-python/modern-di).
 If these projects save you time, consider supporting development on [Boosty](https://boosty.to/lesnik512).
 
 [![Boosty](https://img.shields.io/badge/Boosty-support-f15f2c?logo=boosty&logoColor=white)](https://boosty.to/lesnik512)
+
+For paid help with your own services, such as an audit, observability and CI setup, or a migration, see [services](https://modern-python.org/services/).

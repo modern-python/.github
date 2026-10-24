@@ -1,8 +1,8 @@
 # Services
 
 I'm Artur Shiriev, the maintainer of modern-python. Besides the open-source work, I help teams
-with their Python backends: auditing a codebase, setting up observability and CI, modernizing
-services, and leading the engineering side for a while.
+with their Python backends: auditing a codebase, setting up observability and CI, and
+modernizing services.
 
 The libraries stay free and MIT-licensed whether or not you hire me. You don't have to use them
 either. When one fits, it saves time; when it doesn't, I work with what your team already runs.
@@ -48,15 +48,6 @@ Short, fixed-scope work that ends in merged pull requests in your repositories. 
   and [`semvertag`](https://github.com/modern-python/semvertag).
 - Architecture as code. A [LikeC4](https://likec4.dev) model of the current system, kept in the
   repo next to the code.
-
-## Fractional tech lead { #tech-lead }
-
-For teams without a tech lead, or between two. I join part-time and run the whole loop:
-
-- one-on-ones with each engineer about what slows them down and what they want to work on
-- regular outage and incident reviews that turn into prioritized follow-up tasks
-- grooming the defect and tech-debt backlog
-- the audit and sprints above, scheduled alongside product work
 
 ## Library support { #support }
 
