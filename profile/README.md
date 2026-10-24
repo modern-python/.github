@@ -57,4 +57,4 @@ If these projects save you time, consider supporting development on [Boosty](htt
 
 [![Boosty](https://img.shields.io/badge/Boosty-support-f15f2c?logo=boosty&logoColor=white)](https://boosty.to/lesnik512)
 
-For paid help with your own services, such as an audit, observability and CI setup, or a migration, see [services](https://modern-python.org/services/).
+For paid help with your own services, such as getting a backend ready for coding agents, a delivery review, or securing agent workflows, see [services](https://modern-python.org/services/).

@@ -1,59 +1,68 @@
 # Services
 
-I'm Artur Shiriev, the maintainer of modern-python. Besides the open-source work, I help teams
-with their Python backends: auditing a codebase, setting up observability and CI, and
-modernizing services.
+I'm Artur Shiriev, the maintainer of modern-python. Besides the open-source work, I help Python
+backend teams that use coding agents keep production stable: I make the codebase easier for agents
+to work in, review where delivery stands, and lock down what agents can reach.
 
 The libraries stay free and MIT-licensed whether or not you hire me. You don't have to use them
 either. When one fits, it saves time; when it doesn't, I work with what your team already runs.
 
-## Engineering health audit { #audit }
+## Agent-ready backend { #agent-ready }
 
-For teams that inherited a codebase, are about to grow one, or keep fighting the same incidents.
+For teams where coding agents write a growing share of the code. A fixed-scope sprint that ends in
+merged pull requests in your repositories:
 
-I look at:
+- Context the agent can use. `AGENTS.md`, skills, and architecture rules written where the agent
+  reads them and checked in CI, with a [LikeC4](https://likec4.dev) model of the system when the
+  boundaries need one.
+- Checks for agent-written code. Lint, type, test and coverage gates plus structural tests and
+  hooks, run the same way locally and in CI, along the lines of the org's own
+  [standard](standard.md).
+- Access to production signals. CLI and MCP access to your error tracker, logs, metrics and traces,
+  so an agent can check a change against how the service actually behaves.
+- Telemetry worth querying. Structured logs, traces, metrics and error tracking in FastAPI, Litestar
+  or FastStream services, usually with
+  [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap), so people and agents can
+  debug from the same data.
+
+## Delivery health check { #audit }
+
+A short, fixed-scope review, and a good first step before a sprint. Automated scanners for
+dependencies, vulnerabilities and code smells run first, and I treat what they find as raw input.
+Most of the time goes to what the tools can't see:
 
 - recent outages and incidents, what caused them, and which ones keep coming back
-- the defect backlog and the error tracker (Sentry, GlitchTip): which bugs matter and which can be
-  closed
-- logs, traces and metrics: what is collected, what is noise, and what is missing
-- tech debt: outdated Python and packages, known vulnerabilities, test coverage, tests built on
-  mocks, missing linters and type checks
+- whether your logs, traces and metrics are good enough to debug from, for people and for agents
+- whether code review keeps up with how much code the agents produce, and how deployment
+  frequency, change failure rate and time to restore have moved since the team adopted them
 - CI, the release process, and how a change reaches production
-- the architecture diagrams, and whether they still match the code
+- whether the architecture docs still match the code
 
-You get a written report with findings ranked by impact and effort, a plan for the first fixes,
-and a call to go through it with your team. The audit doesn't change your code; fixes are a
-separate piece of work.
+You get a written report with findings ranked by impact and effort, a plan for the first fixes, and
+a call to go through it with your team. The review doesn't change your code. When it calls for
+design changes, such as dependency injection with
+[`modern-di`](https://github.com/modern-python/modern-di), a transactional outbox with
+[`faststream-outbox`](https://github.com/modern-python/faststream-outbox), or resilient HTTP clients
+with [`httpware`](https://github.com/modern-python/httpware), I can make them as follow-up work.
 
-## Implementation sprints { #sprints }
+## Agent security and governance { #governance }
 
-Short, fixed-scope work that ends in merged pull requests in your repositories. Typical sprints:
+For teams rolling coding agents out beyond a few early users, or unsure what the agents can touch:
 
-- Observability. Structured logs, traces, metrics and error tracking in FastAPI, Litestar or
-  FastStream services, usually with [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap),
-  plus Grafana and Prometheus dashboards.
-- Quality gates. A `justfile` whose lint and test tasks run the same way locally and in CI, with
-  ruff, ty, coverage and dependency checks, along the lines of the org's own [standard](standard.md).
-- A harness for coding agents. `AGENTS.md`, skills, CLI and MCP access to your error tracker, logs
-  and metrics, and the hooks and CI checks that hold agent-written changes to the same bar as
-  everyone else's.
-- Modernization. Upgrading Python and dependencies, and introducing
-  [`modern-di`](https://github.com/modern-python/modern-di) for dependency injection,
-  [`httpware`](https://github.com/modern-python/httpware) for typed, resilient HTTP clients, or
-  [`faststream-outbox`](https://github.com/modern-python/faststream-outbox) for reliable event
-  publishing.
-- Release process. Change requests, end-to-end tests built from test cases, and release scope
-  collected automatically with [`release-scope`](https://github.com/modern-python/release-scope)
-  and [`semvertag`](https://github.com/modern-python/semvertag).
-- Architecture as code. A [LikeC4](https://likec4.dev) model of the current system, kept in the
-  repo next to the code.
+- a usage policy: which tools and repositories, which changes need human review, and the size and
+  test requirements for agent pull requests
+- permissions: which commands agents may run, which secrets and tokens are within their reach, and
+  whether anything reaches production
+- MCP servers and other integrations: which to trust and what data they see
+- prompt injection through issues, pull requests, docs and CI, wherever agents read text they
+  didn't write
+- a rollout plan: one team first, then wider once the guardrails hold
 
 ## Library support { #support }
 
-For companies that run modern-python libraries in production: help with upgrades and migrations
-(for example from `that-depends` or `dependency-injector` to `modern-di`), a review of how the
-libraries are wired into your services, and help when an incident involves one of them.
+If you run modern-python libraries in production, I can help with migrations (for example from
+`that-depends` or `dependency-injector` to `modern-di`) and with incidents that involve one of
+them.
 
 ## Get in touch { #contact }
 
