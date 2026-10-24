@@ -65,7 +65,7 @@ and published on the org site. A repo either meets it, or carries an exemption.
 _Avoid_: guidelines, conventions, rules. Each reads as advisory, and the standard is not.
 
 **Requirement**:
-One numbered statement of the standard, cited by its stable ID (`CI6`). A MUST or MUST NOT
+One numbered statement of the standard, cited by its stable ID (`CI5`). A MUST or MUST NOT
 requirement is core; a SHOULD is a recommendation; a MAY is a permission.
 _Avoid_: rule, check. A check is what verifies a requirement, not the requirement.
 
