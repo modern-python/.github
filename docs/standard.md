@@ -10,8 +10,8 @@ The standard applies to every repo that publishes a package to PyPI under the or
 
 ## Reading a requirement
 
-Each requirement has a stable ID (`CI6`) and an anchor of the same name
-(`https://modern-python.org/standard/#CI6`). Cite the ID, not a heading.
+Each requirement has a stable ID (`CI5`) and an anchor of the same name
+(`https://modern-python.org/standard/#CI5`). Cite the ID, not a heading.
 
 The key words "MUST", "MUST NOT", "SHOULD", "SHOULD NOT", and "MAY" are to be interpreted as
 described in [BCP 14](https://www.rfc-editor.org/info/bcp14) ([RFC 2119], [RFC 8174]) when, and
@@ -168,7 +168,23 @@ free-threaded newest, written as a hand-maintained list in the repo's `_checks.y
 ### PV3 · Python floor { #PV3 }
 
 A repo MAY set `requires-python` to what its code needs, and MAY raise it without a recorded
-reason. Dependency floors are a separate obligation ([CI6](#CI6)).
+reason. Dependency floors are a separate obligation ([DP1](#DP1), [CI10](#CI10)).
+
+## Dependencies
+
+### DP1 · One floor per dependency { #DP1 }
+
+A dependency SHOULD declare one lower bound: the lowest version the code works with. A repo MAY
+add a `python_version` floor where a version at or above that bound installs on that Python and
+then fails there, with the reason in a comment. A repo SHOULD NOT declare a floor, or a
+dependency it does not import, only to get wheel coverage on some interpreter.
+
+*Why:* the `floors` job ([CI10](#CI10)) skips a version that has no wheel for the interpreter and
+tests the lowest one that does, which is the version a floor raised for wheel coverage would name.
+Those floors cost a line per dependency for every new Python and test nothing the resolver does
+not already pick. A version that installs and then fails is different: the resolver cannot see
+the failure, so only a floor keeps users off it. `typing-extensions` 4.7 to 4.13 install on 3.15
+and fail at import, because 3.15 removed the `typing.no_type_check_decorator` they read.
 
 ## CI
 
@@ -180,7 +196,7 @@ superseded runs.
 ### CI2 · `scheduled.yml` { #CI2 }
 
 `scheduled.yml` MUST run daily and on `workflow_dispatch`, running the same checks as `ci.yml`
-except `floors` ([CI6](#CI6)). On a scheduled failure it MUST open or update a tracking issue in the
+except `floors` ([CI10](#CI10)). On a scheduled failure it MUST open or update a tracking issue in the
 repo with this job, byte for byte, and a repo MUST NOT keep its own report script:
 
 ```yaml
@@ -203,7 +219,7 @@ once.
 ### CI3 · Per-repo `_checks.yml` { #CI3 }
 
 `ci.yml` and `scheduled.yml` MUST both call the repo's own reusable `_checks.yml`, which holds the
-jobs [CI4](#CI4) to [CI8](#CI8).
+jobs [CI4](#CI4), [CI5](#CI5), [CI7](#CI7), [CI8](#CI8) and [CI10](#CI10).
 
 *Why:* a shared workflow in `modern-python/.github` was built and rejected
 ([#95](https://github.com/modern-python/.github/issues/95)): a `workflow_call` input is a scalar,
@@ -219,46 +235,10 @@ The `lint` job MUST run `just install lint-ci` on the repo's floor Python.
 The `pytest` job MUST run `just install` then `just test-ci` on every matrix entry, with
 `fail-fast: false`.
 
-### CI6 · `floors` job { #CI6 }
+### CI6 · Retired { #CI6 }
 
-The `floors` job MUST install every direct dependency at its declared floor, wheel-only, on every
-matrix entry, then run the suite or an import. It MUST do so in two steps, pinning the floors with
-builds allowed and then installing the pins with builds disabled:
-
-```yaml
-- run: uv pip compile pyproject.toml --all-extras --no-deps --resolution lowest-direct -o floors.txt
-- run: uv pip install -r pyproject.toml --all-extras --constraints floors.txt --no-build
-```
-
-A repo that runs the suite adds `--group dev` to the install. It MUST gate every pull request and MUST be skipped on the schedule,
-with `if: github.event_name != 'schedule'` on the job (a called workflow sees its caller's `github`
-context).
-
-A repo MAY run an import smoke test instead of the suite where the floors cannot carry it, and MAY
-drop a matrix entry that no upstream wheel covers at the floor (`compose2pod` drops `3.14t` for
-PyYAML). A repo with no runtime dependencies and no extras has no floors to test and MAY omit the
-job (`modern-di`).
-
-*Why:* `pytest` resolves every dependency at its newest, so without this job the bottom of each
-declared range ships untested. It has rotted there before
-([compose2pod#126](https://github.com/modern-python/compose2pod/issues/126),
-[faststream-outbox#190](https://github.com/modern-python/faststream-outbox/pull/190)).
-Wheel-only, because a floor reachable only by compiling an sdist is not one a user installing a
-wheel can reach, and without the flag the resolver builds one and reports success. Two steps,
-because the flag alone does not fail on such a floor: it makes the wheel-less version ineligible,
-and `lowest-direct` climbs to the lowest version that has a wheel, so the job passes on a version
-the repo never declared
-([compose2pod#135](https://github.com/modern-python/compose2pod/pull/135)). Pinning with builds
-allowed fixes the declared floor first, and the wheel-only install then fails on it
-([compose2pod#139](https://github.com/modern-python/compose2pod/pull/139)). Every matrix
-entry, because wheel coverage is per interpreter. On the pull request, because that is where a floor
-breaks: a diff starts using an API newer than the declared floor. `lite-bootstrap` ran its floors
-only on the schedule and shipped such a break to PyPI
-([lite-bootstrap#245](https://github.com/modern-python/lite-bootstrap/issues/245)). A scheduled
-run adds nothing: the direct dependencies sit at their floors, which do not change, and the
-scheduled `pytest` already catches the newest releases, which are what users install. Resolving
-transitive dependencies at their newest exposes a pull request to an upstream release it did not
-cause, but `install` upgrades the lockfile ([JF1](#JF1)), so `pytest` carries the same exposure.
+Replaced by [CI10](#CI10) and [DP1](#DP1). CI6 pinned the declared floors on every matrix entry;
+CI10 pins them on the floor Python only and tests the lowest version with a wheel elsewhere.
 
 ### CI7 · `links` job { #CI7 }
 
@@ -301,6 +281,66 @@ the repo the scanned root; `--noconftest` and `-o addopts=` keep the repo's conf
 coverage gate out of a one-file run; the temporary directory sits inside the repo because
 plugins such as `pytest-alembic` reject collected files outside the root. `adr_check_source` can
 be pointed at a `file://` path to run an unmerged version of the check.
+
+### CI10 · `floors` job { #CI10 }
+
+The `floors` job MUST install every direct dependency at the lowest version it declares that has a
+wheel for the interpreter, wheel-only, on every matrix entry, then run the suite or an import. It
+MUST gate every pull request and MUST be skipped on the schedule, with
+`if: github.event_name != 'schedule'` on the job (a called workflow sees its caller's `github`
+context).
+
+On the floor Python ([PV3](#PV3)) it MUST pin the declared floors with builds allowed, then install
+the pins with builds disabled, so a declared floor with no wheel there fails:
+
+```yaml
+- run: uv pip compile pyproject.toml --all-extras --no-deps --resolution lowest-direct -o floors.txt
+- run: uv pip install -r pyproject.toml --all-extras --constraints floors.txt --no-build
+```
+
+On every other entry it SHOULD (becomes MUST on 2026-12-31) resolve the whole tree with builds
+disabled, so a version with no wheel for that interpreter is skipped:
+
+```yaml
+- run: uv pip compile pyproject.toml --all-extras --resolution lowest-direct --no-build -o floors.txt
+- run: uv pip install -r pyproject.toml --all-extras --constraints floors.txt --no-build
+```
+
+A repo that runs the suite adds `--group dev` to the install. A repo MAY run an import smoke test
+instead of the suite where the floors cannot carry it, and MAY drop a matrix entry where no release
+in a dependency's declared range has a wheel for it (`compose2pod` drops `3.14t` for PyYAML). A
+repo with no runtime dependencies and no extras has no floors to test and MAY omit the job
+(`modern-di`).
+
+*Why:* `pytest` resolves every dependency at its newest, so without this job the bottom of each
+declared range ships untested. It has rotted there before
+([compose2pod#126](https://github.com/modern-python/compose2pod/issues/126),
+[faststream-outbox#190](https://github.com/modern-python/faststream-outbox/pull/190)).
+Wheel-only, because a version reachable only by compiling an sdist is not one a user installing a
+wheel can reach, and without the flag the resolver builds one and reports success.
+
+Strict on the floor Python, because that is where old versions have wheels and the declared floor
+is a claim about the API that can be checked exactly. The flag alone does not check it:
+`lowest-direct` climbs past a version with no wheel and passes on one the repo never declared
+([compose2pod#135](https://github.com/modern-python/compose2pod/pull/135)). Pinning with builds
+allowed fixes the declared floor first, and the wheel-only install then fails on it
+([compose2pod#139](https://github.com/modern-python/compose2pod/pull/139)).
+
+The lowest version with a wheel on every other entry, because a newer interpreter often has no
+wheel for the old floor, and installers pick the newest compatible version, so that gap never
+reaches a default install. Testing the declared floor there forced a `python_version` floor per
+dependency for every new Python ([DP1](#DP1)). The whole tree, without `--no-deps`: with it, uv
+pins a version whose own dependencies have no wheel, such as pydantic 2.0 on 3.14, whose
+pydantic-core has none. Every matrix entry, because newer interpreters are where a version that
+installs then fails shows up.
+
+On the pull request, because that is where a floor breaks: a diff starts using an API newer than
+the declared floor. `lite-bootstrap` ran its floors only on the schedule and shipped such a break to
+PyPI ([lite-bootstrap#245](https://github.com/modern-python/lite-bootstrap/issues/245)). A
+scheduled run adds nothing: the floors do not change, and the scheduled `pytest` already catches
+the newest releases, which are what users install. Resolving transitive dependencies at their
+newest exposes a pull request to an upstream release it did not cause, but `install` upgrades the
+lockfile ([JF1](#JF1)), so `pytest` carries the same exposure.
 
 ## Release
 
