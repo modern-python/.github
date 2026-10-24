@@ -25,6 +25,8 @@ merged pull requests in your repositories:
   [`lite-bootstrap`](https://github.com/modern-python/lite-bootstrap), so people and agents can
   debug from the same data.
 
+The [modern-python repos](agent-ready.md) run on the same setup, minus the production parts.
+
 ## Delivery health check { #audit }
 
 A short, fixed-scope review, and a good first step before a sprint. Automated scanners for
