@@ -45,6 +45,7 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "jwks-client": lambda: sym.key(_CX, _CY, R),
     # utilities
     "db-retry": lambda: sym.db_retry(_CX, _CY, R),
+    "sqlalchemy-inbox": lambda: sym.inbox(_CX, _CY, R),
     "eof-fixer": lambda: sym.eof_fixer(_CX, _CY, R),
     "semvertag": lambda: sym.tag(_CX, _CY, R),
     "compose2pod": lambda: sym.pod(_CX, _CY, R),

@@ -379,6 +379,26 @@ def outbox(cx: float, cy: float, r: float) -> str:
     return base + out
 
 
+def inbox(cx: float, cy: float, r: float) -> str:
+    """sqlalchemy-inbox: an arrow dropping into a database cylinder marked with a check."""
+    cyl_cy = cy + 0.3 * r
+    h = 0.9
+    base = _cyl(cx, cyl_cy, r * 1.05, h)
+    top = cyl_cy - h / 2 * r * 1.05
+    shaft = (
+        f'<line x1="{cx}" y1="{cy - 1.05 * r:.1f}" x2="{cx}" y2="{top - 0.5 * r:.1f}" '
+        f'stroke="{GOLD}" stroke-width="{r * 0.2:.1f}"/>'
+    )
+    head = _ah(cx, top - 0.16 * r, math.pi / 2, r * 0.44)
+    by = cyl_cy + 0.12 * r
+    check = (
+        f'<polyline points="{cx - 0.24 * r:.1f},{by:.1f} {cx - 0.06 * r:.1f},{by + 0.18 * r:.1f} '
+        f'{cx + 0.26 * r:.1f},{by - 0.16 * r:.1f}" fill="none" stroke="{CREAM}" '
+        f'stroke-width="{r * 0.11:.1f}" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    return base + shaft + head + check
+
+
 def db_retry(cx: float, cy: float, r: float) -> str:
     """db-retry: a database cylinder inside a two-head clockwise retry circle."""
     rad = 0.92 * r
