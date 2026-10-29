@@ -9,6 +9,9 @@ uv run python -m brand.build.render
 
 PNGs require `rsvg-convert` (`brew install librsvg` / `apt install librsvg2-bin`).
 Without it the SVGs are still written and PNGs are skipped.
+A PNG is re-rendered only when its SVG, size or palette changes; the source hash
+is stored in the PNG. Delete the PNGs to force a full re-render, for example after
+upgrading `rsvg-convert`.
 
 ## Palette
 
