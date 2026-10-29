@@ -584,6 +584,32 @@ def rpc_arrow(cx: float, cy: float, r: float) -> str:
     return out
 
 
+def plug(cx: float, cy: float, r: float) -> str:
+    """FastMCP cue: a plug, MCP being the port tools plug into, with a bolt knocked out."""
+    bw, bh = 1.3 * r, 1.0 * r
+    top = cy - 0.6 * r
+    prong_w, prong_h = 0.21 * r, 0.45 * r
+    prongs = "".join(
+        f'<rect x="{cx + dx * r - prong_w / 2:.1f}" y="{top - prong_h:.1f}" '
+        f'width="{prong_w:.1f}" height="{prong_h + 0.1 * r:.1f}" rx="{prong_w * 0.3:.1f}" fill="{GOLD}"/>'
+        for dx in (-0.3, 0.3)
+    )
+    body = (
+        f'<rect x="{cx - bw / 2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{bh:.1f}" '
+        f'rx="{0.22 * r:.1f}" fill="{GOLD}"/>'
+    )
+    cord = (
+        f'<path d="M{cx:.1f},{top + bh - 0.05 * r:.1f} '
+        f"C{cx:.1f},{cy + 0.85 * r:.1f} {cx + 0.5 * r:.1f},{cy + 0.7 * r:.1f} "
+        f'{cx + 0.75 * r:.1f},{cy + 0.95 * r:.1f}" fill="none" stroke="{GOLD}" '
+        f'stroke-width="{0.24 * r:.1f}" stroke-linecap="round"/>'
+    )
+    bcy = top + bh / 2
+    norm = [(0.12, -0.38), (-0.24, 0.07), (0.0, 0.07), (-0.12, 0.38), (0.24, -0.07), (0.0, -0.07)]
+    bolt = " ".join(f"{cx + dx * r:.1f},{bcy + dy * r:.1f}" for dx, dy in norm)
+    return prongs + body + cord + f'<polygon points="{bolt}" fill="{CREAM}"/>'
+
+
 def key(cx: float, cy: float, r: float) -> str:
     """jwks-client: a key, the signing key a JWKS publishes."""
     sw = r * 0.2

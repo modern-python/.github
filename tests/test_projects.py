@@ -47,6 +47,7 @@ EXPECTED_REPOS = {
     "modern-di-taskiq",
     "modern-di-flask",
     "modern-di-grpc",
+    "modern-di-fastmcp",
     "jwks-client",
     "release-scope",
 }
