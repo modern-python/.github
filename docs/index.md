@@ -128,6 +128,7 @@ If you'd like help applying this stack to your own services, see [services](serv
 - [`db-retry`](https://github.com/modern-python/db-retry): Retry helpers for PostgreSQL / SQLAlchemy database operations
 - [`eof-fixer`](https://github.com/modern-python/eof-fixer): CLI tool that ensures text files end with exactly one newline
 - [`release-scope`](https://github.com/modern-python/release-scope): Collect what sits between production and the default branch across GitLab services: tags, MRs, Jira keys, failed jobs
+- [`sqlalchemy-inbox`](https://github.com/modern-python/sqlalchemy-inbox): Transactional inbox ledger for SQLAlchemy asyncio on PostgreSQL
 - [`semvertag`](https://github.com/modern-python/semvertag): Auto-tag GitHub & GitLab repos with semantic version tags from CI
 
 <p class="mp-tagline">Built with <a href="https://github.com/astral-sh/uv">uv</a>,

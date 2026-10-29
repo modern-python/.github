@@ -38,6 +38,7 @@ EXPECTED_REPOS = {
     "faststream-concurrent-aiokafka",
     "faststream-outbox",
     "db-retry",
+    "sqlalchemy-inbox",
     "eof-fixer",
     "semvertag",
     "modern-di-arq",
