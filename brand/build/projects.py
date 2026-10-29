@@ -24,6 +24,7 @@ MANIFEST: dict[str, Callable[[], str]] = {
     "modern-di-arq": lambda: sym.hopper(_CX, _CY, R),
     "modern-di-celery": lambda: sym.celery_stalk(_CX, _CY, R),
     "modern-di-fastapi": lambda: sym.bolt_disc(_CX, _CY, R),
+    "modern-di-fastmcp": lambda: sym.plug(_CX, _CY, R),
     "modern-di-faststream": lambda: sym.faststream(_CX, _CY, R),
     "modern-di-flask": lambda: sym.flask_horn(_CX, _CY, R),
     "modern-di-grpc": lambda: sym.rpc_arrow(_CX, _CY, R),

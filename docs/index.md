@@ -68,7 +68,8 @@ production Python services. Each project is independent, so use one piece or all
   [`modern-di`](https://github.com/modern-python/modern-di): typed, scoped
   dependency injection with one wiring shared across web frameworks (FastAPI,
   Litestar, Starlette, Flask, aiohttp), task queues (Celery, arq, taskiq), RPC
-  and messaging (gRPC, FastStream, aiogram), and CLIs (Typer).
+  and messaging (gRPC, FastStream, aiogram), MCP servers (FastMCP), and CLIs
+  (Typer).
   ([`that-depends`](https://github.com/modern-python/that-depends), the older
   DI framework, is still maintained.)
 - Call other services reliably with
